@@ -7,9 +7,15 @@ router.post('/', function(req, res, next) {
 
   const result = req.body;
   if (result.queryResult.sentimentAnalysisResult) {
+
     console.log('Detected sentiment : ');
     const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
     const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
+    const query = result.queryResult.queryText;
+    const responds = result.queryResult.fulfillmentText;
+    const intent = result.queryResult.intent.displayName;
+    
+    console.log(score, magnitude, query, responds, intent);
    
     if (score>0.4){
       console.log("Very Positive Sentiment");

@@ -30,7 +30,7 @@ router.post('/', function (req, res, next) {
       res.send(createTextResponse("I'm glad that you're happy :)"));
     } else if (score < -0.3) {
       console.log("Negative Sentiment");
-      res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends on lalala@email.com :)"));
+      res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
     }
 
   } else {

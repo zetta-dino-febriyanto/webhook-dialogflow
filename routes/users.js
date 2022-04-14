@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+let first_name = "";
+let last_name = "";
 //require('../utils/database');
 
 const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
@@ -26,14 +28,14 @@ router.post('/', function (req, res, next) {
 
   if (result.queryResult.sentimentAnalysisResult) {
 
-    console.log('Detected sentiment : ');
+    // console.log('Detected sentiment : ');
     const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
     const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
     const query = result.queryResult.queryText;
     const responds = result.queryResult.fulfillmentText;
     
 
-    console.log(score, magnitude, query, responds, intent);
+    // console.log(score, magnitude, query, responds, intent);
 
     //store the result to DB
     // SentimentAnalysisModel.create({

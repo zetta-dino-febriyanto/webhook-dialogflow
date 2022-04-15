@@ -36,6 +36,17 @@ router.post('/', function (req, res, next) {
 
 
     res.send(createTextResponse("Thank you, i already told my human that you want to meet him. Here is the link <link jitsi>"))
+  } else if (intent == "A00- Doesn't work - arrange meeting"){
+    //create function to send notification to admin that someone want meeting
+
+
+    res.send(createTextResponse("Thank you, i already told my human that you want to meet him. Here is the link <link jitsi>"))
+  } else if (intent == "A00- Doesn't work - Send Mail - Sending"){
+    const problem = result.queryResult.queryText;
+    //create function to send email
+    console.log(problem);
+    
+    res.send(createTextResponse("Thank you I Already sent email to my human Friend :)")) 
   }
 
   if (result.queryResult.sentimentAnalysisResult) {
@@ -58,8 +69,8 @@ router.post('/', function (req, res, next) {
       //console.log("Very Positive Sentiment");
       // res.send(createTextResponse("I'm glad that you're happy :)"));
     } else if (score < -0.3) {
-      //console.log("Negative Sentiment");
-      // res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
+      console.log("Negative Sentiment");
+      res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
     }
 
   } else {

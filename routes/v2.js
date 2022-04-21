@@ -15,15 +15,18 @@ router.post('/', function (req, res, next) {
   const intent = result.queryResult.intent.displayName;
  
   if (intent == "Q10- Edit Document - Send Mail"){
-    //Get name and Text Messages
-    const name = result.queryResult.parameters.person.name;
-    const name_text = result.queryResult.queryText;
-    
-    console.log(name, name_text);
-
+  
     //Function to send email to acad dir
-
+    //Notification Text : Hei Acad Dir your student with name :<first name> <last name> want to Edit Document. Plase contact him. Thank you
     
+  } else if (intent == "Q17-Access Job Description - Edit - yes" || intent == "Q16- Edit Job Description ? - yes") {
+  //Function to send email to acad dir
+  //Notification Text : Hei Acad Dir your student with name :<first name> <last name> want to Edit Job Description. Plase contact him. Thank you
+
+  } else if (intent == "Q12- Personal Details - yes") {
+    //Function to send email to acad dir
+    //Notification Text : Hei Acad Dir your student with name :<first name> <last name> want to Edit Personal Detail. Plase contact him. Thank you
+  
   } else if (intent == "A04 - AppUsefull - No - Send mail - Sending"){
     const problem = result.queryResult.queryText;
     //create function to send email
@@ -51,6 +54,7 @@ router.post('/', function (req, res, next) {
     res.send(createTextResponse("Thank you I Already sent email to my human Friend :)")) 
   } else if (intent == "A02-Welcome Intent"){
     res.send(createTextResponse("Hello <first name> <last name>. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?"));
+
   }
 
   if (result.queryResult.sentimentAnalysisResult) {

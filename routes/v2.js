@@ -28,6 +28,7 @@ router.post('/', function (req, res, next) {
     const problem = result.queryResult.queryText;
     //create function to send email
     console.log(problem);
+    // Notification Text : "Hello ADTMC Admin Student with Name <first name> <last name> have problem : <problem>. Please contact him, thank you!"
     
     res.send(createTextResponse("Thank you I Already sent email to my human Friend :)"))
 
@@ -45,8 +46,11 @@ router.post('/', function (req, res, next) {
     const problem = result.queryResult.queryText;
     //create function to send email
     console.log(problem);
+    // Notification Text : "Hello ADTMC Admin Student with Name <first name> <last name> have problem : <problem>. Please contact him, thank you!"
     
     res.send(createTextResponse("Thank you I Already sent email to my human Friend :)")) 
+  } else if (intent == "A02-Welcome Intent"){
+    res.send(createTextResponse("Hello <first name> <last name>. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?"));
   }
 
   if (result.queryResult.sentimentAnalysisResult) {
@@ -65,10 +69,7 @@ router.post('/', function (req, res, next) {
     //   score, magnitude, query, responds, intent
     // })
 
-    if (score > 0.4) {
-      //console.log("Very Positive Sentiment");
-      // res.send(createTextResponse("I'm glad that you're happy :)"));
-    } else if (score < -0.3) {
+   if (score < -0.3) {
       console.log("Negative Sentiment");
       res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
     }

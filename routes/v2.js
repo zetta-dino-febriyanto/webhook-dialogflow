@@ -11,6 +11,7 @@ router.post('/', function (req, res, next) {
   //console.log(req.body.queryResult.queryText);
 
   const result = req.body;
+  console.log(result);
   //Get Intent
   const intent = result.queryResult.intent.displayName;
  

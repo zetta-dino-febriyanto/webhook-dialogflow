@@ -67,15 +67,12 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function editdoc_first(agent){
-    // const infoContext = agent.context;
-    // console.log(result.queryResult.outputContexts);
-    // const token = infoContext.parameters.token;
-
     // function to search for the next deadlines IN THE FUTURE  for doc upload
-
+    // const id = result.originalDetectIntentRequest.payload.userId;
+    // console.log(id)
 
     // Function to add search result to context
-    agent.context.set('info', 99, {
+    agent.context.set('info', 999, {
       1: "<<Search 1>>",
       2: "<<Search 2>>",
       3: "<<Search 3>>"
@@ -92,6 +89,10 @@ const dialogflowfulfillment = (request, response, result) => {
   function editdoc_no(agent){
     // Function to add search result to context
     infoContext = agent.context.get('info');
+    // Array info[length] = [];
+    // for i in Range(0, length):
+    //  info.append(infoContext.parameters[i+1])
+
     const info1 = infoContext.parameters[1];
     const info2 = infoContext.parameters[2];
     const info3 = infoContext.parameters[3];
@@ -141,10 +142,18 @@ const dialogflowfulfillment = (request, response, result) => {
     const test = infoContext.parameters[choice];
 
     // function to send  email to acad dir and CC to student
+    
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the document for ${test}. <<student name>> please forward your document to <<Acad Dir Name>> 
 
     agent.add(`I Already send email to <<acad dir>> as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`)
     
+  }
+
+  function edit_job_desc(agent) {
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You! 
+
+    agent.add("I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!")
   }
 
   let intentMap = new Map();
@@ -157,6 +166,13 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("Q10- Edit Document - lists - yes", editdoc_choose_yes);
   intentMap.set("Q10- Edit Document - lists - yes - yes", editdoc_send);
   intentMap.set("Q10- Edit Document - lists - yes - no", editdoc_choose_no);
+
+
+  // Job Description
+  intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc)
+  intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc)
+
+  
   // intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
 
 

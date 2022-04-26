@@ -142,7 +142,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const test = infoContext.parameters[choice];
 
     // function to send  email to acad dir and CC to student
-    
+
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the document for ${test}. <<student name>> please forward your document to <<Acad Dir Name>> 
 
     agent.add(`I Already send email to <<acad dir>> as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`)
@@ -154,6 +154,19 @@ const dialogflowfulfillment = (request, response, result) => {
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You! 
 
     agent.add("I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!")
+  }
+
+  function send_email(agent){
+    // function to send  email to aide@ADMTC.pro and CC to student
+    const problem = result.queryResult.queryText;
+    // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
+    agent.add(`Thank you I Already sent email to my human Friend :)`)
+  }
+  function send_email_2(agent){
+    // function to send  email to aide@ADMTC.pro and CC to student
+    const problem = result.queryResult.queryText;
+    // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
+    agent.add(`Thank you I Already sent email to my human Friend :)`)
   }
 
   let intentMap = new Map();
@@ -172,6 +185,10 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc)
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc)
 
+
+  // App not usefull
+  intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
+ // intentMap.set("A00- Doesn't work - yes - sendmail", send_email_2);
   
   // intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
 

@@ -89,6 +89,22 @@ const dialogflowfulfillment = (request, response, result) => {
     
   }
 
+  function editdoc_no(agent){
+    // Function to add search result to context
+    infoContext = agent.context.get('info');
+    const info1 = infoContext.parameters[1];
+    const info2 = infoContext.parameters[2];
+    const info3 = infoContext.parameters[3];
+
+    // bot response
+    agent.add("Please Choose What Document you want to Edit: ");
+    agent.add(`1. ${info1}`);
+    agent.add(`2. ${info2}`);
+    agent.add(`3. ${info3}`);
+    agent.add("Select the number, please");
+    
+  }
+
   function editdoc_choose(agent){
     const choice = agent.parameters.number;
     console.log(choice);
@@ -98,7 +114,23 @@ const dialogflowfulfillment = (request, response, result) => {
     });
     infoContext = agent.context.get('info');
     const test = infoContext.parameters[choice];
-    agent.add(`Please confirm  you selected to change the ${test} ?`);
+    agent.add(`Please confirm  you selected to change the ${test}?`);
+  }
+
+  function editdoc_choose_yes(agent){
+    infoChoice = agent.context.get('choice')
+    const choice = infoChoice.parameters.choice;
+    infoContext = agent.context.get('info');
+    const test = infoContext.parameters[choice];
+    agent.add(`Only Academic Director can change Your Document for ${test}. You want me to contact your Academic Director?`);
+  }
+
+  function editdoc_choose_no(agent){
+    // infoChoice = agent.context.get('choice')
+    // const choice = infoChoice.parameters.choice;
+    // infoContext = agent.context.get('info');
+    // const test = infoContext.parameters[choice];
+    agent.add(`Oke, I Suggest you to contact your Academic Director to edit Document, Thank You`);
   }
 
   function editdoc_send(agent) {
@@ -108,17 +140,26 @@ const dialogflowfulfillment = (request, response, result) => {
     infoContext = agent.context.get('info');
     const test = infoContext.parameters[choice];
 
-    // function to send  email to acad dir
-    agent.add(`I Already send email to your Acad Dir that you want to edit document about ${test}`)
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the document for ${test}. <<student name>> please forward your document to <<Acad Dir Name>> 
+
+    agent.add(`I Already send email to <<acad dir>> as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`)
     
   }
 
   let intentMap = new Map();
-
+  // Welcome Intent
   intentMap.set("A02-Welcome Intent",sayHello);
+
+  // For Edit Document
   intentMap.set("Q10- Edit Document", editdoc_first);
-  intentMap.set("Q10- Edit Document - list", editdoc_choose);
-  intentMap.set("Q10- Edit Document - list - yes", editdoc_send);
+  intentMap.set("Q10- Edit Document - lists", editdoc_choose);
+  intentMap.set("Q10- Edit Document - lists - yes", editdoc_choose_yes);
+  intentMap.set("Q10- Edit Document - lists - yes - yes", editdoc_send);
+  intentMap.set("Q10- Edit Document - lists - yes - no", editdoc_choose_no);
+  // intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
+
+
   
 
   agent.handleRequest(intentMap);

@@ -181,7 +181,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function edit_address_first(agent) {
     const address = result.queryResult.queryText;
-    agent.context.set('addess', 99, {
+    agent.context.set('address', 99, {
       address: address
     });
 
@@ -191,10 +191,10 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function edit_address_mail(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<address>>. Thank You! 
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>>. Thank You! 
     infoAddress = agent.context.get('address')
     const Address = infoAddress.parameters.address;
-
+    console.log(Address)
 
     agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
   }

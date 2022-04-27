@@ -1,7 +1,7 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const { WebhookClient } = require('dialogflow-fulfillment');
-const {dialogflow, BasicCard, Suggestions} = require('actions-on-google');
+const { WebhookClient } = require("dialogflow-fulfillment");
+const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 
 //require('../utils/database');
@@ -9,22 +9,22 @@ const app = dialogflow();
 // const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
 
 /* GET users listing. */
-router.post('/', function (req, res, next) {
+router.post("/", function (req, res, next) {
   //console.log(req.body.queryResult.queryText);
 
   const result = req.body;
   dialogflowfulfillment(req, res, result);
   //console.log(result);
   //Get Intent
- 
-  if (result.queryResult.sentimentAnalysisResult) {
 
+  if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');
-    const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
-    const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
+    const score =
+      result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
+    const magnitude =
+      result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
     const query = result.queryResult.queryText;
     const responds = result.queryResult.fulfillmentText;
-    
 
     // console.log(score, magnitude, query, responds, intent);
 
@@ -33,24 +33,21 @@ router.post('/', function (req, res, next) {
     //   score, magnitude, query, responds, intent
     // })
 
-  //  if (score < -0.3) {
-  //     console.log("Negative Sentiment");
-  //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
-  //   }
-
+    //  if (score < -0.3) {
+    //     console.log("Negative Sentiment");
+    //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
+    //   }
   } else {
-    console.log('No sentiment Analysis Found');
-
+    console.log("No sentiment Analysis Found");
   }
 });
 
-
 const dialogflowfulfillment = (request, response, result) => {
-  const agent = new WebhookClient({request, response});
+  const agent = new WebhookClient({ request, response });
   let text = "";
   let infoContext = null;
 
-  function sayHello(agent){
+  function sayHello(agent) {
     //get user data
     //uncommend if on stagging
     // const id = result.originalDetectIntentRequest.payload.userId;
@@ -61,21 +58,22 @@ const dialogflowfulfillment = (request, response, result) => {
     //uncommend if on stagging
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
-
     //this only for development
-    agent.add(`Hello <<user.first_name>> <<user.last_name>>. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
+    agent.add(
+      `Hello <<user.first_name>> <<user.last_name>>. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
+    );
   }
 
-  function editdoc_first(agent){
+  function editdoc_first(agent) {
     // function to search for the next deadlines IN THE FUTURE  for doc upload
     // const id = result.originalDetectIntentRequest.payload.userId;
     // console.log(id)
 
     // Function to add search result to context
-    agent.context.set('info', 999, {
+    agent.context.set("info", 999, {
       1: "<<Search 1>>",
       2: "<<Search 2>>",
-      3: "<<Search 3>>"
+      3: "<<Search 3>>",
     });
     // bot response
     agent.add("Please Choose What Document you want to Edit: ");
@@ -83,12 +81,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("2. <<Search 2>>");
     agent.add("3. <<Search 3>>");
     agent.add("Select the number, please");
-    
   }
 
-  function editdoc_no(agent){
+  function editdoc_no(agent) {
     // Function to add search result to context
-    infoContext = agent.context.get('info');
+    infoContext = agent.context.get("info");
     // Array info[length] = [];
     // for i in Range(0, length):
     //  info.append(infoContext.parameters[i+1])
@@ -103,56 +100,62 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`2. ${info2}`);
     agent.add(`3. ${info3}`);
     agent.add("Select the number, please");
-    
   }
 
-  function editdoc_choose(agent){
+  function editdoc_choose(agent) {
     const choice = agent.parameters.number;
     console.log(choice);
 
-    agent.context.set('choice', 99, {
-      choice: choice
+    agent.context.set("choice", 99, {
+      choice: choice,
     });
-    infoContext = agent.context.get('info');
+    infoContext = agent.context.get("info");
     const test = infoContext.parameters[choice];
     agent.add(`Please confirm  you selected to change the ${test}?`);
   }
 
-  function editdoc_choose_yes(agent){
-    infoChoice = agent.context.get('choice')
+  function editdoc_choose_yes(agent) {
+    infoChoice = agent.context.get("choice");
     const choice = infoChoice.parameters.choice;
-    infoContext = agent.context.get('info');
+    infoContext = agent.context.get("info");
     const test = infoContext.parameters[choice];
-    agent.add(`Only Academic Director can change Your Document for ${test}. You want me to contact your Academic Director?`);
+    agent.add(
+      `Only Academic Director can change Your Document for ${test}. You want me to contact your Academic Director?`
+    );
   }
 
-  function editdoc_choose_no(agent){
-    agent.add(`Oke, I Suggest you to contact your Academic Director to edit Document, Thank You`);
+  function editdoc_choose_no(agent) {
+    agent.add(
+      `Oke, I Suggest you to contact your Academic Director to edit Document, Thank You`
+    );
   }
 
   function editdoc_send(agent) {
     // function to get variabel from context
-    infoChoice = agent.context.get('choice')
+    infoChoice = agent.context.get("choice");
     const choice = infoChoice.parameters.choice;
-    infoContext = agent.context.get('info');
+    infoContext = agent.context.get("info");
     const test = infoContext.parameters[choice];
 
     // function to send  email to acad dir and CC to student
 
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the document for ${test}. <<student name>> please forward your document to <<Acad Dir Name>> 
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the document for ${test}. <<student name>> please forward your document to <<Acad Dir Name>>
 
-    agent.add(`I Already send email to <<acad dir>> as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`)
-    
+    agent.add(
+      `I Already send email to <<acad dir>> as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`
+    );
   }
 
   function edit_job_desc(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You! 
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You!
 
-    agent.add("I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!")
+    agent.add(
+      "I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
   }
 
-  function send_email(agent){
+  function send_email(agent) {
     // function to send  email to aide@ADMTC.pro and CC to student
     const problem = result.queryResult.queryText;
     console.log(problem);
@@ -162,66 +165,109 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function edit_identity_first(agent) {
     const problem = result.queryResult.queryText;
-    agent.context.set('problem', 99, {
-      problem: problem
+    agent.context.set("problem", 99, {
+      problem: problem,
     });
-    agent.add(`Oke, so you want me to Send email to your Academic Director that you want to change your personal information with detail like this :`);
-    agent.add(`"${problem}" ?`)
+    agent.add(
+      `Oke, so you want me to Send email to your Academic Director that you want to change your personal information with detail like this :`
+    );
+    agent.add(`"${problem}" ?`);
   }
 
   function edit_identity_mail(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change your personal information with detail like this: \n <<problem>> Please proceed, Thank You! 
-    infoProblem = agent.context.get('problem')
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change your personal information with detail like this: \n <<problem>> Please proceed, Thank You!
+    infoProblem = agent.context.get("problem");
     const problem = infoProblem.parameters.problem;
 
-
-    agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
   }
 
   function edit_address_first(agent) {
     const address = result.queryResult.queryText;
-    agent.context.set('address', 99, {
-      address: address
+    agent.context.set("address", 99, {
+      address: address,
     });
 
-    agent.add(`Oke, so you want me to Send email to your Academic Director that you want to change your address with detail like this :`);
-    agent.add(`"${address}" ?`)
+    agent.add(
+      `Oke, so you want me to Send email to your Academic Director that you want to change your address with detail like this :`
+    );
+    agent.add(`"${address}" ?`);
   }
 
   function edit_address_mail(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>> Please proceed, Thank You! 
-    infoAddress = agent.context.get('address')
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>> Please proceed, Thank You!
+    infoAddress = agent.context.get("address");
     const Address = infoAddress.parameters.address;
-    console.log(Address)
+    console.log(Address);
 
-    agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
   }
 
   function edit_parent_first(agent) {
     const parent = result.queryResult.queryText;
-    agent.context.set('parent', 99, {
-      parent: parent
+    agent.context.set("parent", 99, {
+      parent: parent,
     });
 
-    agent.add(`Oke, so you want me to Send email to your Academic Director that you want to change your Parent Information with detail like this :`);
-    agent.add(`"${parent}" ?`)
+    agent.add(
+      `Oke, so you want me to Send email to your Academic Director that you want to change your Parent Information with detail like this :`
+    );
+    agent.add(`"${parent}" ?`);
   }
 
   function edit_parent_mail(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your parent information with detail like this : \n <<Parent>> Please proceed, Thank You! 
-    infoParent = agent.context.get('parent')
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your parent information with detail like this : \n <<Parent>> Please proceed, Thank You!
+    infoParent = agent.context.get("parent");
     const Parent = infoParent.parameters.parent;
-    console.log(Parent)
+    console.log(Parent);
 
-    agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
+  }
+
+  function edit_mentor_first(agent) {
+    // Function to search Mentor of Student
+
+    agent.add(
+      `Your old mentor is <<mentor>>. Please enter email of new mentor.`
+    );
+  }
+
+  function edit_mentor_confirmation(agent) {
+    const mentor = result.queryResult.parameters.email;
+    agent.context.set("mentor", 99, {
+      mentor: mentor,
+    });
+
+    agent.add(
+      `Oke, so you want me to Send email to your Academic Director that you want to change your Mentor and the email of new mentor is ${mentor}?`
+    );
+  }
+
+  function edit_mentor_mail(agent) {
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change mentor with the email of new mentor is <<Mentor>> Please proceed, Thank You!
+    infoMentor = agent.context.get("mentor");
+    const Mentor = infoMentor.parameters.mentor;
+    console.log(Mentor);
+
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
   }
 
   let intentMap = new Map();
+
   // Welcome Intent
-  intentMap.set("A02-Welcome Intent",sayHello);
+  intentMap.set("A02-Welcome Intent", sayHello);
 
   // For Edit Document
   intentMap.set("Q10- Edit Document", editdoc_first);
@@ -232,46 +278,69 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
 
   // Job Description
-  intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc)
-  intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc)
-
+  intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
+  intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
   intentMap.set("A00- Doesn't work - yes - sendmail", send_email);
 
-
   // Edit Identity - Personal Information
-  intentMap.set("Q12- Personal Details - personal - yes - detail", edit_identity_first);
-  intentMap.set("Q12- Personal Details - personal - yes - detail - yes", edit_identity_mail);
+  intentMap.set(
+    "Q12- Personal Details - personal - yes - detail",
+    edit_identity_first
+  );
+  intentMap.set(
+    "Q12- Personal Details - personal - yes - detail - yes",
+    edit_identity_mail
+  );
   // Edit Identity - Address
-  intentMap.set("Q12- Personal Details - address - yes - confirmation", edit_address_first);
-  intentMap.set("Q12- Personal Details - address - yes - confirmation - yes", edit_address_mail);
+  intentMap.set(
+    "Q12- Personal Details - address - yes - confirmation",
+    edit_address_first
+  );
+  intentMap.set(
+    "Q12- Personal Details - address - yes - confirmation - yes",
+    edit_address_mail
+  );
   // Edit  Identity - Parent
-  intentMap.set("Q12- Personal Details - parent - yes - detail", edit_parent_first);
-  intentMap.set("Q12- Personal Details - parent - yes - detail - yes", edit_parent_mail);
-  
+  intentMap.set(
+    "Q12- Personal Details - parent - yes - detail",
+    edit_parent_first
+  );
+  intentMap.set(
+    "Q12- Personal Details - parent - yes - detail - yes",
+    edit_parent_mail
+  );
 
+  // Information Company/Mentor
+  intentMap.set(
+    "Q01- Information company / mentor - mentor - yes",
+    edit_mentor_first
+  );
+  intentMap.set(
+    "Q01- Information company / mentor - mentor - yes - confirmation",
+    edit_mentor_confirmation
+  );
+  intentMap.set(
+    "Q01- Information company / mentor - mentor - yes - confirmation - yes",
+    edit_mentor_mail
+  );
+ 
 
-
-  
 
   agent.handleRequest(intentMap);
-
-
-}
+};
 function createTextResponse(textresponse) {
   let response = {
-    "fulfillmentMessages": [
+    fulfillmentMessages: [
       {
-        "text": {
-          "text": [
-            textresponse
-          ]
-        }
-      }
-    ]
-  }
+        text: {
+          text: [textresponse],
+        },
+      },
+    ],
+  };
 
   return response;
 }

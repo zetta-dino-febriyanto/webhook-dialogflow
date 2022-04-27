@@ -171,7 +171,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function edit_identity_mail(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change your personal information with detail like this: \n <<problem>>. Thank You! 
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change your personal information with detail like this: \n <<problem>> Please proceed, Thank You! 
     infoProblem = agent.context.get('problem')
     const problem = infoProblem.parameters.problem;
 
@@ -191,10 +191,30 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function edit_address_mail(agent) {
     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>>. Thank You! 
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>> Please proceed, Thank You! 
     infoAddress = agent.context.get('address')
     const Address = infoAddress.parameters.address;
     console.log(Address)
+
+    agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
+  }
+
+  function edit_parent_first(agent) {
+    const parent = result.queryResult.queryText;
+    agent.context.set('parent', 99, {
+      parent: parent
+    });
+
+    agent.add(`Oke, so you want me to Send email to your Academic Director that you want to change your Parent Information with detail like this :`);
+    agent.add(`"${parent}" ?`)
+  }
+
+  function edit_parent_mail(agent) {
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your parent information with detail like this : \n <<Parent>> Please proceed, Thank You! 
+    infoParent = agent.context.get('parent')
+    const Parent = infoParent.parameters.parent;
+    console.log(Parent)
 
     agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
   }
@@ -227,7 +247,9 @@ const dialogflowfulfillment = (request, response, result) => {
   // Edit Identity - Address
   intentMap.set("Q12- Personal Details - address - yes - confirmation", edit_address_first);
   intentMap.set("Q12- Personal Details - address - yes - confirmation - yes", edit_address_mail);
-  
+  // Edit  Identity - Parent
+  intentMap.set("Q12- Personal Details - parent - yes - detail", edit_parent_first);
+  intentMap.set("Q12- Personal Details - parent - yes - detail - yes", edit_parent_mail);
   
 
 

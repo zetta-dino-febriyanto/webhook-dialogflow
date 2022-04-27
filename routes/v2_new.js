@@ -127,10 +127,6 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function editdoc_choose_no(agent){
-    // infoChoice = agent.context.get('choice')
-    // const choice = infoChoice.parameters.choice;
-    // infoContext = agent.context.get('info');
-    // const test = infoContext.parameters[choice];
     agent.add(`Oke, I Suggest you to contact your Academic Director to edit Document, Thank You`);
   }
 
@@ -164,6 +160,25 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Thank you I Already sent email to my human Friend :)");
   }
 
+  function edit_identity_first(agent) {
+    const problem = result.queryResult.queryText;
+    agent.context.set('problem', 99, {
+      problem: problem
+    });
+    agent.add(`Oke, so you want me to Send email to your Academic Director that you want to change your personal information with detail like this :`);
+    agent.add(`"${problem}" ?`)
+  }
+
+  function edit_identity_mail(agent) {
+     // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You! 
+    infoProblem = agent.context.get('problem')
+    const problem = infoProblem.parameters.problem;
+
+
+    agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
+  }
+
   let intentMap = new Map();
   // Welcome Intent
   intentMap.set("A02-Welcome Intent",sayHello);
@@ -184,6 +199,11 @@ const dialogflowfulfillment = (request, response, result) => {
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
   intentMap.set("A00- Doesn't work - yes - sendmail", send_email);
+
+
+  // Edit Identity
+  intentMap.set("Q12- Personal Details - personal - yes - detail", edit_identity_first);
+  intentMap.set("Q12- Personal Details - personal - yes - detail - yes", edit_identity_mail);
   
 
 

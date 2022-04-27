@@ -33,10 +33,10 @@ router.post('/', function (req, res, next) {
     //   score, magnitude, query, responds, intent
     // })
 
-   if (score < -0.3) {
-      console.log("Negative Sentiment");
-      res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
-    }
+  //  if (score < -0.3) {
+  //     console.log("Negative Sentiment");
+  //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
+  //   }
 
   } else {
     console.log('No sentiment Analysis Found');
@@ -159,14 +159,9 @@ const dialogflowfulfillment = (request, response, result) => {
   function send_email(agent){
     // function to send  email to aide@ADMTC.pro and CC to student
     const problem = result.queryResult.queryText;
+    console.log(problem);
     // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
-    agent.add(`Thank you I Already sent email to my human Friend :)`)
-  }
-  function send_email_2(agent){
-    // function to send  email to aide@ADMTC.pro and CC to student
-    const problem = result.queryResult.queryText;
-    // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
-    agent.add(`Thank you I Already sent email to my human Friend :)`)
+    agent.add("Thank you I Already sent email to my human Friend :)");
   }
 
   let intentMap = new Map();
@@ -179,7 +174,7 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("Q10- Edit Document - lists - yes", editdoc_choose_yes);
   intentMap.set("Q10- Edit Document - lists - yes - yes", editdoc_send);
   intentMap.set("Q10- Edit Document - lists - yes - no", editdoc_choose_no);
-
+  intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
 
   // Job Description
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc)
@@ -188,9 +183,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
- // intentMap.set("A00- Doesn't work - yes - sendmail", send_email_2);
+  intentMap.set("A00- Doesn't work - yes - sendmail", send_email);
   
-  // intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
+
 
 
   

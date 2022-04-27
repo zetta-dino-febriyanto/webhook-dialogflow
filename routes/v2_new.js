@@ -170,10 +170,30 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function edit_identity_mail(agent) {
-     // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You! 
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change your personal information with detail like this: \n <<problem>>. Thank You! 
     infoProblem = agent.context.get('problem')
     const problem = infoProblem.parameters.problem;
+
+
+    agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
+  }
+
+  function edit_address_first(agent) {
+    const address = result.queryResult.queryText;
+    agent.context.set('addess', 99, {
+      address: address
+    });
+
+    agent.add(`Oke, so you want me to Send email to your Academic Director that you want to change your address with detail like this :`);
+    agent.add(`"${address}" ?`)
+  }
+
+  function edit_address_mail(agent) {
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<address>>. Thank You! 
+    infoAddress = agent.context.get('address')
+    const Address = infoAddress.parameters.address;
 
 
     agent.add("I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!")
@@ -201,9 +221,13 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("A00- Doesn't work - yes - sendmail", send_email);
 
 
-  // Edit Identity
+  // Edit Identity - Personal Information
   intentMap.set("Q12- Personal Details - personal - yes - detail", edit_identity_first);
   intentMap.set("Q12- Personal Details - personal - yes - detail - yes", edit_identity_mail);
+  // Edit Identity - Address
+  intentMap.set("Q12- Personal Details - address - yes - confirmation", edit_address_first);
+  intentMap.set("Q12- Personal Details - address - yes - confirmation - yes", edit_address_mail);
+  
   
 
 

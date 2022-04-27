@@ -264,6 +264,15 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  function cancel_contract(agent) {
+    // Function to get student name
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Cancel the Contract of Company, Please proceed. Thank You!
+
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
+  }
+
   let intentMap = new Map();
 
   // Welcome Intent
@@ -326,6 +335,16 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - mentor - yes - confirmation - yes",
     edit_mentor_mail
   );
+  intentMap.set(
+    "Q01- Information company / mentor - contract - yes",
+    cancel_contract
+  );
+  intentMap.set(
+    "Q01- Information company / mentor - mentor - yes - confirmation - no",
+    edit_mentor_first
+  );
+  
+  
  
 
 

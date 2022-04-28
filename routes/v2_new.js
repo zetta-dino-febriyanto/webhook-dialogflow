@@ -377,6 +377,7 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
   intentMap.set("A00- Doesn't work - yes - sendmail", send_email);
 
+  
   // Edit Identity - Personal Information
   intentMap.set(
     "Q12- Personal Details - personal - yes - detail",
@@ -408,7 +409,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q12_2 - address - yes - confirmation - yes",
     edit_address_mail
   );
-  
+
   // Edit  Identity - Parent
   intentMap.set(
     "Q12- Personal Details - parent - yes - detail",

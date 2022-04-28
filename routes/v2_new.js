@@ -49,7 +49,7 @@ const dialogflowfulfillment = (request, response, result) => {
   let text = "";
   let infoContext = null;
   let intent = result.queryResult.intent.displayName;
-  console.log(intent)
+  console.log(intent);
 
   async function sayHello(agent) {
     //get user data
@@ -210,8 +210,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the document for ${test}. ${student.first_name} ${student.last_name} please forward your document to ${acadDirs[0].first_name} ${acadDirs[0].last_name}`,
@@ -286,33 +286,36 @@ const dialogflowfulfillment = (request, response, result) => {
     // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
 
     const id = result.originalDetectIntentRequest.payload.userId;
-    let student = await get_data(`https://api.bilip.zetta-demo.space/getUserById/${id}`, 'GET');
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
 
     let recipients = [
       {
-        recipients: ['admtcadmin2021@yopmail.com'],
-        rank: 'a',
+        recipients: ["admtcadmin2021@yopmail.com"],
+        rank: "a",
       },
       {
         recipients: [student.email],
-        rank: 'cc',
-      }
+        rank: "cc",
+      },
     ];
 
     let mailOptions = {
-      when: 'dummy notification',
-      language: '',
+      when: "dummy notification",
+      language: "",
       to: recipients,
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!`,
       },
-      notificationReference: 'DUMMY_N1',
+      notificationReference: "DUMMY_N1",
       RNCPTitleId: [],
       schoolId: [],
       fromId: null,
@@ -432,6 +435,30 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  function edit_date_first(agent) {
+    const date = result.queryResult.queryText;
+    agent.context.set("date", 99, {
+      date: date,
+    });
+
+    agent.add(
+      `Oke, so you want me to Send email to your Academic Director that you want to change your Contract Date with detail like this :`
+    );
+    agent.add(`"${date}" ?`);
+  }
+
+  function edit_date_mail(agent) {
+    // function to send  email to acad dir and CC to student
+    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Contract Date with detail like this: <<date>>. Please proceed, Thank You!
+    infoDate = agent.context.get("date");
+    const date = infoDate.parameters.date;
+    console.log(date);
+
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
+  }
+
   function cancel_contract(agent) {
     // Function to get student name
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Cancel the Contract of Company, Please proceed. Thank You!
@@ -465,7 +492,6 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q16- Edit Job Description ? - yes - detail - yes",
     edit_job_desc_email
   );
-
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
@@ -528,6 +554,14 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes - confirmation - no",
     edit_mentor_first
+  );
+  intentMap.set(
+    "Q01- Information company / mentor - date - yes - date",
+    edit_date_first
+  );
+  intentMap.set(
+    "Q01- Information company / mentor - date - yes - date - yes",
+    edit_date_mail
   );
 
   agent.handleRequest(intentMap);

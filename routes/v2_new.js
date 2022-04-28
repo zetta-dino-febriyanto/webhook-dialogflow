@@ -48,6 +48,8 @@ const dialogflowfulfillment = (request, response, result) => {
   const agent = new WebhookClient({ request, response });
   let text = "";
   let infoContext = null;
+  let intent = result.queryResult.intent.displayName;
+  console.log(intent)
 
   async function sayHello(agent) {
     //get user data
@@ -206,10 +208,10 @@ const dialogflowfulfillment = (request, response, result) => {
       language: "",
       to: recipients,
       from: student.email,
-      subjectEN: `dummy`,
-      subjectFR: `dummy`,
-      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
-      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the document for ${test}. ${student.first_name} ${student.last_name} please forward your document to ${acadDirs[0].first_name} ${acadDirs[0].last_name}`,
@@ -221,7 +223,6 @@ const dialogflowfulfillment = (request, response, result) => {
       toId: null,
       subjectId: null,
       testId: null,
-      isADMTCInCC: true,
       sendToPlatformMailBox: true,
     };
 
@@ -278,11 +279,55 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function send_email(agent) {
+  async function send_email(agent) {
     // function to send  email to aide@ADMTC.pro and CC to student
     const problem = result.queryResult.queryText;
     console.log(problem);
     // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
+
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(`https://api.bilip.zetta-demo.space/getUserById/${id}`, 'GET');
+
+    let recipients = [
+      {
+        recipients: ['admtcadmin2021@yopmail.com'],
+        rank: 'a',
+      },
+      {
+        recipients: [student.email],
+        rank: 'cc',
+      }
+    ];
+
+    let mailOptions = {
+      when: 'dummy notification',
+      language: '',
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!`,
+      },
+      notificationReference: 'DUMMY_N1',
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
     agent.add("Thank you I Already sent email to my human Friend :)");
   }
 
@@ -420,7 +465,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q16- Edit Job Description ? - yes - detail - yes",
     edit_job_desc_email
   );
-  
+
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);

@@ -10,12 +10,17 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dialogflow-fulfillment": "^0.6.1",
+    "dotenv": "^16.0.0",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.2",
     "mongoose": "^6.2.10",
     "morgan": "~1.9.1",
-    "dotenv": "^16.0.0",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "nodemailer": "^6.7.3",
+    "nodemailer-ses-transport": "^1.5.1"
   }
 }

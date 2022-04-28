@@ -250,6 +250,7 @@ const dialogflowfulfillment = (request, response, result) => {
       agent.add(
         "I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!"
       );
+      agent.context.delete('Q16-EditJobDescription-yes-followup');
     } else {
       agent.add("Oke, Your Job Description already accepted by Your Academic Director, please tell me the detail of change you want to make.")
     }

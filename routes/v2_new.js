@@ -124,7 +124,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // }
     Object.keys(infoContext.parameters).map(function (key, index) {
       if (key && Number.isInteger(parseInt(key))) {
-        agent.add(infoContext.parameters[key])
+        agent.add(`${key}. ${infoContext.parameters[key]}`)
       }
     });
     agent.add("Select the number, please");

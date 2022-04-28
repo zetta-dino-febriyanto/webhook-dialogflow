@@ -3,6 +3,7 @@ var router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
+const fetch = require('node-fetch');
 
 //require('../utils/database');
 
@@ -64,23 +65,33 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function editdoc_first(agent) {
+  async function editdoc_first(agent) {
     // function to search for the next deadlines IN THE FUTURE  for doc upload
-    // const id = result.originalDetectIntentRequest.payload.userId;
-    // console.log(id)
+    const id = result.originalDetectIntentRequest.payload.userId;
+    console.log(id)
+
+    let tasks = await get_data(`http://localhost:8080/getDocExpStudentTask/${id}/5a067bba1c0217218c75f8ab`, 'GET');
+    // console.log(tasks)
+
+    let taskDatas = tasks.map((task) => {
+      return `Upload Document ${task.description}`
+    });
+
+    let taskObject = taskDatas.reduce(function (result, item, index, array) {
+      result[index + 1] = item;
+      return result;
+    }, {});
 
     // Function to add search result to context
-    agent.context.set("info", 999, {
-      1: "<<Search 1>>",
-      2: "<<Search 2>>",
-      3: "<<Search 3>>",
-    });
+    agent.context.set("info", 999, taskObject);
     // bot response
     agent.add("Please Choose What Document you want to Edit: ");
-    agent.add("1. <<Search 1>>");
-    agent.add("2. <<Search 2>>");
-    agent.add("3. <<Search 3>>");
+    for (let [index, task] of tasks.entries()) {
+      agent.add(`${index + 1}. Upload Document ${task.description}`);
+    }
     agent.add("Select the number, please");
+    infoContext = agent.context.get("info");
+    console.log(infoContext)
   }
 
   function editdoc_no(agent) {
@@ -90,15 +101,17 @@ const dialogflowfulfillment = (request, response, result) => {
     // for i in Range(0, length):
     //  info.append(infoContext.parameters[i+1])
 
-    const info1 = infoContext.parameters[1];
-    const info2 = infoContext.parameters[2];
-    const info3 = infoContext.parameters[3];
+    console.log(infoContext)
+
+    // const info1 = infoContext.parameters[1];
+    // const info2 = infoContext.parameters[2];
+    // const info3 = infoContext.parameters[3];
 
     // bot response
     agent.add("Please Choose What Document you want to Edit: ");
-    agent.add(`1. ${info1}`);
-    agent.add(`2. ${info2}`);
-    agent.add(`3. ${info3}`);
+    for (let [index, param] of infoContext.parameters.entries()) {
+      agent.add(param);
+    }
     agent.add("Select the number, please");
   }
 
@@ -343,13 +356,14 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - mentor - yes - confirmation - no",
     edit_mentor_first
   );
-  
-  
- 
+
+
+
 
 
   agent.handleRequest(intentMap);
 };
+
 function createTextResponse(textresponse) {
   let response = {
     fulfillmentMessages: [
@@ -363,4 +377,28 @@ function createTextResponse(textresponse) {
 
   return response;
 }
+
+const get_data = async (url, method, auth, data = {}) => {
+  try {
+    let headers = {
+      // "Content-Type": "application/json",
+      // "client_id": "1001125",
+      // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
+      "Authorization": `Bearer "${auth}"`
+    }
+    if (method === 'POST') {
+      const response = await fetch(url, { method: method, headers: headers, body: data });
+      const json = await response.json();
+      return json;
+    } else {
+      const response = await fetch(url, { method: method, headers: headers });
+      const json = await response.json();
+      return json;
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = router;

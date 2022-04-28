@@ -819,6 +819,14 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q16- Edit Job Description ? - yes - detail - yes",
     edit_job_desc_email
   );
+  intentMap.set(
+    "Q17-Access Job Description - Edit - yes - detail",
+    edit_job_desc_confirmation
+  );
+  intentMap.set(
+    "Q17-Access Job Description - Edit - yes - detail - yes",
+    edit_job_desc_email
+  );
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
@@ -890,6 +898,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
   );
+  
 
   agent.handleRequest(intentMap);
 };

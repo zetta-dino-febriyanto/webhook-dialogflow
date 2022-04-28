@@ -351,7 +351,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     const id = result.originalDetectIntentRequest.payload.userId;
     let student = await get_data(
-      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
 
@@ -529,12 +529,34 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function edit_mentor_first(agent) {
+  async function edit_mentor_first(agent) {
     // Function to search Mentor of Student
-
-    agent.add(
-      `Your old mentor is <<mentor>>. Please enter email of new mentor.`
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
     );
+    if (student && student.companies && student.companies.length) {
+      let companyData = student.companies.find((company) => company && company.status && company.status === 'active' && company.mentor);
+      if (companyData && companyData.mentor) {
+        let mentor = await get_data(
+          `https://api.bilip.zetta-demo.space/getUserById/${companyData.mentor}`,
+          "GET"
+        );
+
+        if (mentor && mentor._id) {
+          agent.add(
+            `Your old mentor is ${mentor.first_name} ${mentor.last_name}. Please enter email of new mentor.`
+          );
+        } else {
+          agent.add('mentor not found');
+        }
+      } else {
+        agent.add('mentor not found');
+      }
+    } else {
+      agent.add('mentor not found');
+    }
   }
 
   function edit_mentor_confirmation(agent) {

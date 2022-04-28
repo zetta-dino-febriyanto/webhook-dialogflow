@@ -119,9 +119,14 @@ const dialogflowfulfillment = (request, response, result) => {
 
     // bot response
     agent.add("Please Choose What Document you want to Edit: ");
-    for (let [index, param] of infoContext.parameters.entries()) {
-      agent.add(param);
-    }
+    // for (let [index, param] of infoContext.parameters.entries()) {
+    //   agent.add(param);
+    // }
+    Object.keys(infoContext.parameters).map(function (key, index) {
+      if (key && Number.isInteger(parseInt(key))) {
+        agent.add(infoContext.parameters[key])
+      }
+    });
     agent.add("Select the number, please");
   }
 
@@ -308,7 +313,7 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("Q10- Edit Document - lists - yes - yes", editdoc_send);
   intentMap.set("Q10- Edit Document - lists - yes - no", editdoc_choose_no);
   intentMap.set("Q10- Edit Document - lists - no", editdoc_no);
- 
+
   // Job Description
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
@@ -328,7 +333,7 @@ const dialogflowfulfillment = (request, response, result) => {
   );
   intentMap.set("Q12_1 - personal - yes - detail", edit_identity_first)
   intentMap.set("Q12_1 - personal - yes - detail - yes", edit_identity_mail)
-  
+
 
 
   // Edit Identity - Address

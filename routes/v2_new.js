@@ -241,7 +241,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function edit_job_desc(agent) {
-    var isnotAccept = false;
+    var isnotAccept = true;
     // Function to check is Job Description of Student is already accepted by acad dir or no
     // if already accept change <<isnotAccept>> to false
     if (!isnotAccept) {
@@ -250,9 +250,11 @@ const dialogflowfulfillment = (request, response, result) => {
       agent.add(
         "I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!"
       );
-      agent.context.delete('Q16-EditJobDescription-yes-followup');
+      agent.context.delete("Q16-EditJobDescription-yes-followup");
     } else {
-      agent.add("Oke, Your Job Description already accepted by Your Academic Director, please tell me the detail of change you want to make.")
+      agent.add(
+        "Oke, Your Job Description already accepted by Your Academic Director, please tell me the detail of change you want to make."
+      );
     }
   }
 
@@ -265,6 +267,15 @@ const dialogflowfulfillment = (request, response, result) => {
       `Oke, so you want me to Send email to your Academic Director that you want to change your Job Description with detail like this :`
     );
     agent.add(`"${problem}" ?`);
+  }
+
+  function edit_job_desc_email(agent) {
+    infoJobDesc = agent.context.get("job_desc");
+    const problem = infoJobDesc.parameters.problem;
+    console.log(problem);
+    agent.add(
+      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+    );
   }
 
   function send_email(agent) {
@@ -401,7 +412,15 @@ const dialogflowfulfillment = (request, response, result) => {
   // Job Description
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
-  intentMap.set("Q16- Edit Job Description ? - yes - detail", edit_job_desc_confirmation);
+  intentMap.set(
+    "Q16- Edit Job Description ? - yes - detail",
+    edit_job_desc_confirmation
+  );
+  intentMap.set(
+    "Q16- Edit Job Description ? - yes - detail - yes",
+    edit_job_desc_email
+  );
+  
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);

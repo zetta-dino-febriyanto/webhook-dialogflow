@@ -3,7 +3,7 @@ var router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 //require('../utils/database');
 
@@ -64,17 +64,23 @@ const dialogflowfulfillment = (request, response, result) => {
       `Hello <<user.first_name>> <<user.last_name>>. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     );
   }
-
+  function isEmptyObject(obj) {
+    return !Object.keys(obj).length;
+  }
   async function editdoc_first(agent) {
     // function to search for the next deadlines IN THE FUTURE  for doc upload
+    console.log(result);
     const id = result.originalDetectIntentRequest.payload.userId;
-    console.log(id)
+    console.log(id);
 
-    let tasks = await get_data(`http://localhost:8080/getDocExpStudentTask/${id}/5a067bba1c0217218c75f8ab`, 'GET');
+    let tasks = await get_data(
+      `https://api.bilip.zetta-demo.space/getDocExpStudentTask/${id}/5a067bba1c0217218c75f8ab`,
+      "GET"
+    );
     // console.log(tasks)
 
     let taskDatas = tasks.map((task) => {
-      return `Upload Document ${task.description}`
+      return `Upload Document ${task.description}`;
     });
 
     let taskObject = taskDatas.reduce(function (result, item, index, array) {
@@ -85,13 +91,17 @@ const dialogflowfulfillment = (request, response, result) => {
     // Function to add search result to context
     agent.context.set("info", 999, taskObject);
     // bot response
-    agent.add("Please Choose What Document you want to Edit: ");
-    for (let [index, task] of tasks.entries()) {
-      agent.add(`${index + 1}. Upload Document ${task.description}`);
+    if (isEmptyObject(taskObject)) {
+      agent.add("You don't have any deadline of test");
+    } else {
+      agent.add("Please Choose What Document you want to Edit: ");
+      for (let [index, task] of tasks.entries()) {
+        agent.add(`${index + 1}. Upload Document ${task.description}`);
+      }
+      agent.add("Select the number, please");
+      infoContext = agent.context.get("info");
+      console.log(infoContext);
     }
-    agent.add("Select the number, please");
-    infoContext = agent.context.get("info");
-    console.log(infoContext)
   }
 
   function editdoc_no(agent) {
@@ -101,7 +111,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // for i in Range(0, length):
     //  info.append(infoContext.parameters[i+1])
 
-    console.log(infoContext)
+    console.log(infoContext.parameters);
 
     // const info1 = infoContext.parameters[1];
     // const info2 = infoContext.parameters[2];
@@ -357,10 +367,6 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_mentor_first
   );
 
-
-
-
-
   agent.handleRequest(intentMap);
 };
 
@@ -384,10 +390,14 @@ const get_data = async (url, method, auth, data = {}) => {
       // "Content-Type": "application/json",
       // "client_id": "1001125",
       // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
-      "Authorization": `Bearer "${auth}"`
-    }
-    if (method === 'POST') {
-      const response = await fetch(url, { method: method, headers: headers, body: data });
+      Authorization: `Bearer "${auth}"`,
+    };
+    if (method === "POST") {
+      const response = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: data,
+      });
       const json = await response.json();
       return json;
     } else {
@@ -395,7 +405,6 @@ const get_data = async (url, method, auth, data = {}) => {
       const json = await response.json();
       return json;
     }
-
   } catch (error) {
     console.log(error);
   }

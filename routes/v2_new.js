@@ -334,10 +334,70 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${problem}" ?`);
   }
 
-  function edit_job_desc_email(agent) {
+  async function edit_job_desc_email(agent) {
     infoJobDesc = agent.context.get("job_desc");
     const problem = infoJobDesc.parameters.problem;
     console.log(problem);
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the job description with detail like this: \n ${problem} Please proceed, Thank You!`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
     agent.add(
       "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
     );
@@ -493,15 +553,75 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${address}" ?`);
   }
 
-  function edit_address_mail(agent) {
+  async function edit_address_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>> Please proceed, Thank You!
     infoAddress = agent.context.get("address");
     const Address = infoAddress.parameters.address;
     console.log(Address);
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change your address with detail like this: \n ${Address} Please proceed, Thank You!`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
 
     agent.add(
-      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `I Already sent a email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director and CC to You, please check your mail box. Thank you!`
     );
   }
 
@@ -517,15 +637,75 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${parent}" ?`);
   }
 
-  function edit_parent_mail(agent) {
+  async function edit_parent_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your parent information with detail like this : \n <<Parent>> Please proceed, Thank You!
     infoParent = agent.context.get("parent");
     const Parent = infoParent.parameters.parent;
     console.log(Parent);
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change your parent information with detail like this: \n ${Parent} Please proceed, Thank You!`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
 
     agent.add(
-      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `I Already sent a email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director and CC to You, please check your mail box. Thank you!`
     );
   }
 

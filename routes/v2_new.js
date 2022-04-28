@@ -400,6 +400,15 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q12- Personal Details - address - yes - confirmation - yes",
     edit_address_mail
   );
+  intentMap.set(
+    "Q12_2 - address - yes - confirmation",
+    edit_address_first
+  );
+  intentMap.set(
+    "Q12_2 - address - yes - confirmation - yes",
+    edit_address_mail
+  );
+  
   // Edit  Identity - Parent
   intentMap.set(
     "Q12- Personal Details - parent - yes - detail",

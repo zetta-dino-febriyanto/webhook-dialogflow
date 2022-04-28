@@ -4,7 +4,7 @@ const { WebhookClient } = require("dialogflow-fulfillment");
 const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 const fetch = require("node-fetch");
-const emailUtil = require('../utils/email');
+const emailUtil = require("../utils/email");
 
 //require('../utils/database');
 
@@ -53,8 +53,11 @@ const dialogflowfulfillment = (request, response, result) => {
     //get user data
     //uncommend if on stagging
     const id = result.originalDetectIntentRequest.payload.userId;
-    console.log(id)
-    let user = await get_data(`https://api.bilip.zetta-demo.space/getUserById/${id}`, 'GET');
+    console.log(id);
+    let user = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
 
     // console.log(user)
     //uncommend if on stagging
@@ -125,7 +128,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // }
     Object.keys(infoContext.parameters).map(function (key, index) {
       if (key && Number.isInteger(parseInt(key))) {
-        agent.add(`${key}. ${infoContext.parameters[key]}`)
+        agent.add(`${key}. ${infoContext.parameters[key]}`);
       }
     });
     agent.add("Select the number, please");
@@ -167,43 +170,51 @@ const dialogflowfulfillment = (request, response, result) => {
     const test = infoContext.parameters[choice];
 
     const id = result.originalDetectIntentRequest.payload.userId;
-    let student = await get_data(`https://api.bilip.zetta-demo.space/getUserByUserId/${id}`, 'GET');
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
     let data = {
-      entity: 'academic',
-      name: 'Academic Director',
+      entity: "academic",
+      name: "Academic Director",
       school: student.school,
       rncpTitle: student.rncp_title,
-      classId: student.current_class
+      classId: student.current_class,
     };
-    console.log(`https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`)
-    let acadDirs = await get_data(`https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`, 'GET');
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
 
     let recipients = [
       {
         recipients: [acadDirs[0].email],
-        rank: 'a',
+        rank: "a",
       },
       {
         recipients: [student.email],
-        rank: 'cc',
-      }
+        rank: "cc",
+      },
     ];
 
     //Function to send email to acad dir
     let mailOptions = {
-      when: 'dummy notification',
-      language: '',
+      when: "dummy notification",
+      language: "",
       to: recipients,
       from: student.email,
       subjectEN: `dummy`,
       subjectFR: `dummy`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the document for ${test}. ${student.first_name} ${student.last_name} please forward your document to ${acadDirs[0].first_name} ${acadDirs[0].last_name}`,
       },
-      notificationReference: 'DUMMY_N1',
+      notificationReference: "DUMMY_N1",
       RNCPTitleId: [],
       schoolId: [],
       fromId: null,
@@ -230,12 +241,29 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function edit_job_desc(agent) {
-    // function to send  email to acad dir and CC to student
-    // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You!
+    var isnotAccept = false;
+    // Function to check is Job Description of Student is already accepted by acad dir or no
+    // if already accept change <<isnotAccept>> to false
+    if (!isnotAccept) {
+      // function to send  email to acad dir and CC to student
+      // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You!
+      agent.add(
+        "I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!"
+      );
+    } else {
+      agent.add("Oke, Your Job Description already accepted by Your Academic Director, please tell me the detail of change you want to make.")
+    }
+  }
 
+  function edit_job_desc_confirmation(agent) {
+    const problem = result.queryResult.queryText;
+    agent.context.set("job_desc", 99, {
+      problem: problem,
+    });
     agent.add(
-      "I Already sent a email to your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `Oke, so you want me to Send email to your Academic Director that you want to change your Job Description with detail like this :`
     );
+    agent.add(`"${problem}" ?`);
   }
 
   function send_email(agent) {
@@ -372,12 +400,12 @@ const dialogflowfulfillment = (request, response, result) => {
   // Job Description
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
+  intentMap.set("Q16- Edit Job Description ? - yes - detail", edit_job_desc_confirmation);
 
   // App not usefull
   intentMap.set("A04 - AppUsefull - No - yes - sending", send_email);
   intentMap.set("A00- Doesn't work - yes - sendmail", send_email);
 
-  
   // Edit Identity - Personal Information
   intentMap.set(
     "Q12- Personal Details - personal - yes - detail",
@@ -387,10 +415,8 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q12- Personal Details - personal - yes - detail - yes",
     edit_identity_mail
   );
-  intentMap.set("Q12_1 - personal - yes - detail", edit_identity_first)
-  intentMap.set("Q12_1 - personal - yes - detail - yes", edit_identity_mail)
-
-
+  intentMap.set("Q12_1 - personal - yes - detail", edit_identity_first);
+  intentMap.set("Q12_1 - personal - yes - detail - yes", edit_identity_mail);
 
   // Edit Identity - Address
   intentMap.set(
@@ -401,10 +427,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q12- Personal Details - address - yes - confirmation - yes",
     edit_address_mail
   );
-  intentMap.set(
-    "Q12_2 - address - yes - confirmation",
-    edit_address_first
-  );
+  intentMap.set("Q12_2 - address - yes - confirmation", edit_address_first);
   intentMap.set(
     "Q12_2 - address - yes - confirmation - yes",
     edit_address_mail

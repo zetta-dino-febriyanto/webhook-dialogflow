@@ -1,0 +1,25 @@
+module.exports = {
+  DUMMY_N1: {
+    when: 'dummy notification for accept student admission process step',
+    language: '',
+    to: '',
+    from: '',
+    subjectEN: '',
+    subjectFR: '',
+    htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+    htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+    sendToPersonalEmail: true,
+    requiredParams: {
+      body: '',
+    },
+    notificationReference: 'DUMMY_N1',
+    RNCPTitleId: [],
+    schoolId: [],
+    fromId: null,
+    toId: null,
+    subjectId: null,
+    testId: null,
+    isADMTCInCC: true,
+    sendToPlatformMailBox: true,
+  },
+};

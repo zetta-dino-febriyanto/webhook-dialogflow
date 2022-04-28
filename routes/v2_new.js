@@ -4,6 +4,7 @@ const { WebhookClient } = require("dialogflow-fulfillment");
 const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 const fetch = require("node-fetch");
+const emailUtil = require('../utils/email');
 
 //require('../utils/database');
 
@@ -48,12 +49,12 @@ const dialogflowfulfillment = (request, response, result) => {
   let text = "";
   let infoContext = null;
 
-  function sayHello(agent) {
+  async function sayHello(agent) {
     //get user data
     //uncommend if on stagging
-    // const id = result.originalDetectIntentRequest.payload.userId;
-    // console.log(id)
-    // let user = await get_data(`https://api.bilip.zetta-demo.space/getUserById/${id}`, 'GET');
+    const id = result.originalDetectIntentRequest.payload.userId;
+    console.log(id)
+    let user = await get_data(`https://api.bilip.zetta-demo.space/getUserById/${id}`, 'GET');
 
     // console.log(user)
     //uncommend if on stagging
@@ -61,7 +62,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     //this only for development
     agent.add(
-      `Hello <<user.first_name>> <<user.last_name>>. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
+      `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     );
   }
   function isEmptyObject(obj) {
@@ -158,19 +159,73 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function editdoc_send(agent) {
+  async function editdoc_send(agent) {
     // function to get variabel from context
     infoChoice = agent.context.get("choice");
     const choice = infoChoice.parameters.choice;
     infoContext = agent.context.get("info");
     const test = infoContext.parameters[choice];
 
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(`https://api.bilip.zetta-demo.space/getUserByUserId/${id}`, 'GET');
+    let data = {
+      entity: 'academic',
+      name: 'Academic Director',
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class
+    };
+    console.log(`https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`)
+    let acadDirs = await get_data(`https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`, 'GET');
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: 'a',
+      },
+      {
+        recipients: [student.email],
+        rank: 'cc',
+      }
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: 'dummy notification',
+      language: '',
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy`,
+      subjectFR: `dummy`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the document for ${test}. ${student.first_name} ${student.last_name} please forward your document to ${acadDirs[0].first_name} ${acadDirs[0].last_name}`,
+      },
+      notificationReference: 'DUMMY_N1',
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      isADMTCInCC: true,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
     // function to send  email to acad dir and CC to student
 
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the document for ${test}. <<student name>> please forward your document to <<Acad Dir Name>>
 
     agent.add(
-      `I Already send email to <<acad dir>> as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`
+      `I Already send email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director that you want to edit document about ${test} and CC to your email. Please check your Mail box`
     );
   }
 

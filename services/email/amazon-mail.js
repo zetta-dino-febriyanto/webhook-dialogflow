@@ -23,17 +23,16 @@ function sendMail(mailOptions, next) {
   // mailOptions.from = mailUtil.platformEmail;
   // }
   console.log('amazon mail options ', mailOptions);
-  next()
   // only send when the app in production mode
-  // if (env === 'production') {
-  //   if (mailOptions.to === 'aide@admtc.pro') {
-  //     mailOptions.from = 'sos.utilisateur@admtc.pro';
-  //   }
+  if (env === 'production') {
+    if (mailOptions.to === 'aide@admtc.pro') {
+      mailOptions.from = 'sos.utilisateur@admtc.pro';
+    }
 
-  //   transport.sendMail(mailOptions, next);
-  // } else {
-  //   next();
-  // }
+    transport.sendMail(mailOptions, next);
+  } else {
+    next();
+  }
 }
 
 module.exports = {

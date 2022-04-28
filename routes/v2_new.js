@@ -327,6 +327,10 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_identity_mail
   );
   intentMap.set("Q12_1 - personal - yes - detail", edit_identity_first)
+  intentMap.set("Q12_1 - personal - yes - detail - yes", edit_identity_mail)
+  
+
+
   // Edit Identity - Address
   intentMap.set(
     "Q12- Personal Details - address - yes - confirmation",

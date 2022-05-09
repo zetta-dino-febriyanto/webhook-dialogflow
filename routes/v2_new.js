@@ -811,6 +811,8 @@ const dialogflowfulfillment = (request, response, result) => {
   // Job Description
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
+  intentMap.set("Q16- Edit Job Description ? - yes - detail - no", edit_job_desc);
+  
   intentMap.set(
     "Q16- Edit Job Description ? - yes - detail",
     edit_job_desc_confirmation

@@ -243,6 +243,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
   async function edit_job_desc(agent) {
     const id = result.originalDetectIntentRequest.payload.userId;
+    console.log(id)
     let isnotAccept = await get_data(
       `https://api.bilip.zetta-demo.space/checkJobDescAcceptByAcadDir/${id}`,
       "GET"
@@ -796,6 +797,13 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  function arrange_meeting_first(agent) {
+    //Function so get free schedule of acad dir
+    const id = result.originalDetectIntentRequest.payload.userId;
+
+    agent.add(`You Acad Dir is Available on : 1. 9th May\n2. 10th May\n3.16th May`)
+  }
+
   let intentMap = new Map();
 
   // Welcome Intent
@@ -932,6 +940,9 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
   );
+
+  // Arrange Meeting
+  intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
   
 
   agent.handleRequest(intentMap);

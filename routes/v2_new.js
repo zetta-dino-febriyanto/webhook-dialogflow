@@ -242,6 +242,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   async function edit_job_desc(agent) {
+    const id = result.originalDetectIntentRequest.payload.userId;
     let isnotAccept = await get_data(
       `https://api.bilip.zetta-demo.space/checkJobDescAcceptByAcadDir/${id}`,
       "GET"
@@ -399,7 +400,7 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
     agent.add(
-      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `I Already sent a email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director and CC to You, please check your mail box. Thank youu!`
     );
   }
 

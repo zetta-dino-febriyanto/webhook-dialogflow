@@ -795,6 +795,13 @@ const dialogflowfulfillment = (request, response, result) => {
       "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
     );
   }
+  
+  function arrange_meeting_first(agent) {
+    //Function so get free schedule of acad dir
+    const id = result.originalDetectIntentRequest.payload.userId;
+
+    agent.add(`You Acad Dir is Available on : 1. 9th May\n2. 10th May\n3.16th May`)
+  }
 
   let intentMap = new Map();
 
@@ -932,7 +939,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
   );
-  
+  intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
 
   agent.handleRequest(intentMap);
 };

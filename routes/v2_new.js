@@ -865,10 +865,18 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_parent_first
   );
   intentMap.set(
+    "Q12_3 - parent - yes - detail",
+    edit_parent_first
+  );
+  intentMap.set(
     "Q12- Personal Details - parent - yes - detail - yes",
     edit_parent_mail
   );
-
+  intentMap.set(
+    "Q12_3 - parent - yes - detail - yes",
+    edit_parent_mail
+  );
+  
   // Information Company/Mentor
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes",

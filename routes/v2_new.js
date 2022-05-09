@@ -883,13 +883,27 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_mentor_first
   );
   intentMap.set(
+    "Q01_1 - mentor - yes",
+    edit_mentor_first
+  );
+  intentMap.set(
     "Q01- Information company / mentor - mentor - yes - confirmation",
+    edit_mentor_confirmation
+  );
+  intentMap.set(
+    "Q01_1 - mentor - yes - confirmations",
     edit_mentor_confirmation
   );
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes - confirmation - yes",
     edit_mentor_mail
   );
+  intentMap.set(
+    "Q01_1 - mentor - yes - confirmations - yes",
+    edit_mentor_mail
+  );
+  
+
   intentMap.set(
     "Q01- Information company / mentor - contract - yes",
     cancel_contract
@@ -902,6 +916,11 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - mentor - yes - confirmation - no",
     edit_mentor_first
   );
+  intentMap.set(
+    "Q01_1 - mentor - yes - confirmations - no",
+    edit_mentor_first
+  );
+  
   intentMap.set(
     "Q01- Information company / mentor - date - yes - date",
     edit_date_first

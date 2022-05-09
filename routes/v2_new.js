@@ -895,6 +895,10 @@ const dialogflowfulfillment = (request, response, result) => {
     cancel_contract
   );
   intentMap.set(
+    "Q01_2 - cancel_contract - yes",
+    cancel_contract
+  );
+  intentMap.set(
     "Q01- Information company / mentor - mentor - yes - confirmation - no",
     edit_mentor_first
   );

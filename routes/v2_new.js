@@ -818,7 +818,7 @@ const dialogflowfulfillment = (request, response, result) => {
         let translateDayToDate = common.convertDayNameToDate(day, week);
         console.log(translateDayToDate)
         let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
-        if (!checkMeetingSchedule || checkMeetingSchedule < 3) {
+        if (!checkMeetingSchedule) {
           dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
         }
         if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {
@@ -829,17 +829,12 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     } while (!found)
 
-    let responseText = ""
-
-    if (found){
-      responseText = `You Acad Dir is Available on : `;
-      for (let [index, date] of dateFound.entries()) {
-        responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
-      }
-    } else {
-      responseText = "Schedule of Your Acad Dir is Full";
-    }
+    let responseText = `You Acad Dir is Available on : `;
     
+    for (let [index, date] of dateFound.entries()) {
+      responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
+    }
+
     agent.add(responseText)
   }
 

@@ -818,7 +818,7 @@ const dialogflowfulfillment = (request, response, result) => {
         let translateDayToDate = common.convertDayNameToDate(day, week);
         console.log(translateDayToDate)
         let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
-        if (!checkMeetingSchedule) {
+        if (!checkMeetingSchedule || checkMeetingSchedule < 3) {
           dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
         }
         if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {

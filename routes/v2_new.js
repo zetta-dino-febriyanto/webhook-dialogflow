@@ -831,10 +831,17 @@ const dialogflowfulfillment = (request, response, result) => {
 
     let responseText = `Your Acad Dir is Available on : `;
     
+    
     for (let [index, date] of dateFound.entries()) {
       responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
     }
-   
+    //convert
+    ....
+    
+    // Simpan tanggal yg ditemukan disini
+    // agent.context.set("info", 999, <<tanggal_yg_ditemukan>>);
+
+
     agent.add(responseText);
     agent.add("Please choose the date : ");
   }

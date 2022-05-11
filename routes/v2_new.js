@@ -836,7 +836,7 @@ const dialogflowfulfillment = (request, response, result) => {
       responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
     }
     //convert
-    ....
+    
 
     // Simpan tanggal yg ditemukan disini
     // agent.context.set("info", 999, <<tanggal_yg_ditemukan>>);

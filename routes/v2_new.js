@@ -829,13 +829,14 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     } while (!found)
 
-    let responseText = `You Acad Dir is Available on : `;
+    let responseText = `Your Acad Dir is Available on : `;
     
     for (let [index, date] of dateFound.entries()) {
       responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
     }
-
-    agent.add(responseText)
+   
+    agent.add(responseText);
+    agent.add("Please choose the date : ");
   }
 
   let intentMap = new Map();

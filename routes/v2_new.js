@@ -854,10 +854,11 @@ const dialogflowfulfillment = (request, response, result) => {
       choice: choice,
     });
     infoContext = agent.context.get("info");
-    const test = infoContext.parameters[choice];
-    agent.add(`${test}`);
+    const date = infoContext.parameters[choice];
+    agent.add(`${date}`);
 
-    //save tanggal ke database meeting schedule
+    //save tanggal ke database meeting schedule ($date, acad dir, student, online)
+
   }
 
   let intentMap = new Map();

@@ -11,6 +11,15 @@ const acaddirScheduleModel = new Schema({
     enum: ['active', 'deleted'],
     default: 'active',
   },
+  type: {
+    type: String,
+    enum: ['fixed', 'dynamic'],
+    default: 'fixed',
+  },
+  day_name_schedule: [{
+    type: String,
+    enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', null],
+  }],
 });
 
 module.exports = mongoose.model('acaddir_schedule', acaddirScheduleModel);

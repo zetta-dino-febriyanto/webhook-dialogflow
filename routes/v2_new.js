@@ -20,7 +20,7 @@ router.post("/", function (req, res, next) {
   //Get Intent, Query, and Respond
   const intent = result.queryResult.intent.displayName;
   const query = result.queryResult.queryText;
-  const responds = result.queryResult.fulfillmentText;
+  const responds = result.queryResult.fulfillmentMessages;
 
   if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');
@@ -39,8 +39,8 @@ router.post("/", function (req, res, next) {
   } else {
     const score = 0
     const magnitude = 0
-     SentimentAnalysisModel.create({
-     score, magnitude, query, responds, intent
+    SentimentAnalysisModel.create({
+      score, magnitude, query, responds, intent
     })
   }
 });
@@ -811,7 +811,7 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes - detail - no", edit_job_desc);
-  
+
   intentMap.set(
     "Q16- Edit Job Description ? - yes - detail",
     edit_job_desc_confirmation
@@ -877,7 +877,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q12_3 - parent - yes - detail - yes",
     edit_parent_mail
   );
-  
+
   // Information Company/Mentor
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes",
@@ -903,7 +903,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01_1 - mentor - yes - confirmations - yes",
     edit_mentor_mail
   );
-  
+
 
   intentMap.set(
     "Q01- Information company / mentor - contract - yes",
@@ -921,7 +921,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01_1 - mentor - yes - confirmations - no",
     edit_mentor_first
   );
-  
+
   intentMap.set(
     "Q01- Information company / mentor - date - yes - date",
     edit_date_first

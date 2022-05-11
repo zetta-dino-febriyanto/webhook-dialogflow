@@ -464,3 +464,26 @@ exports.get_data = async function (url, method, auth, data = {}) {
     console.log(error);
   }
 };
+
+exports.convertDayNameToDate = function (name = '', weekAdded) {
+  name = name.toLowerCase();
+  let added = 0;
+  if (name === 'monday') {
+    added = 1;
+  } else if (name === 'tuesday') {
+    added = 2
+  } else if (name === 'wednesday') {
+    added = 3
+  } else if (name === 'thursday') {
+    added = 4
+  } else if (name === 'friday') {
+    added = 5
+  }
+
+  let currentDate = moment.utc();
+  if (weekAdded) {
+    return currentDate.clone().startOf('week').add(added + (weekAdded * 7), 'days');
+  } else {
+    return currentDate.clone().startOf('week').add(added, 'days');
+  }
+}

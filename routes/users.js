@@ -6,23 +6,23 @@ const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
 
 /* GET users listing. */
 router.post('/', function (req, res, next) {
- 
+
 
   const result = req.body;
   //Get Intent
   const intent = result.queryResult.intent.displayName;
   const query = result.queryResult.queryText;
-  const responds = result.queryResult.fulfillmentText;
+  const responds = result.queryResult.fulfillmentMessages;
 
   if (result.queryResult.sentimentAnalysisResult) {
 
-    
+
     const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
     const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
-   
-    
 
-    
+
+
+
 
     // store the result to DB
     SentimentAnalysisModel.create({
@@ -36,8 +36,8 @@ router.post('/', function (req, res, next) {
   } else {
     const score = 0
     const magnitude = 0
-     SentimentAnalysisModel.create({
-     score, magnitude, query, responds, intent
+    SentimentAnalysisModel.create({
+      score, magnitude, query, responds, intent
     })
 
   }

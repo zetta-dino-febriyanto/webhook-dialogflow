@@ -837,13 +837,27 @@ const dialogflowfulfillment = (request, response, result) => {
     }
     //convert
     ....
-    
+
     // Simpan tanggal yg ditemukan disini
     // agent.context.set("info", 999, <<tanggal_yg_ditemukan>>);
 
 
     agent.add(responseText);
     agent.add("Please choose the date : ");
+  }
+
+  function arrange_meeting_date(agent) {
+    const choice = agent.parameters.number;
+    console.log(choice);
+
+    agent.context.set("choice", 99, {
+      choice: choice,
+    });
+    infoContext = agent.context.get("info");
+    const test = infoContext.parameters[choice];
+    agent.add(`${test}`);
+
+    //save tanggal ke database meeting schedule
   }
 
   let intentMap = new Map();
@@ -983,6 +997,8 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_date_mail
   );
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
+  intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
+  
 
   agent.handleRequest(intentMap);
 };

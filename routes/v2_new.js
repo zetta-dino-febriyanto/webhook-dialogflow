@@ -829,11 +829,17 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     } while (!found)
 
-    let responseText = `You Acad Dir is Available on : `;
+    
 
-    for (let [index, date] of dateFound.entries()) {
-      responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
+    if (found){
+      let responseText = `You Acad Dir is Available on : `;
+      for (let [index, date] of dateFound.entries()) {
+        responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
+      }
+    } else {
+      let responseText = `Schedule of Your Acad Dir is Full `;
     }
+    
 
     agent.add(responseText)
   }

@@ -6,9 +6,9 @@ const app = dialogflow();
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 
-//require('../utils/database');
+require('../utils/database');
 
-// const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
+const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
 
 /* GET users listing. */
 router.post("/", function (req, res, next) {
@@ -17,30 +17,31 @@ router.post("/", function (req, res, next) {
   const result = req.body;
   dialogflowfulfillment(req, res, result);
   //console.log(result);
-  //Get Intent
+  //Get Intent, Query, and Respond
+  const intent = result.queryResult.intent.displayName;
+  const query = result.queryResult.queryText;
+  const responds = result.queryResult.fulfillmentText;
 
   if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');
-    const score =
-      result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
-    const magnitude =
-      result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
-    const query = result.queryResult.queryText;
-    const responds = result.queryResult.fulfillmentText;
-
-    // console.log(score, magnitude, query, responds, intent);
+    const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
+    const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
 
     //store the result to DB
-    // SentimentAnalysisModel.create({
-    //   score, magnitude, query, responds, intent
-    // })
+    SentimentAnalysisModel.create({
+      score, magnitude, query, responds, intent
+    })
 
     //  if (score < -0.3) {
     //     console.log("Negative Sentiment");
     //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
     //   }
   } else {
-    console.log("No sentiment Analysis Found");
+    const score = 0
+    const magnitude = 0
+     SentimentAnalysisModel.create({
+     score, magnitude, query, responds, intent
+    })
   }
 });
 
@@ -113,21 +114,11 @@ const dialogflowfulfillment = (request, response, result) => {
   function editdoc_no(agent) {
     // Function to add search result to context
     infoContext = agent.context.get("info");
-    // Array info[length] = [];
-    // for i in Range(0, length):
-    //  info.append(infoContext.parameters[i+1])
-
     console.log(infoContext.parameters);
-
-    // const info1 = infoContext.parameters[1];
-    // const info2 = infoContext.parameters[2];
-    // const info3 = infoContext.parameters[3];
 
     // bot response
     agent.add("Please Choose What Document you want to Edit: ");
-    // for (let [index, param] of infoContext.parameters.entries()) {
-    //   agent.add(param);
-    // }
+
     Object.keys(infoContext.parameters).map(function (key, index) {
       if (key && Number.isInteger(parseInt(key))) {
         agent.add(`${key}. ${infoContext.parameters[key]}`);

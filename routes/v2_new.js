@@ -5,10 +5,14 @@ const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
+const common = require('../utils/common');
+const moment = require('moment');
 
 require('../utils/database');
 
 const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
+const AcadDirScheduleModel = require('../models/acaddir_schedule.model');
+const MeetingScheduleModel = require('../models/meeting_schedule.model');
 
 /* GET users listing. */
 router.post("/", function (req, res, next) {
@@ -787,11 +791,51 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function arrange_meeting_first(agent) {
+  async function arrange_meeting_first(agent) {
     //Function so get free schedule of acad dir
     const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = { entity: "academic", name: "Academic Director", school: student.school, rncpTitle: student.rncp_title, classId: student.current_class };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+    let acadDir = acadDirs[0];
 
-    agent.add(`You Acad Dir is Available on : \n1. 9th May\n2. 10th May\n3.16th May`)
+    let acaddirSchedule = await AcadDirScheduleModel.findOne({ status: 'active', acaddir_id: String(acadDir._id), type: 'dynamic' }).lean();
+    let week = 0;
+    let found = false;
+    let dateFound = [];
+    console.log(acaddirSchedule)
+    do {
+      for (let [index, day] of acaddirSchedule.day_name_schedule.entries()) {
+        let translateDayToDate = common.convertDayNameToDate(day, week);
+        console.log(translateDayToDate)
+        let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
+        if (!checkMeetingSchedule) {
+          dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
+        }
+        if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {
+          week = week + 1;
+        } else if (index === (acaddirSchedule.day_name_schedule.length - 1) && dateFound.length) {
+          found = true;
+        }
+      }
+    } while (!found)
+
+    let responseText = `You Acad Dir is Available on : `;
+
+    for (let [index, date] of dateFound.entries()) {
+      responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
+    }
+
+    agent.add(responseText)
   }
 
   let intentMap = new Map();

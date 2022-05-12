@@ -753,8 +753,69 @@ const dialogflowfulfillment = (request, response, result) => {
     const Mentor = infoMentor.parameters.mentor;
     console.log(Mentor);
 
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change mentor with the email of new mentor is ${Mentor} Please proceed, Thank You!`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
     agent.add(
-      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `I Already sent a email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director and CC to You, please check your mail box. Thank youu!`
     );
   }
 
@@ -777,8 +838,69 @@ const dialogflowfulfillment = (request, response, result) => {
     const date = infoDate.parameters.date;
     console.log(date);
 
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to Contract Date with detail like this: ${date}. Please proceed, Thank You!`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
     agent.add(
-      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `I Already sent a email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director and CC to You, please check your mail box. Thank youu!`
     );
   }
 
@@ -786,8 +908,69 @@ const dialogflowfulfillment = (request, response, result) => {
     // Function to get student name
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Cancel the Contract of Company, Please proceed. Thank You!
 
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
+      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to Cancel the Contract of Company, Please proceed. Thank You!`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
     agent.add(
-      "I Already sent a email to <<Acad Dir Name>> as Your Academic Director and CC to You, please check your mail box. Thank youu!"
+      `I Already sent a email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} as Your Academic Director and CC to You, please check your mail box. Thank youu!`
     );
   }
 
@@ -830,17 +1013,20 @@ const dialogflowfulfillment = (request, response, result) => {
     } while (!found)
 
     let responseText = `Your Acad Dir is Available on : `;
-    
-    
+
+    let dateFoundFormatted = [];
     for (let [index, date] of dateFound.entries()) {
       responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
+      dateFoundFormatted.push(moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY'));
     }
-    //convert
-    
 
-    // Simpan tanggal yg ditemukan disini
-    // agent.context.set("info", 999, <<tanggal_yg_ditemukan>>);
+    let taskObject = dateFoundFormatted.reduce(function (result, item, index, array) {
+      result[index + 1] = item;
+      return result;
+    }, {});
 
+    // Function to add search result to context
+    agent.context.set("info", 999, taskObject);
 
     agent.add(responseText);
     agent.add("Please choose the date : ");
@@ -850,6 +1036,21 @@ const dialogflowfulfillment = (request, response, result) => {
     const choice = agent.parameters.number;
     console.log(choice);
 
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = { entity: "academic", name: "Academic Director", school: student.school, rncpTitle: student.rncp_title, classId: student.current_class };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+    let acadDir = acadDirs[0];
+
     agent.context.set("choice", 99, {
       choice: choice,
     });
@@ -857,7 +1058,15 @@ const dialogflowfulfillment = (request, response, result) => {
     const date = infoContext.parameters[choice];
     agent.add(`${date}`);
 
-    //save tanggal ke database meeting schedule ($date, acad dir, student, online)
+    // save tanggal ke database meeting schedule ($date, acad dir, student, online)
+    await MeetingScheduleModel.create({
+      date_schedule: date,
+      time_schedule: '00:00',
+      user_meeting: acadDir._id,
+      student_meeting: student._id,
+      link: String,
+      type: 'online',
+    });
 
   }
 
@@ -999,7 +1208,7 @@ const dialogflowfulfillment = (request, response, result) => {
   );
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
   intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
-  
+
 
   agent.handleRequest(intentMap);
 };

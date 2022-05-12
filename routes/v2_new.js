@@ -1037,37 +1037,14 @@ const dialogflowfulfillment = (request, response, result) => {
     const choice = agent.parameters.number;
     console.log(choice);
 
-    const id = result.originalDetectIntentRequest.payload.userId;
-    let student = await get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
-      "GET"
-    );
-    let data = { entity: "academic", name: "Academic Director", school: student.school, rncpTitle: student.rncp_title, classId: student.current_class };
-    console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
-    );
-    let acadDirs = await get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
-      "GET"
-    );
-    let acadDir = acadDirs[0];
-
     agent.context.set("choice", 99, {
       choice: choice,
     });
     infoContext = agent.context.get("info");
     const date = infoContext.parameters[choice];
-    agent.add(`${date}`);
-
-    // save tanggal ke database meeting schedule ($date, acad dir, student, online)
-    await MeetingScheduleModel.create({
-      date_schedule: date,
-      time_schedule: '00:00',
-      user_meeting: acadDir._id,
-      student_meeting: student._id,
-      link: String,
-      type: 'online',
-    });
+    agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
+    agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
+    
 
   }
 

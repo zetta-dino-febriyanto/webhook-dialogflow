@@ -1061,6 +1061,10 @@ const dialogflowfulfillment = (request, response, result) => {
     const choice_type = agent.parameters.number;
     const type = infoType.parameters[choice_type];
 
+    agent.context.set("type", 99, {
+      type : type
+    });
+
     agent.add(`Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`)
   }
 
@@ -1072,8 +1076,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const date = infoContext.parameters[choices];
 
     infoType = agent.context.get("type");
-    const choice_type = agent.parameters.number;
-    const type = infoType.parameters[choice_type];
+    const type = infoType.parameters.type;
 
     agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} with type of meeting is ${type}`);
   }

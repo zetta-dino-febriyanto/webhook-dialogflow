@@ -514,7 +514,7 @@ const dialogflowfulfillment = (request, response, result) => {
       htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
       sendToPersonalEmail: true,
       requiredParams: {
-        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change your personal information with detail like this: \n ${problem} Please proceed, Thank You!`,
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change personal information with detail like this: \n ${problem} Please proceed, Thank You!`,
       },
       notificationReference: "DUMMY_N1",
       RNCPTitleId: [],
@@ -598,7 +598,7 @@ const dialogflowfulfillment = (request, response, result) => {
       htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
       sendToPersonalEmail: true,
       requiredParams: {
-        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change your address with detail like this: \n ${Address} Please proceed, Thank You!`,
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change address with detail like this: \n ${Address} Please proceed, Thank You!`,
       },
       notificationReference: "DUMMY_N1",
       RNCPTitleId: [],
@@ -682,7 +682,7 @@ const dialogflowfulfillment = (request, response, result) => {
       htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
       sendToPersonalEmail: true,
       requiredParams: {
-        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change your parent information with detail like this: \n ${Parent} Please proceed, Thank You!`,
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change parent information with detail like this: \n ${Parent} Please proceed, Thank You!`,
       },
       notificationReference: "DUMMY_N1",
       RNCPTitleId: [],

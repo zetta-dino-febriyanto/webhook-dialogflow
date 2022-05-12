@@ -1001,7 +1001,7 @@ const dialogflowfulfillment = (request, response, result) => {
         let translateDayToDate = common.convertDayNameToDate(day, week);
         console.log(translateDayToDate)
         let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
-        if (!checkMeetingSchedule) {
+        if (!checkMeetingSchedule || checkMeetingSchedule < 3) {
           dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
         }
         if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {
@@ -1045,8 +1045,8 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
     agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
     agent.context.set("type", 99, {
-      '1' : "Online",
-      '2' : "Offline"
+      '1': "Online",
+      '2': "Offline"
     });
   }
 
@@ -1062,7 +1062,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const type = infoType.parameters[choice_type];
 
     agent.context.set("type", 99, {
-      type : type
+      type: type
     });
 
     agent.add(`Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`)
@@ -1080,7 +1080,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const type = infoType.parameters.type;
 
     agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} with type of meeting is ${type}`);
-    
+
     //Search acad dir of the student
     const id = result.originalDetectIntentRequest.payload.userId;
     let student = await get_data(
@@ -1251,8 +1251,8 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
   intentMap.set("A06 - Arrange Meeting - date - type", arrange_meeting_type);
   intentMap.set("A06 - Arrange Meeting - date - type - yes", arrange_meeting_confirm);
-  
-  
+
+
 
 
   agent.handleRequest(intentMap);

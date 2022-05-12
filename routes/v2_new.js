@@ -1061,7 +1061,21 @@ const dialogflowfulfillment = (request, response, result) => {
     const choice_type = agent.parameters.number;
     const type = infoType.parameters[choice_type];
 
-    agent.add(`${date} ${type}`)
+    agent.add(`Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`)
+  }
+
+  function arrange_meeting_confirm(agent) {
+    const choices = agent.context.get("choice").parameters.choice;
+    console.log(choices);
+
+    infoContext = agent.context.get("info");
+    const date = infoContext.parameters[choices];
+
+    infoType = agent.context.get("type");
+    const choice_type = agent.parameters.number;
+    const type = infoType.parameters[choice_type];
+
+    agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} with type of meeting is ${type}`);
   }
 
   let intentMap = new Map();
@@ -1206,6 +1220,8 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
   intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
   intentMap.set("A06 - Arrange Meeting - date - type", arrange_meeting_type);
+  intentMap.set("A06 - Arrange Meeting - date - type - yes", arrange_meeting_confirm);
+  
   
 
 

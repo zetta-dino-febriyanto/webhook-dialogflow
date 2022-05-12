@@ -1051,14 +1051,15 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function arrange_meeting_type(agent) {
-    const choices = agent.context.get("choice").choice;
-    console.log(agent.context.get("choice"));
-    
+    const choices = agent.context.get("choice").parameters.choice;
+    console.log(choices);
+
     infoContext = agent.context.get("info");
     const date = infoContext.parameters[choices];
 
+    infoType = agent.context.get("type");
     const choice_type = agent.parameters.number;
-    const type = infoContext.parameters[choice_type];
+    const type = infoType.parameters[choice_type];
 
     agent.add(`${date} ${type}`)
   }

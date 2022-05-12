@@ -1104,7 +1104,7 @@ const dialogflowfulfillment = (request, response, result) => {
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
-      type: type,
+      type: type.toLowerCase(),
     });
   }
 

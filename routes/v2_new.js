@@ -746,7 +746,7 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function edit_mentor_mail(agent) {
+  async function edit_mentor_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change mentor with the email of new mentor is <<Mentor>> Please proceed, Thank You!
     infoMentor = agent.context.get("mentor");
@@ -831,7 +831,7 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${date}" ?`);
   }
 
-  function edit_date_mail(agent) {
+  async function edit_date_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Contract Date with detail like this: <<date>>. Please proceed, Thank You!
     infoDate = agent.context.get("date");
@@ -904,7 +904,7 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function cancel_contract(agent) {
+  async function cancel_contract(agent) {
     // Function to get student name
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Cancel the Contract of Company, Please proceed. Thank You!
 
@@ -1033,7 +1033,7 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Please choose the date : ");
   }
 
-  function arrange_meeting_date(agent) {
+  async function arrange_meeting_date(agent) {
     const choice = agent.parameters.number;
     console.log(choice);
 

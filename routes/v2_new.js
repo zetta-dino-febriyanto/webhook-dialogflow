@@ -1033,7 +1033,7 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Please choose the date : ");
   }
 
-  async function arrange_meeting_date(agent) {
+  function arrange_meeting_date(agent) {
     const choice = agent.parameters.number;
     console.log(choice);
 
@@ -1044,8 +1044,23 @@ const dialogflowfulfillment = (request, response, result) => {
     const date = infoContext.parameters[choice];
     agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
     agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
-    
+    agent.context.set("type", 99, {
+      '1' : "Online",
+      '2' : "Offline"
+    });
+  }
 
+  function arrange_meeting_type(agent) {
+    const choices = agent.context.get("choice").choice;
+    console.log(agent.context.get("choice"));
+    
+    infoContext = agent.context.get("info");
+    const date = infoContext.parameters[choices];
+
+    const choice_type = agent.parameters.number;
+    const type = infoContext.parameters[choice_type];
+
+    agent.add(`${date} ${type}`)
   }
 
   let intentMap = new Map();
@@ -1184,8 +1199,13 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
   );
+
+
+  // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
   intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
+  intentMap.set("A06 - Arrange Meeting - date - type", arrange_meeting_type);
+  
 
 
   agent.handleRequest(intentMap);

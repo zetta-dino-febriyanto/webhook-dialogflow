@@ -1067,9 +1067,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
     agent.add(`Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`)
   }
-  
 
-  function arrange_meeting_confirm(agent) {
+
+  async function arrange_meeting_confirm(agent) {
     const choices = agent.context.get("choice").parameters.choice;
     console.log(choices);
 

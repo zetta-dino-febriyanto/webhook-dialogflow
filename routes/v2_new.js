@@ -1067,6 +1067,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     agent.add(`Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`)
   }
+  
 
   function arrange_meeting_confirm(agent) {
     const choices = agent.context.get("choice").parameters.choice;
@@ -1079,6 +1080,32 @@ const dialogflowfulfillment = (request, response, result) => {
     const type = infoType.parameters.type;
 
     agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} with type of meeting is ${type}`);
+    
+    //Search acad dir of the student
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = { entity: "academic", name: "Academic Director", school: student.school, rncpTitle: student.rncp_title, classId: student.current_class };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+    let acadDir = acadDirs[0];
+
+    // save data to database meeting schedule ($date, acad dir, student, $type)
+    await MeetingScheduleModel.create({
+      date_schedule: date,
+      time_schedule: '00:00',
+      user_meeting: acadDir._id,
+      student_meeting: student._id,
+      link: String,
+      type: type,
+    });
   }
 
   let intentMap = new Map();

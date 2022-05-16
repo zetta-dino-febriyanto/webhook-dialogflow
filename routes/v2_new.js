@@ -740,7 +740,7 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.context.set("mentor", 99, {
       mentor: mentor,
     });
-
+ 
     agent.add(
       `Oke, so you want me to Send email to your Academic Director that you want to change your Mentor and the email of new mentor is ${mentor}?`
     );
@@ -996,41 +996,47 @@ const dialogflowfulfillment = (request, response, result) => {
     let found = false;
     let dateFound = [];
     console.log(acaddirSchedule)
-    do {
-      for (let [index, day] of acaddirSchedule.day_name_schedule.entries()) {
-        let translateDayToDate = common.convertDayNameToDate(day, week);
-        console.log(translateDayToDate)
-        let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
-        if (!checkMeetingSchedule || checkMeetingSchedule < 3) {
-          dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
+    if (acaddirSchedule != []){
+      do {
+        for (let [index, day] of acaddirSchedule.day_name_schedule.entries()) {
+          let translateDayToDate = common.convertDayNameToDate(day, week);
+          console.log(translateDayToDate)
+          let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
+          if (!checkMeetingSchedule || checkMeetingSchedule < 3) {
+            dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
+          }
+          if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {
+            week = week + 1;
+          } else if (index === (acaddirSchedule.day_name_schedule.length - 1) && dateFound.length) {
+            found = true;
+          }
         }
-        if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {
-          week = week + 1;
-        } else if (index === (acaddirSchedule.day_name_schedule.length - 1) && dateFound.length) {
-          found = true;
-        }
+      } while (!found)
+  
+      let responseText = `Your Acad Dir is Available on : `;
+  
+      let dateFoundFormatted = [];
+      for (let [index, date] of dateFound.entries()) {
+        responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
+        dateFoundFormatted.push(moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY'));
       }
-    } while (!found)
-
-    let responseText = `Your Acad Dir is Available on : `;
-
-    let dateFoundFormatted = [];
-    for (let [index, date] of dateFound.entries()) {
-      responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
-      dateFoundFormatted.push(moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY'));
+  
+      let taskObject = dateFoundFormatted.reduce(function (result, item, index, array) {
+        result[index + 1] = item;
+        return result;
+      }, {});
+      console.log(taskObject);
+  
+      // Function to add search result to context
+      agent.context.set("info", 999, taskObject);
+  
+      agent.add(responseText);
+      agent.add("Please choose the date : ");
     }
-
-    let taskObject = dateFoundFormatted.reduce(function (result, item, index, array) {
-      result[index + 1] = item;
-      return result;
-    }, {});
-    console.log(taskObject);
-
-    // Function to add search result to context
-    agent.context.set("info", 999, taskObject);
-
-    agent.add(responseText);
-    agent.add("Please choose the date : ");
+    else{
+      agent.add("Sorry Your Academic Director is Busy.");
+    }
+    
   }
 
   function arrange_meeting_date(agent) {

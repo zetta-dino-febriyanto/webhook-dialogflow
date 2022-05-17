@@ -1271,7 +1271,7 @@ const dialogflowfulfillment = (request, response, result) => {
     });
 
     agent.add(
-      `Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} <<jam>> with type of meeting is ${type}`
+      `Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} ${meetingScheduleCreated.time_schedule} with type of meeting is ${type}`
     );
   }
 

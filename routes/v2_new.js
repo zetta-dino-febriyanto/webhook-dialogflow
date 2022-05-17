@@ -84,7 +84,7 @@ const dialogflowfulfillment = (request, response, result) => {
     //this only for development
     agent.add(
       new Image(
-        'https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png'
+        'https://avatars1.githubusercontent.com/u/36980416'
       )
     );
     agent.add(

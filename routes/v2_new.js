@@ -93,7 +93,7 @@ const dialogflowfulfillment = (request, response, result) => {
     //   ],
     // });
     const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
-    agent.add(new Image({imageUrl: "https://i.stack.imgur.com/HxYOm.png"}))
+    agent.add(new Image({image: 'https://i.stack.imgur.com/HxYOm.png'}))
     agent.add(kata);
     // response.send(createTextResponse(kata,  "https://i.stack.imgur.com/HxYOm.png"));
     // agent.add(

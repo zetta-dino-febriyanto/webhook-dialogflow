@@ -1048,6 +1048,7 @@ const dialogflowfulfillment = (request, response, result) => {
     let found = false;
     let dateFound = [];
     console.log(acaddirSchedule);
+
     if (acaddirSchedule != []) {
       do {
         for (let [index, day] of acaddirSchedule.day_name_schedule.entries()) {
@@ -1121,6 +1122,7 @@ const dialogflowfulfillment = (request, response, result) => {
     });
     infoContext = agent.context.get("info");
     const date = infoContext.parameters[choice];
+    console.log(Object.keys(infoContext).length)
     agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
     agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
     agent.context.set("type", 99, {

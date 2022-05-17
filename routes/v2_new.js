@@ -72,7 +72,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    agent.add(new Image(""))
+    agent.add(new Image("https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png"))
     agent.add(
       `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     );

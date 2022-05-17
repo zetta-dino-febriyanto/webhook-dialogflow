@@ -93,7 +93,8 @@ const dialogflowfulfillment = (request, response, result) => {
     //   ],
     // });
     const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
-    response.send(createTextResponse(kata,  "https://i.stack.imgur.com/HxYOm.png"));
+    response.send(createTextResponse("https://i.stack.imgur.com/HxYOm.png"));
+    agent.add(kata)
     // agent.add(
     //   `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     // );
@@ -1348,11 +1349,6 @@ const dialogflowfulfillment = (request, response, result) => {
 function createTextResponse(textresponse, urls) {
   let response = {
     fulfillmentMessages: [
-      {
-        text: {
-          text: [textresponse],
-        },
-      },
       {
         payload: {
           richContent: [

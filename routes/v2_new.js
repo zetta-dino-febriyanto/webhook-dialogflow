@@ -81,20 +81,22 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    agent.add({
-      "richContent": [
-        [
-          {
-            "type": "image",
-            "rawUrl": "https://example.com/images/logo.png",
-            "accessibilityText": "Example logo"
-          }
-        ]
-      ]
-    });
-    agent.add(
-      `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
-    );
+    // agent.add({
+    //   richContent: [
+    //     [
+    //       {
+    //         type: "image",
+    //         rawUrl: "https://example.com/images/logo.png",
+    //         accessibilityText: "Example logo",
+    //       },
+    //     ],
+    //   ],
+    // });
+    const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
+    res.send(createTextResponse(kata,  "https://example.com/images/logo.png"));
+    // agent.add(
+    //   `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
+    // );
   }
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;
@@ -1343,12 +1345,25 @@ const dialogflowfulfillment = (request, response, result) => {
   agent.handleRequest(intentMap);
 };
 
-function createTextResponse(textresponse) {
+function createTextResponse(textresponse, urls) {
   let response = {
     fulfillmentMessages: [
       {
         text: {
           text: [textresponse],
+        },
+      },
+      {
+        payload: {
+          richContent: [
+            [
+              {
+                type: "image",
+                accessibilityText: "Example logo",
+                rawUrl: urls,
+              },
+            ],
+          ],
         },
       },
     ],

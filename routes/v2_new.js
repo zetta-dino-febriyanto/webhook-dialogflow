@@ -66,7 +66,7 @@ const dialogflowfulfillment = (request, response, result) => {
   let intent = result.queryResult.intent.displayName;
   console.log(intent);
 
-  async function sayHello(agent) {
+  async function sayHello() {
     //get user data
     //uncommend if on stagging
     const id = result.originalDetectIntentRequest.payload.userId;
@@ -93,9 +93,9 @@ const dialogflowfulfillment = (request, response, result) => {
     //   ],
     // });
     const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
-    agent.add(new Image({imageUrl: 'https://i.stack.imgur.com/HxYOm.png'}))
-    agent.add(kata);
-    // response.send(createTextResponse(kata,  "https://i.stack.imgur.com/HxYOm.png"));
+    // agent.add(new Image({imageUrl: 'https://i.stack.imgur.com/HxYOm.png'}))
+    // agent.add(kata);
+    response.send(createTextResponse(kata,  "https://i.stack.imgur.com/HxYOm.png"));
     // agent.add(
     //   `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     // );
@@ -1217,7 +1217,10 @@ const dialogflowfulfillment = (request, response, result) => {
   let intentMap = new Map();
 
   // Welcome Intent
-  intentMap.set("A02-Welcome Intent", sayHello);
+  if (intent == "A02-Welcome Intent"){
+    sayHello();
+  }
+  // intentMap.set("A02-Welcome Intent", sayHello);
 
   // For Edit Document
   intentMap.set("Q10- Edit Document", editdoc_first);

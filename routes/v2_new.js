@@ -1122,6 +1122,7 @@ const dialogflowfulfillment = (request, response, result) => {
     });
     infoContext = agent.context.get("info");
     const date = infoContext.parameters[choice];
+    console.log(infoContext)
     console.log(Object.keys(infoContext).length)
     agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
     agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);

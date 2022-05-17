@@ -1,6 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const { WebhookClient, Image, Card, Payload } = require("dialogflow-fulfillment");
+const {
+  WebhookClient,
+  Image,
+  Card,
+  Payload,
+} = require("dialogflow-fulfillment");
 const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 const fetch = require("node-fetch");
@@ -81,7 +86,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
+    const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
     // let responsess = {
     //   fulfillmentMessages: [
     //     {
@@ -109,7 +114,6 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(new Suggestion("Suggestion"));
     agent.add(kata);
     // agent.add(new Payload(agent.UNSPECIFIED, responsess, { rawPayload: true, sendAsMessage: true}));
-
   }
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;
@@ -1100,7 +1104,7 @@ const dialogflowfulfillment = (request, response, result) => {
         result[index + 1] = item;
         return result;
       },
-        {});
+      {});
       console.log(taskObject);
 
       // Function to add search result to context
@@ -1122,14 +1126,18 @@ const dialogflowfulfillment = (request, response, result) => {
     });
     infoContext = agent.context.get("info");
     const date = infoContext.parameters[choice];
-    console.log(infoContext.parameters)
-    console.log((Object.keys(infoContext.parameters).length)-2)
-    agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
-    agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
-    agent.context.set("type", 99, {
-      1: "Online",
-      2: "Offline",
-    });
+    console.log(infoContext.parameters);
+    const threshold = Object.keys(infoContext.parameters).length - 2;
+    if (choice > threshold) {
+      agent.add("Input salah");
+    } else {
+      agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
+      agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
+      agent.context.set("type", 99, {
+        1: "Online",
+        2: "Offline",
+      });
+    }
   }
 
   function arrange_meeting_type(agent) {
@@ -1205,18 +1213,18 @@ const dialogflowfulfillment = (request, response, result) => {
       time_schedule:
         checkMeetingScheduleData && checkMeetingScheduleData.length
           ? moment
-            .utc(
-              checkMeetingScheduleData[0].date_schedule +
-              checkMeetingScheduleData[0].time_schedule,
-              "DD/MM/YYYYHH:mm"
-            )
-            .add(acaddirSchedule.meeting_duration, "minutes")
+              .utc(
+                checkMeetingScheduleData[0].date_schedule +
+                  checkMeetingScheduleData[0].time_schedule,
+                "DD/MM/YYYYHH:mm"
+              )
+              .add(acaddirSchedule.meeting_duration, "minutes")
           : moment
-            .utc(
-              date + acaddirSchedule.time_start_schedule,
-              "DD/MM/YYYYHH:mm"
-            )
-            .add(acaddirSchedule.meeting_duration, "minutes"),
+              .utc(
+                date + acaddirSchedule.time_start_schedule,
+                "DD/MM/YYYYHH:mm"
+              )
+              .add(acaddirSchedule.meeting_duration, "minutes"),
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
@@ -1234,12 +1242,18 @@ const dialogflowfulfillment = (request, response, result) => {
       },
     ];
 
-    let jitsiLink = `https://meet.jit.si/ZettaMeet_${moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').format('YYYYMMDDHHmmss')}`;
+    let jitsiLink = `https://meet.jit.si/ZettaMeet_${moment
+      .utc(
+        meetingScheduleCreated.date_schedule +
+          meetingScheduleCreated.time_schedule,
+        "DD/MM/YYYYHH:mm"
+      )
+      .format("YYYYMMDDHHmmss")}`;
 
-    let body = '';
-    if (type && type === 'online') {
+    let body = "";
+    if (type && type === "online") {
       body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
-    } else if (type && type === 'offline') {
+    } else if (type && type === "offline") {
       body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} in your office`;
     }
 

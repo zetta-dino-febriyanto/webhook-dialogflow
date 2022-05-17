@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const { WebhookClient, Image, Card, Suggestion } = require("dialogflow-fulfillment");
+const { WebhookClient, Image, Card, Payload } = require("dialogflow-fulfillment");
 const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 const fetch = require("node-fetch");

@@ -1120,50 +1120,36 @@ const dialogflowfulfillment = (request, response, result) => {
   function arrange_meeting_date(agent) {
     const choice = agent.parameters.number;
     console.log(choice);
-
+    infoContext = agent.context.get("info");
     const threshold = Object.keys(infoContext.parameters).length - 2;
     let check = false;
-    console.log(threshold)
-    // while (!check) {
-    //   if (choice > threshold || choice < 1) {
-    //     agent.add("Wrong Input");
-    //     let responseText = "Your Acad Dir is Available on :";
-    //     for (let index = 1; index <= threshold; index++) {
-    //       responseText += `\n${index}. ${infoContext.parameters[index]}`;
-    //     }
-    //     agent.add(responseText);
-    //     agent.add("Please choose the date : ");
-    //     const choice = agent.parameters.number;
-    //     console.log(choice);
-    //   } else {
-    //     agent.context.set("choice", 99, {
-    //       choice: choice,
-    //     });
-    //     infoContext = agent.context.get("info");
-    //     const date = infoContext.parameters[choice];
-    //     console.log(infoContext.parameters);
-    //     agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
-    //     agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
-    //     agent.context.set("type", 99, {
-    //       1: "Online",
-    //       2: "Offline",
-    //     });
-    //     check = true;
-    //   }
-    // }
-    agent.context.set("choice", 99, {
-      choice: choice,
-    });
-    infoContext = agent.context.get("info");
-    const date = infoContext.parameters[choice];
-    console.log(infoContext.parameters);
-    agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
-    agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
-    agent.context.set("type", 99, {
-      1: "Online",
-      2: "Offline",
-    });
-    check = true;
+    while (!check) {
+      if (choice > threshold || choice < 1) {
+        agent.add("Wrong Input");
+        let responseText = "Your Acad Dir is Available on :";
+        for (let index = 1; index <= threshold; index++) {
+          responseText += `\n${index}. ${infoContext.parameters[index]}`;
+        }
+        agent.add(responseText);
+        agent.add("Please choose the date : ");
+        const choice = agent.parameters.number;
+        console.log(choice);
+      } else {
+        agent.context.set("choice", 99, {
+          choice: choice,
+        });
+        infoContext = agent.context.get("info");
+        const date = infoContext.parameters[choice];
+        console.log(infoContext.parameters);
+        agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
+        agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
+        agent.context.set("type", 99, {
+          1: "Online",
+          2: "Offline",
+        });
+        check = true;
+      }
+    }
   }
 
   function arrange_meeting_type(agent) {

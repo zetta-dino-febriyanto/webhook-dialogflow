@@ -1220,7 +1220,7 @@ const dialogflowfulfillment = (request, response, result) => {
   if (intent == "A02-Welcome Intent"){
     sayHello();
   }
-  // intentMap.set("A02-Welcome Intent", sayHello);
+  intentMap.set("A02-Welcome Intent", void(0));
 
   // For Edit Document
   intentMap.set("Q10- Edit Document", editdoc_first);

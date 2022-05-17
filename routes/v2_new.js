@@ -75,7 +75,7 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
-    
+
     // console.log(user)
     //uncommend if on stagging
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
@@ -109,7 +109,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(new Suggestion("Suggestion"));
     agent.add(kata);
     // agent.add(new Payload(agent.UNSPECIFIED, responsess, { rawPayload: true, sendAsMessage: true}));
-   
+
   }
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;
@@ -1099,7 +1099,7 @@ const dialogflowfulfillment = (request, response, result) => {
         result[index + 1] = item;
         return result;
       },
-      {});
+        {});
       console.log(taskObject);
 
       // Function to add search result to context
@@ -1159,10 +1159,6 @@ const dialogflowfulfillment = (request, response, result) => {
     infoType = agent.context.get("type");
     const type = infoType.parameters.type;
 
-    agent.add(
-      `Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} <<jam>> with type of meeting is ${type}`
-    );
-
     //Search acad dir of the student
     const id = result.originalDetectIntentRequest.payload.userId;
     let student = await get_data(
@@ -1201,28 +1197,82 @@ const dialogflowfulfillment = (request, response, result) => {
     // if type==online : Hello <<acad dir>> student with name <<name student>> want to meet you on <<date>> <<hours>> on this link <<link jitsi>>
     // if type==offline :   Hello <<acad dir>> student with name <<name student>> want to meet you on <<date>> <<hours>> in your office
     // save data to database meeting schedule ($date, acad dir, student, $type)
-    await MeetingScheduleModel.create({
+    let meetingScheduleCreated = await MeetingScheduleModel.create({
       date_schedule: date,
       time_schedule:
         checkMeetingScheduleData && checkMeetingScheduleData.length
           ? moment
-              .utc(
-                checkMeetingScheduleData[0].date_schedule +
-                  checkMeetingScheduleData[0].time_schedule,
-                "DD/MM/YYYYHH:mm"
-              )
-              .add(acaddirSchedule.meeting_duration, "minutes")
+            .utc(
+              checkMeetingScheduleData[0].date_schedule +
+              checkMeetingScheduleData[0].time_schedule,
+              "DD/MM/YYYYHH:mm"
+            )
+            .add(acaddirSchedule.meeting_duration, "minutes")
           : moment
-              .utc(
-                date + acaddirSchedule.time_start_schedule,
-                "DD/MM/YYYYHH:mm"
-              )
-              .add(acaddirSchedule.meeting_duration, "minutes"),
+            .utc(
+              date + acaddirSchedule.time_start_schedule,
+              "DD/MM/YYYYHH:mm"
+            )
+            .add(acaddirSchedule.meeting_duration, "minutes"),
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
       type: type.toLowerCase(),
     });
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    let jitsiLink = `https://meet.jit.si/ZettaMeet_${moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').format('YYYYMMDDHHmmss')}`;
+
+    let body = '';
+    if (type && type === 'online') {
+      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+    } else if (type && type === 'offline') {
+      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} in your office`;
+    }
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: body,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
+    agent.add(
+      `Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} <<jam>> with type of meeting is ${type}`
+    );
   }
 
   let intentMap = new Map();

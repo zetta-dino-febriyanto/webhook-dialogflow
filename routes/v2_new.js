@@ -1129,7 +1129,8 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(infoContext.parameters);
     const threshold = Object.keys(infoContext.parameters).length - 2;
     if (choice > threshold) {
-      agent.add("Input salah");
+      agent.add("Wrong Input");
+      arrange_meeting_first(agent);
     } else {
       agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
       agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);

@@ -82,15 +82,15 @@ const dialogflowfulfillment = (request, response, result) => {
 
     //this only for development
     agent.add({
-      richContent: [
+      "richContent": [
         [
           {
-            type: "image",
-            rawUrl: "https://example.com/images/logo.png",
-            accessibilityText: "Example logo",
-          },
-        ],
-      ],
+            "type": "image",
+            "rawUrl": "https://example.com/images/logo.png",
+            "accessibilityText": "Example logo"
+          }
+        ]
+      ]
     });
     agent.add(
       `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`

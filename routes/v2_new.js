@@ -1117,6 +1117,95 @@ const dialogflowfulfillment = (request, response, result) => {
     }
   }
 
+  async function get_schedule(){
+    const id = result.originalDetectIntentRequest.payload.userId;
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+    let acadDir = acadDirs[0];
+
+    let acaddirSchedule = await AcadDirScheduleModel.findOne({
+      status: "active",
+      acaddir_id: String(acadDir._id),
+      type: "dynamic",
+    }).lean();
+    let week = 0;
+    let found = false;
+    let dateFound = [];
+    console.log(acaddirSchedule);
+
+    if (acaddirSchedule != []) {
+      do {
+        for (let [index, day] of acaddirSchedule.day_name_schedule.entries()) {
+          let translateDayToDate = common.convertDayNameToDate(day, week);
+          console.log(translateDayToDate);
+          let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({
+            status: "active",
+            user_meeting: String(acadDir._id),
+            date_schedule: translateDayToDate.format("DD/MM/YYYY"),
+          });
+          if (
+            !checkMeetingSchedule ||
+            checkMeetingSchedule < acaddirSchedule.total_student
+          ) {
+            dateFound.push(translateDayToDate.format("DD/MM/YYYYHH:mm"));
+          }
+          if (
+            index === acaddirSchedule.day_name_schedule.length - 1 &&
+            !dateFound.length
+          ) {
+            week = week + 1;
+          } else if (
+            index === acaddirSchedule.day_name_schedule.length - 1 &&
+            dateFound.length
+          ) {
+            found = true;
+          }
+        }
+      } while (!found);
+
+      let responseText = `Your Acad Dir is Available on : `;
+
+      let dateFoundFormatted = [];
+      for (let [index, date] of dateFound.entries()) {
+        responseText += `\n${index + 1}. ${moment
+          .utc(date, "DD/MM/YYYYHH:mm")
+          .format("DD/MM/YYYY")}`;
+        dateFoundFormatted.push(
+          moment.utc(date, "DD/MM/YYYYHH:mm").format("DD/MM/YYYY")
+        );
+      }
+
+      let taskObject = dateFoundFormatted.reduce(function (
+        result,
+        item,
+        index,
+        array
+      ) {
+        result[index + 1] = item;
+        return result;
+      },
+      {});
+
+      return taskObject, responseText
+  }
+
+
   function arrange_meeting_date(agent) {
     const choice = agent.parameters.number;
     console.log(choice);
@@ -1128,9 +1217,15 @@ const dialogflowfulfillment = (request, response, result) => {
     const date = infoContext.parameters[choice];
     console.log(infoContext.parameters);
     const threshold = Object.keys(infoContext.parameters).length - 2;
-    if (choice > threshold) {
+    
+    if (choice > threshold || choice <threshold) {
       agent.add("Wrong Input");
-      arrange_meeting_first(agent);
+      taskObject, responseText = get_schedule();
+      agent.context.set("info", 999, taskObject);
+
+      agent.add(responseText);
+      agent.add("Please choose the date : ");
+
     } else {
       agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
       agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);

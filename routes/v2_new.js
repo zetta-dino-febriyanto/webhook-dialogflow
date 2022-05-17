@@ -1121,25 +1121,26 @@ const dialogflowfulfillment = (request, response, result) => {
     const choice = agent.parameters.number;
     console.log(choice);
 
-    agent.context.set("choice", 99, {
-      choice: choice,
-    });
-    infoContext = agent.context.get("info");
-    const date = infoContext.parameters[choice];
-    console.log(infoContext.parameters);
     const threshold = Object.keys(infoContext.parameters).length - 2;
-    let check = false
-    while (!check){
-      if (choice > threshold || choice <threshold) {
+    let check = false;
+    while (!check) {
+      if (choice > threshold || choice < threshold) {
         agent.add("Wrong Input");
-        let responseText = "Your Acad Dir is Available on :"
+        let responseText = "Your Acad Dir is Available on :";
         for (let index = 1; index <= threshold; index++) {
-          responseText += `\n${index}. ${infoContext.parameters[index]}`
+          responseText += `\n${index}. ${infoContext.parameters[index]}`;
         }
         agent.add(responseText);
         agent.add("Please choose the date : ");
-  
+        const choice = agent.parameters.number;
+        console.log(choice);
       } else {
+        agent.context.set("choice", 99, {
+          choice: choice,
+        });
+        infoContext = agent.context.get("info");
+        const date = infoContext.parameters[choice];
+        console.log(infoContext.parameters);
         agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
         agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
         agent.context.set("type", 99, {
@@ -1149,7 +1150,6 @@ const dialogflowfulfillment = (request, response, result) => {
         check = true;
       }
     }
-    
   }
 
   function arrange_meeting_type(agent) {

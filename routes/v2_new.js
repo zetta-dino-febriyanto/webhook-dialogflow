@@ -1085,7 +1085,7 @@ const dialogflowfulfillment = (request, response, result) => {
     infoType = agent.context.get("type");
     const type = infoType.parameters.type;
 
-    agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} with type of meeting is ${type}`);
+    agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} <<jam>> with type of meeting is ${type}`);
 
     //Search acad dir of the student
     const id = result.originalDetectIntentRequest.payload.userId;
@@ -1107,6 +1107,10 @@ const dialogflowfulfillment = (request, response, result) => {
 
     let checkMeetingScheduleData = await MeetingScheduleModel.find({ status: 'active', user_meeting: acadDir._id, date_schedule: date }).sort({ _id: -1 });
 
+
+    //Send email to acad dir :
+    // if type==online : Hello <<acad dir>> student with name <<name student>> want to meet you on <<date>> <<hours>> on this link <<link jitsi>>
+    // if type==offline :   Hello <<acad dir>> student with name <<name student>> want to meet you on <<date>> <<hours>> in your office
     // save data to database meeting schedule ($date, acad dir, student, $type)
     await MeetingScheduleModel.create({
       date_schedule: date,

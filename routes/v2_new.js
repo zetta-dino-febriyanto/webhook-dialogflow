@@ -6,14 +6,14 @@ const { dialogflow, BasicCard, Suggestions } = require("actions-on-google");
 const app = dialogflow();
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
-const common = require('../utils/common');
-const moment = require('moment');
+const common = require("../utils/common");
+const moment = require("moment");
 
-require('../utils/database');
+require("../utils/database");
 
-const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
-const AcadDirScheduleModel = require('../models/acaddir_schedule.model');
-const MeetingScheduleModel = require('../models/meeting_schedule.model');
+const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
+const AcadDirScheduleModel = require("../models/acaddir_schedule.model");
+const MeetingScheduleModel = require("../models/meeting_schedule.model");
 
 /* GET users listing. */
 router.post("/", function (req, res, next) {
@@ -29,24 +29,34 @@ router.post("/", function (req, res, next) {
 
   if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');
-    const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
-    const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
+    const score =
+      result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
+    const magnitude =
+      result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
 
     //store the result to DB
     SentimentAnalysisModel.create({
-      score, magnitude, query, responds, intent
-    })
+      score,
+      magnitude,
+      query,
+      responds,
+      intent,
+    });
 
     //  if (score < -0.3) {
     //     console.log("Negative Sentiment");
     //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
     //   }
   } else {
-    const score = 0
-    const magnitude = 0
+    const score = 0;
+    const magnitude = 0;
     SentimentAnalysisModel.create({
-      score, magnitude, query, responds, intent
-    })
+      score,
+      magnitude,
+      query,
+      responds,
+      intent,
+    });
   }
 });
 
@@ -72,7 +82,11 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    agent.add(new Image("https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png"))
+    agent.add(
+      new Image(
+        "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png"
+      )
+    );
     agent.add(
       `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     );
@@ -288,8 +302,8 @@ const dialogflowfulfillment = (request, response, result) => {
         from: student.email,
         subjectEN: `dummy ${intent}`,
         subjectFR: `dummy ${intent}`,
-        htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-        htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+        htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+        htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
         sendToPersonalEmail: true,
         requiredParams: {
           body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the Edit Job Description, Please Rejected his Job Description. Thank You!`,
@@ -375,8 +389,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change the job description with detail like this: \n ${problem} Please proceed, Thank You!`,
@@ -512,8 +526,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change personal information with detail like this: \n ${problem} Please proceed, Thank You!`,
@@ -596,8 +610,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change address with detail like this: \n ${Address} Please proceed, Thank You!`,
@@ -680,8 +694,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change parent information with detail like this: \n ${Parent} Please proceed, Thank You!`,
@@ -715,7 +729,13 @@ const dialogflowfulfillment = (request, response, result) => {
       "GET"
     );
     if (student && student.companies && student.companies.length) {
-      let companyData = student.companies.find((company) => company && company.status && company.status === 'active' && company.mentor);
+      let companyData = student.companies.find(
+        (company) =>
+          company &&
+          company.status &&
+          company.status === "active" &&
+          company.mentor
+      );
       if (companyData && companyData.mentor) {
         let mentor = await get_data(
           `https://api.bilip.zetta-demo.space/getUserById/${companyData.mentor}`,
@@ -727,13 +747,13 @@ const dialogflowfulfillment = (request, response, result) => {
             `Your old mentor is ${mentor.first_name} ${mentor.last_name}. Please enter email of new mentor.`
           );
         } else {
-          agent.add('mentor not found');
+          agent.add("mentor not found");
         }
       } else {
-        agent.add('mentor not found');
+        agent.add("mentor not found");
       }
     } else {
-      agent.add('mentor not found');
+      agent.add("mentor not found");
     }
   }
 
@@ -794,8 +814,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to change mentor with the email of new mentor is ${Mentor} Please proceed, Thank You!`,
@@ -879,8 +899,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to Contract Date with detail like this: ${date}. Please proceed, Thank You!`,
@@ -949,8 +969,8 @@ const dialogflowfulfillment = (request, response, result) => {
       from: student.email,
       subjectEN: `dummy ${intent}`,
       subjectFR: `dummy ${intent}`,
-      htmlEN: 'utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html',
-      htmlFR: 'utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html',
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
         body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. ${student.first_name} ${student.last_name} want to Cancel the Contract of Company, Please proceed. Thank You!`,
@@ -983,7 +1003,13 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-    let data = { entity: "academic", name: "Academic Director", school: student.school, rncpTitle: student.rncp_title, classId: student.current_class };
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
@@ -993,40 +1019,67 @@ const dialogflowfulfillment = (request, response, result) => {
     );
     let acadDir = acadDirs[0];
 
-    let acaddirSchedule = await AcadDirScheduleModel.findOne({ status: 'active', acaddir_id: String(acadDir._id), type: 'dynamic' }).lean();
+    let acaddirSchedule = await AcadDirScheduleModel.findOne({
+      status: "active",
+      acaddir_id: String(acadDir._id),
+      type: "dynamic",
+    }).lean();
     let week = 0;
     let found = false;
     let dateFound = [];
-    console.log(acaddirSchedule)
+    console.log(acaddirSchedule);
     if (acaddirSchedule != []) {
       do {
         for (let [index, day] of acaddirSchedule.day_name_schedule.entries()) {
           let translateDayToDate = common.convertDayNameToDate(day, week);
-          console.log(translateDayToDate)
-          let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({ status: 'active', user_meeting: String(acadDir._id), date_schedule: translateDayToDate.format('DD/MM/YYYY') });
-          if (!checkMeetingSchedule || checkMeetingSchedule < acaddirSchedule.total_student) {
-            dateFound.push(translateDayToDate.format('DD/MM/YYYYHH:mm'));
+          console.log(translateDayToDate);
+          let checkMeetingSchedule = await MeetingScheduleModel.countDocuments({
+            status: "active",
+            user_meeting: String(acadDir._id),
+            date_schedule: translateDayToDate.format("DD/MM/YYYY"),
+          });
+          if (
+            !checkMeetingSchedule ||
+            checkMeetingSchedule < acaddirSchedule.total_student
+          ) {
+            dateFound.push(translateDayToDate.format("DD/MM/YYYYHH:mm"));
           }
-          if (index === (acaddirSchedule.day_name_schedule.length - 1) && !dateFound.length) {
+          if (
+            index === acaddirSchedule.day_name_schedule.length - 1 &&
+            !dateFound.length
+          ) {
             week = week + 1;
-          } else if (index === (acaddirSchedule.day_name_schedule.length - 1) && dateFound.length) {
+          } else if (
+            index === acaddirSchedule.day_name_schedule.length - 1 &&
+            dateFound.length
+          ) {
             found = true;
           }
         }
-      } while (!found)
+      } while (!found);
 
       let responseText = `Your Acad Dir is Available on : `;
 
       let dateFoundFormatted = [];
       for (let [index, date] of dateFound.entries()) {
-        responseText += `\n${index + 1}. ${moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY')}`;
-        dateFoundFormatted.push(moment.utc(date, 'DD/MM/YYYYHH:mm').format('DD/MM/YYYY'));
+        responseText += `\n${index + 1}. ${moment
+          .utc(date, "DD/MM/YYYYHH:mm")
+          .format("DD/MM/YYYY")}`;
+        dateFoundFormatted.push(
+          moment.utc(date, "DD/MM/YYYYHH:mm").format("DD/MM/YYYY")
+        );
       }
 
-      let taskObject = dateFoundFormatted.reduce(function (result, item, index, array) {
+      let taskObject = dateFoundFormatted.reduce(function (
+        result,
+        item,
+        index,
+        array
+      ) {
         result[index + 1] = item;
         return result;
-      }, {});
+      },
+      {});
       console.log(taskObject);
 
       // Function to add search result to context
@@ -1034,11 +1087,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
       agent.add(responseText);
       agent.add("Please choose the date : ");
-    }
-    else {
+    } else {
       agent.add("Sorry Your Academic Director is Busy.");
     }
-
   }
 
   function arrange_meeting_date(agent) {
@@ -1053,8 +1104,8 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
     agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
     agent.context.set("type", 99, {
-      '1': "Online",
-      '2': "Offline"
+      1: "Online",
+      2: "Offline",
     });
   }
 
@@ -1070,12 +1121,13 @@ const dialogflowfulfillment = (request, response, result) => {
     const type = infoType.parameters[choice_type];
 
     agent.context.set("type", 99, {
-      type: type
+      type: type,
     });
 
-    agent.add(`Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`)
+    agent.add(
+      `Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`
+    );
   }
-
 
   async function arrange_meeting_confirm(agent) {
     const choices = agent.context.get("choice").parameters.choice;
@@ -1087,7 +1139,9 @@ const dialogflowfulfillment = (request, response, result) => {
     infoType = agent.context.get("type");
     const type = infoType.parameters.type;
 
-    agent.add(`Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} <<jam>> with type of meeting is ${type}`);
+    agent.add(
+      `Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} <<jam>> with type of meeting is ${type}`
+    );
 
     //Search acad dir of the student
     const id = result.originalDetectIntentRequest.payload.userId;
@@ -1095,7 +1149,13 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-    let data = { entity: "academic", name: "Academic Director", school: student.school, rncpTitle: student.rncp_title, classId: student.current_class };
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
@@ -1105,10 +1165,17 @@ const dialogflowfulfillment = (request, response, result) => {
     );
     let acadDir = acadDirs[0];
 
-    let acaddirSchedule = await AcadDirScheduleModel.findOne({ status: 'active', acaddir_id: String(acadDir._id), type: 'dynamic' }).lean();
+    let acaddirSchedule = await AcadDirScheduleModel.findOne({
+      status: "active",
+      acaddir_id: String(acadDir._id),
+      type: "dynamic",
+    }).lean();
 
-    let checkMeetingScheduleData = await MeetingScheduleModel.find({ status: 'active', user_meeting: acadDir._id, date_schedule: date }).sort({ _id: -1 });
-
+    let checkMeetingScheduleData = await MeetingScheduleModel.find({
+      status: "active",
+      user_meeting: acadDir._id,
+      date_schedule: date,
+    }).sort({ _id: -1 });
 
     //Send email to acad dir :
     // if type==online : Hello <<acad dir>> student with name <<name student>> want to meet you on <<date>> <<hours>> on this link <<link jitsi>>
@@ -1116,7 +1183,21 @@ const dialogflowfulfillment = (request, response, result) => {
     // save data to database meeting schedule ($date, acad dir, student, $type)
     await MeetingScheduleModel.create({
       date_schedule: date,
-      time_schedule: checkMeetingScheduleData && checkMeetingScheduleData.length ? moment.utc(checkMeetingScheduleData[0].date_schedule + checkMeetingScheduleData[0].time_schedule, 'DD/MM/YYYYHH:mm').add(acaddirSchedule.meeting_duration, 'minutes') : moment.utc(date + acaddirSchedule.time_start_schedule, 'DD/MM/YYYYHH:mm').add(acaddirSchedule.meeting_duration, 'minutes'),
+      time_schedule:
+        checkMeetingScheduleData && checkMeetingScheduleData.length
+          ? moment
+              .utc(
+                checkMeetingScheduleData[0].date_schedule +
+                  checkMeetingScheduleData[0].time_schedule,
+                "DD/MM/YYYYHH:mm"
+              )
+              .add(acaddirSchedule.meeting_duration, "minutes")
+          : moment
+              .utc(
+                date + acaddirSchedule.time_start_schedule,
+                "DD/MM/YYYYHH:mm"
+              )
+              .add(acaddirSchedule.meeting_duration, "minutes"),
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
@@ -1140,7 +1221,10 @@ const dialogflowfulfillment = (request, response, result) => {
   // Job Description
   intentMap.set("Q17-Access Job Description - Edit - yes", edit_job_desc);
   intentMap.set("Q16- Edit Job Description ? - yes", edit_job_desc);
-  intentMap.set("Q16- Edit Job Description ? - yes - detail - no", edit_job_desc);
+  intentMap.set(
+    "Q16- Edit Job Description ? - yes - detail - no",
+    edit_job_desc
+  );
 
   intentMap.set(
     "Q16- Edit Job Description ? - yes - detail",
@@ -1195,28 +1279,19 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q12- Personal Details - parent - yes - detail",
     edit_parent_first
   );
-  intentMap.set(
-    "Q12_3 - parent - yes - detail",
-    edit_parent_first
-  );
+  intentMap.set("Q12_3 - parent - yes - detail", edit_parent_first);
   intentMap.set(
     "Q12- Personal Details - parent - yes - detail - yes",
     edit_parent_mail
   );
-  intentMap.set(
-    "Q12_3 - parent - yes - detail - yes",
-    edit_parent_mail
-  );
+  intentMap.set("Q12_3 - parent - yes - detail - yes", edit_parent_mail);
 
   // Information Company/Mentor
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes",
     edit_mentor_first
   );
-  intentMap.set(
-    "Q01_1 - mentor - yes",
-    edit_mentor_first
-  );
+  intentMap.set("Q01_1 - mentor - yes", edit_mentor_first);
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes - confirmation",
     edit_mentor_confirmation
@@ -1229,28 +1304,18 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - mentor - yes - confirmation - yes",
     edit_mentor_mail
   );
-  intentMap.set(
-    "Q01_1 - mentor - yes - confirmations - yes",
-    edit_mentor_mail
-  );
-
+  intentMap.set("Q01_1 - mentor - yes - confirmations - yes", edit_mentor_mail);
 
   intentMap.set(
     "Q01- Information company / mentor - contract - yes",
     cancel_contract
   );
-  intentMap.set(
-    "Q01_2 - cancel_contract - yes",
-    cancel_contract
-  );
+  intentMap.set("Q01_2 - cancel_contract - yes", cancel_contract);
   intentMap.set(
     "Q01- Information company / mentor - mentor - yes - confirmation - no",
     edit_mentor_first
   );
-  intentMap.set(
-    "Q01_1 - mentor - yes - confirmations - no",
-    edit_mentor_first
-  );
+  intentMap.set("Q01_1 - mentor - yes - confirmations - no", edit_mentor_first);
 
   intentMap.set(
     "Q01- Information company / mentor - date - yes - date",
@@ -1261,15 +1326,14 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_date_mail
   );
 
-
   // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
   intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
   intentMap.set("A06 - Arrange Meeting - date - type", arrange_meeting_type);
-  intentMap.set("A06 - Arrange Meeting - date - type - yes", arrange_meeting_confirm);
-
-
-
+  intentMap.set(
+    "A06 - Arrange Meeting - date - type - yes",
+    arrange_meeting_confirm
+  );
 
   agent.handleRequest(intentMap);
 };

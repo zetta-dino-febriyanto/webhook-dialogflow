@@ -81,11 +81,12 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    agent.add(
-      new Image(
-        'https://avatars1.githubusercontent.com/u/36980416'
-      )
-    );
+    agent.add(new Card({
+      title: `Title: this is a card title`,
+      imageUrl: 'https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png',
+      text: `This is the body text of a card.`,
+      })
+   );
     agent.add(
       `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
     );

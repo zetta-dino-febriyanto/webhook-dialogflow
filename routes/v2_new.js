@@ -1124,7 +1124,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const threshold = Object.keys(infoContext.parameters).length - 2;
     let check = false;
     while (!check) {
-      if (choice > threshold || choice < threshold) {
+      if (choice > threshold || choice < 1) {
         agent.add("Wrong Input");
         let responseText = "Your Acad Dir is Available on :";
         for (let index = 1; index <= threshold; index++) {

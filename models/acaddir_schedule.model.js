@@ -20,6 +20,8 @@ const acaddirScheduleModel = new Schema({
     type: String,
     enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', null],
   }],
+  total_student: Number,
+  meeting_duration: Number
 });
 
 module.exports = mongoose.model('acaddir_schedule', acaddirScheduleModel);

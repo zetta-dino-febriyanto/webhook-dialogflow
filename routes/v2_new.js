@@ -75,32 +75,41 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
-
+    
     // console.log(user)
     //uncommend if on stagging
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    // agent.add({
-    //   richContent: [
-    //     [
-    //       {
-    //         type: "image",
-    //         rawUrl: "https://example.com/images/logo.png",
-    //         accessibilityText: "Example logo",
-    //       },
-    //     ],
-    //   ],
-    // });
     const kata = `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
+    let responsess = {
+      fulfillmentMessages: [
+        {
+          text: {
+            text: [kata],
+          },
+        },
+        {
+          payload: {
+            richContent: [
+              [
+                {
+                  type: "image",
+                  accessibilityText: "Example logo",
+                  rawUrl: 'https://i.stack.imgur.com/HxYOm.png',
+                },
+              ],
+            ],
+          },
+        },
+      ],
+    }
     // agent.add(new Image({imageUrl: 'https://i.stack.imgur.com/HxYOm.png'}))
-    agent.add(new Suggestion("Quick Reply"));
-    agent.add(new Suggestion("Suggestion"));
-    agent.add(kata);
-    // response.send(createTextResponse(kata,  "https://i.stack.imgur.com/HxYOm.png"));
-    // agent.add(
-    //   `Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`
-    // );
+    // agent.add(new Suggestion("Quick Reply"));
+    // agent.add(new Suggestion("Suggestion"));
+    // agent.add(kata);
+    agent.add(new Payload(agent.UNSPECIFIED, responsess, { rawPayload: true, sendAsMessage: true}));
+   
   }
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;

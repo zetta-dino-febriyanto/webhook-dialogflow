@@ -173,14 +173,22 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function editdoc_choose(agent) {
     const choice = agent.parameters.number;
-    console.log(choice);
-
-    agent.context.set("choice", 99, {
-      choice: choice,
-    });
     infoContext = agent.context.get("info");
-    const test = infoContext.parameters[choice];
-    agent.add(`Please confirm  you selected to change the ${test}?`);
+
+    console.log(choice);
+    const threshold = Object.keys(infoContext.parameters).length - 2;
+    if (choice > threshold || choice < 1) {
+      agent.add("Wrong Input. Please Choose the right input");
+      agent.context.set("Q10-EditDocument-followup", 1);
+      agent.context.delete("Q10-EditDocument-lists-followup");
+    } else {
+      agent.context.set("choice", 99, {
+        choice: choice,
+      });
+
+      const test = infoContext.parameters[choice];
+      agent.add(`Please confirm  you selected to change the ${test}?`);
+    }
   }
 
   function editdoc_choose_yes(agent) {
@@ -1149,7 +1157,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const threshold = 2;
     const choices = agent.context.get("choice").parameters.choice;
     console.log(choices);
-    
+
     const choice_type = agent.parameters.number;
     if (choice_type > threshold || choice_type < 1) {
       agent.add("Wrong Input. Please Choose the right input");

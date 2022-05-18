@@ -140,7 +140,7 @@ const dialogflowfulfillment = (request, response, result) => {
     }, {});
 
     // Function to add search result to context
-    agent.context.set("info", 999, taskObject);
+    agent.context.set("info_doc", 999, taskObject);
     // bot response
     if (isEmptyObject(taskObject)) {
       agent.add("You don't have any deadline of test");
@@ -150,14 +150,14 @@ const dialogflowfulfillment = (request, response, result) => {
         agent.add(`${index + 1}. Upload Document ${task.description}`);
       }
       agent.add("Select the number, please");
-      infoContext = agent.context.get("info");
+      infoContext = agent.context.get("info_doc");
       console.log(infoContext);
     }
   }
 
   function editdoc_no(agent) {
     // Function to add search result to context
-    infoContext = agent.context.get("info");
+    infoContext = agent.context.get("info_doc");
     console.log(infoContext.parameters);
 
     // bot response
@@ -173,7 +173,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
   function editdoc_choose(agent) {
     const choice = agent.parameters.number;
-    infoContext = agent.context.get("info");
+    infoContext = agent.context.get("info_doc");
 
     console.log(choice);
     const threshold = Object.keys(infoContext.parameters).length - 2;
@@ -182,7 +182,7 @@ const dialogflowfulfillment = (request, response, result) => {
       agent.context.set("Q10-EditDocument-followup", 1);
       agent.context.delete("Q10-EditDocument-lists-followup");
     } else {
-      agent.context.set("choice", 99, {
+      agent.context.set("choice_doc", 99, {
         choice: choice,
       });
 
@@ -192,9 +192,9 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function editdoc_choose_yes(agent) {
-    infoChoice = agent.context.get("choice");
+    infoChoice = agent.context.get("choice_doc");
     const choice = infoChoice.parameters.choice;
-    infoContext = agent.context.get("info");
+    infoContext = agent.context.get("info_doc");
     const test = infoContext.parameters[choice];
     agent.add(
       `Only Academic Director can change Your Document for ${test}. You want me to contact your Academic Director?`
@@ -209,9 +209,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
   async function editdoc_send(agent) {
     // function to get variabel from context
-    infoChoice = agent.context.get("choice");
+    infoChoice = agent.context.get("choice_doc");
     const choice = infoChoice.parameters.choice;
-    infoContext = agent.context.get("info");
+    infoContext = agent.context.get("info_doc");
     const test = infoContext.parameters[choice];
 
     const id = result.originalDetectIntentRequest.payload.userId;
@@ -1457,7 +1457,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "A06 - Arrange Meeting - date - type - yes",
     arrange_meeting_confirm
   );
-  
+ 
   agent.handleRequest(intentMap);
 };
 

@@ -1128,7 +1128,7 @@ const dialogflowfulfillment = (request, response, result) => {
     if (choice > threshold || choice < 1) {
       agent.add("Wrong Input");
       agent.context.delete("info")
-      agent.context.set("wrong", 99 {
+      agent.context.set("wrong", 99, {
         wrong: true
       })
     } else {

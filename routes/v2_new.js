@@ -1127,9 +1127,8 @@ const dialogflowfulfillment = (request, response, result) => {
 
     if (choice > threshold || choice < 1) {
       agent.add("Wrong Input. Please Choose the right input");
-      agent.context.set("A06-ArrangeMeeting-followup", 99)
+      agent.context.set("A06-ArrangeMeeting-followup", 1);
       agent.context.delete("A06-ArrangeMeeting-date-followup");
-
     } else {
       agent.context.set("choice", 99, {
         choice: choice,
@@ -1143,28 +1142,35 @@ const dialogflowfulfillment = (request, response, result) => {
         1: "Online",
         2: "Offline",
       });
-
     }
   }
 
   function arrange_meeting_type(agent) {
+    infoContext = agent.context.get("info");
+    const threshold = Object.keys(infoContext.parameters).length - 2;
     const choices = agent.context.get("choice").parameters.choice;
     console.log(choices);
 
-    infoContext = agent.context.get("info");
-    const date = infoContext.parameters[choices];
+    if (choice > threshold || choice < 1) {
+      agent.add("Wrong Input. Please Choose the right input");
+      agent.context.set("A06-ArrangeMeeting-date-followup", 1);
+      agent.context.delete("A06-ArrangeMeeting-date-type-followup");
+    } else {
+      infoContext = agent.context.get("info");
+      const date = infoContext.parameters[choices];
 
-    infoType = agent.context.get("type");
-    const choice_type = agent.parameters.number;
-    const type = infoType.parameters[choice_type];
+      infoType = agent.context.get("type");
+      const choice_type = agent.parameters.number;
+      const type = infoType.parameters[choice_type];
 
-    agent.context.set("type", 99, {
-      type: type,
-    });
+      agent.context.set("type", 99, {
+        type: type,
+      });
 
-    agent.add(
-      `Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`
-    );
+      agent.add(
+        `Oke, Please confirm, you want to meet your Academic Director on ${date} with type of meeting is ${type}?`
+      );
+    }
   }
 
   async function arrange_meeting_confirm(agent) {

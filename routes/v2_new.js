@@ -1149,8 +1149,9 @@ const dialogflowfulfillment = (request, response, result) => {
     const threshold = 2;
     const choices = agent.context.get("choice").parameters.choice;
     console.log(choices);
-
-    if (choice > threshold || choice < 1) {
+    
+    const choice_type = agent.parameters.number;
+    if (choice_type > threshold || choice_type < 1) {
       agent.add("Wrong Input. Please Choose the right input");
       agent.context.set("A06-ArrangeMeeting-date-followup", 1);
       agent.context.delete("A06-ArrangeMeeting-date-type-followup");
@@ -1159,7 +1160,6 @@ const dialogflowfulfillment = (request, response, result) => {
       const date = infoContext.parameters[choices];
 
       infoType = agent.context.get("type");
-      const choice_type = agent.parameters.number;
       const type = infoType.parameters[choice_type];
 
       agent.context.set("type", 99, {

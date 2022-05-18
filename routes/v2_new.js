@@ -1146,8 +1146,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function arrange_meeting_type(agent) {
-    infoContext = agent.context.get("info");
-    const threshold = Object.keys(infoContext.parameters).length - 2;
+    const threshold = 2;
     const choices = agent.context.get("choice").parameters.choice;
     console.log(choices);
 

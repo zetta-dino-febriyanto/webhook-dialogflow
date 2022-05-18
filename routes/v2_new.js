@@ -1126,11 +1126,10 @@ const dialogflowfulfillment = (request, response, result) => {
     let check = false;
 
     if (choice > threshold || choice < 1) {
-      agent.add("Wrong Input");
-      agent.context.delete("info")
-      agent.context.set("wrong", 99, {
-        wrong: true
-      })
+      agent.add("Wrong Input. Please Choose the right input");
+      agent.context.set("A06-ArrangeMeeting-followup", 99)
+      agent.context.delete("A06-ArrangeMeeting-date-followup");
+
     } else {
       agent.context.set("choice", 99, {
         choice: choice,

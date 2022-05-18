@@ -1144,13 +1144,28 @@ const dialogflowfulfillment = (request, response, result) => {
       infoContext = agent.context.get("info");
       const date = infoContext.parameters[choice];
       console.log(infoContext.parameters);
-      agent.add(`Oke, you choose to Meet Your Acad ir on ${date}.`);
-      agent.add(`Please Choose the type of meeting:\n1. Online \n2. Offline`);
+      agent.add(`Oke, you choose to Meet Your Acad ir on ${date}?`);
+      agent.add(`If Yes Please Choose the type of meeting:\n1. Online \n2. Offline`);
       agent.context.set("type", 99, {
         1: "Online",
         2: "Offline",
       });
     }
+  }
+
+  function arrange_meeting_date_no(agent) {
+    infoContext = agent.context.get("info");
+    console.log(infoContext.parameters);
+
+    // bot response
+    agent.add("Your Acad Dir is Available on : ");
+
+    Object.keys(infoContext.parameters).map(function (key, index) {
+      if (key && Number.isInteger(parseInt(key))) {
+        agent.add(`${key}. ${infoContext.parameters[key]}`);
+      }
+    });
+    agent.add("Select the number, please");
   }
 
   function arrange_meeting_type(agent) {
@@ -1436,12 +1451,13 @@ const dialogflowfulfillment = (request, response, result) => {
   // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
   intentMap.set("A06 - Arrange Meeting - date", arrange_meeting_date);
+  intentMap.set("A06 - Arrange Meeting - date - no", arrange_meeting_date_no);
   intentMap.set("A06 - Arrange Meeting - date - type", arrange_meeting_type);
   intentMap.set(
     "A06 - Arrange Meeting - date - type - yes",
     arrange_meeting_confirm
   );
-
+  
   agent.handleRequest(intentMap);
 };
 

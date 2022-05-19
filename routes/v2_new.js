@@ -128,6 +128,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
+
     console.log(id);
 
     let tasks = await get_data(
@@ -1476,9 +1477,19 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_date_first
   );
   intentMap.set(
+    "Q01_3 - contract_date - yes - detail",
+    edit_date_first
+  );
+  
+  intentMap.set(
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
   );
+  intentMap.set(
+    "Q01_3 - contract_date - yes - detail - yes",
+    edit_date_mail
+  );
+  
 
   // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);

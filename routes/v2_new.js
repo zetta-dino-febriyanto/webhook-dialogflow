@@ -1321,9 +1321,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
     let body = "";
     if (type && type === "Online") {
-      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.time_schedule} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
     } else if (type && type === "Offline") {
-      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} in your office`;
+      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.time_schedule} in your office`;
     }
 
     //Function to send email to acad dir
@@ -1357,7 +1357,7 @@ const dialogflowfulfillment = (request, response, result) => {
     });
 
     agent.add(
-      `Oke, I already send an email to Your Academic Director that you want to meet on  on ${date} ${meetingScheduleCreated.time_schedule} with type of meeting is ${type}`
+      `Oke, I already send an email to Your Academic Director that you want to meet on ${meetingScheduleCreated.time_schedule} with type of meeting is ${type}`
     );
   }
 

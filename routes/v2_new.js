@@ -1235,6 +1235,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     infoType = agent.context.get("type");
     const type = infoType.parameters.type;
+    console.log(type);
 
     //Search acad dir of the student
     const id_before = result.originalDetectIntentRequest.payload.userId;

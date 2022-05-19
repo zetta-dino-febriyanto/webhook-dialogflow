@@ -75,9 +75,9 @@ const dialogflowfulfillment = (request, response, result) => {
     //get user data
     //uncommend if on stagging
     const id_before = result.originalDetectIntentRequest.payload.userId;
-    const result = id_before.split(/[/\s]/);
-    const id = id_before[0];
-    
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
+
     console.log(id);
     let user = await get_data(
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,

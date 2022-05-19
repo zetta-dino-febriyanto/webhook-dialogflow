@@ -74,7 +74,10 @@ const dialogflowfulfillment = (request, response, result) => {
   async function sayHello(agent) {
     //get user data
     //uncommend if on stagging
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const result = id_before.split(/[/\s]/);
+    const id = id_before[0];
+    
     console.log(id);
     let user = await get_data(
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,
@@ -453,7 +456,8 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(problem);
     // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
 
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_mentah = result.originalDetectIntentRequest.payload.userId;
+
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"

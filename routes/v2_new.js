@@ -124,7 +124,9 @@ const dialogflowfulfillment = (request, response, result) => {
   async function editdoc_first(agent) {
     // function to search for the next deadlines IN THE FUTURE  for doc upload
     console.log(result);
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     console.log(id);
 
     let tasks = await get_data(
@@ -217,7 +219,9 @@ const dialogflowfulfillment = (request, response, result) => {
     infoContext = agent.context.get("info_doc");
     const test = infoContext.parameters[choice];
 
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -288,7 +292,9 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   async function edit_job_desc(agent) {
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let isnotAccept = await get_data(
       `https://api.bilip.zetta-demo.space/checkJobDescAcceptByAcadDir/${id}`,
       "GET"
@@ -298,7 +304,6 @@ const dialogflowfulfillment = (request, response, result) => {
     if (!isnotAccept) {
       // function to send  email to acad dir and CC to student
       // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You!
-      const id = result.originalDetectIntentRequest.payload.userId;
       let student = await get_data(
         `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
         "GET"
@@ -385,7 +390,9 @@ const dialogflowfulfillment = (request, response, result) => {
     infoJobDesc = agent.context.get("job_desc");
     const problem = infoJobDesc.parameters.problem;
     console.log(problem);
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -456,7 +463,9 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(problem);
     // Email Text : Hello User Help. Student with Name ${student.first_name} ${student.last_name} have problem : ${problem}. Please contact him, thank you!
 
-    const id_mentah = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
 
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
@@ -523,7 +532,9 @@ const dialogflowfulfillment = (request, response, result) => {
     infoProblem = agent.context.get("problem");
     const problem = infoProblem.parameters.problem;
 
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -607,7 +618,9 @@ const dialogflowfulfillment = (request, response, result) => {
     infoAddress = agent.context.get("address");
     const Address = infoAddress.parameters.address;
     console.log(Address);
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -691,7 +704,9 @@ const dialogflowfulfillment = (request, response, result) => {
     infoParent = agent.context.get("parent");
     const Parent = infoParent.parameters.parent;
     console.log(Parent);
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -759,7 +774,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
   async function edit_mentor_first(agent) {
     // Function to search Mentor of Student
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -811,7 +828,9 @@ const dialogflowfulfillment = (request, response, result) => {
     const Mentor = infoMentor.parameters.mentor;
     console.log(Mentor);
 
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -896,7 +915,9 @@ const dialogflowfulfillment = (request, response, result) => {
     const date = infoDate.parameters.date;
     console.log(date);
 
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -966,7 +987,9 @@ const dialogflowfulfillment = (request, response, result) => {
     // Function to get student name
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Cancel the Contract of Company, Please proceed. Thank You!
 
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -1034,7 +1057,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
   async function arrange_meeting_first(agent) {
     //Function so get free schedule of acad dir
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -1210,7 +1235,9 @@ const dialogflowfulfillment = (request, response, result) => {
     const type = infoType.parameters.type;
 
     //Search acad dir of the student
-    const id = result.originalDetectIntentRequest.payload.userId;
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"

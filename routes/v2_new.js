@@ -1252,9 +1252,9 @@ const dialogflowfulfillment = (request, response, result) => {
       rncpTitle: student.rncp_title,
       classId: student.current_class,
     };
-    console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
-    );
+    // console.log(
+    //   `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    // );
     let acadDirs = await get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"

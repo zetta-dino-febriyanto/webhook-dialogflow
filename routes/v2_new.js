@@ -70,6 +70,7 @@ const dialogflowfulfillment = (request, response, result) => {
   let infoContext = null;
   let intent = result.queryResult.intent.displayName;
   console.log(intent);
+  console.log(result);
 
   async function sayHello(agent) {
     //get user data

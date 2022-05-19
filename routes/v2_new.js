@@ -1320,9 +1320,9 @@ const dialogflowfulfillment = (request, response, result) => {
       .format("YYYYMMDDHHmmss")}`;
 
     let body = "";
-    if (type && type === "online") {
+    if (type && type === "Online") {
       body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
-    } else if (type && type === "offline") {
+    } else if (type && type === "Offline") {
       body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.date_schedule} ${meetingScheduleCreated.time_schedule} in your office`;
     }
 

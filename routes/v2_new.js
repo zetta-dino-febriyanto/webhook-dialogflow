@@ -145,7 +145,7 @@ const dialogflowfulfillment = (request, response, result) => {
       result[index + 1] = item;
       return result;
     }, {});
-
+    console.log(taskObject)
     // Function to add search result to context
     agent.context.set("info_doc", 999, taskObject);
     // bot response

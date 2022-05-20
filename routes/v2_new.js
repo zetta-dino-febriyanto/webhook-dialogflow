@@ -1366,6 +1366,17 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  function deactivated_account(agent) {
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
+
+    //Funtion to send email to acad Dir and CC to student :
+    // Dear <<Acad Dir>>. Your student with name <<Student Name>> and Email <<student email>> Wanto Resign/Deactivated his Account. Thank You.
+
+    agent.add("Oke. I already send an email to <<Acad Dir Name>> As your Academic Director that you want to Resign/Deactivated Your Account. Thank You :)")
+  }
+
   let intentMap = new Map();
 
   // Welcome Intent
@@ -1506,6 +1517,10 @@ const dialogflowfulfillment = (request, response, result) => {
     "A06 - Arrange Meeting - date - type - yes",
     arrange_meeting_confirm
   );
+
+  //Deactivated Account
+  intentMap.set("Q19- Deactivated - yes", deactivated_account);
+  
 
   agent.handleRequest(intentMap);
 };

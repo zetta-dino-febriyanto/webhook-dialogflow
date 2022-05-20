@@ -1062,6 +1062,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
+    const timeZoneInMinutes = results[1];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -1128,9 +1129,10 @@ const dialogflowfulfillment = (request, response, result) => {
       for (let [index, date] of dateFound.entries()) {
         responseText += `\n${index + 1}. ${moment
           .utc(date, "DD/MM/YYYYHH:mm")
+          .add(timeZoneInMinutes, 'minutes')
           .format("DD/MM/YYYY")}`;
         dateFoundFormatted.push(
-          moment.utc(date, "DD/MM/YYYYHH:mm").format("DD/MM/YYYY")
+          moment.utc(date, "DD/MM/YYYYHH:mm").add(timeZoneInMinutes, 'minutes').format("DD/MM/YYYY")
         );
       }
 
@@ -1143,7 +1145,7 @@ const dialogflowfulfillment = (request, response, result) => {
         result[index + 1] = item;
         return result;
       },
-      {});
+        {});
       console.log(taskObject);
 
       // Function to add search result to context
@@ -1241,6 +1243,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
+    const timeZoneInMinutes = results[1];
     let student = await get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
@@ -1282,18 +1285,18 @@ const dialogflowfulfillment = (request, response, result) => {
       time_schedule:
         checkMeetingScheduleData && checkMeetingScheduleData.length
           ? moment
-              .utc(
-                checkMeetingScheduleData[0].date_schedule +
-                  checkMeetingScheduleData[0].time_schedule,
-                "DD/MM/YYYYHH:mm"
-              )
-              .add(acaddirSchedule.meeting_duration, "minutes")
+            .utc(
+              checkMeetingScheduleData[0].date_schedule +
+              checkMeetingScheduleData[0].time_schedule,
+              "DD/MM/YYYYHH:mm"
+            )
+            .add(acaddirSchedule.meeting_duration, "minutes")
           : moment
-              .utc(
-                date + acaddirSchedule.time_start_schedule,
-                "DD/MM/YYYYHH:mm"
-              )
-              .add(acaddirSchedule.meeting_duration, "minutes"),
+            .utc(
+              date + acaddirSchedule.time_start_schedule,
+              "DD/MM/YYYYHH:mm"
+            )
+            .add(acaddirSchedule.meeting_duration, "minutes"),
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
@@ -1314,7 +1317,7 @@ const dialogflowfulfillment = (request, response, result) => {
     let jitsiLink = `https://meet.jit.si/ZettaMeet_${moment
       .utc(
         meetingScheduleCreated.date_schedule +
-          meetingScheduleCreated.time_schedule,
+        meetingScheduleCreated.time_schedule,
         "DD/MM/YYYYHH:mm"
       )
       .format("YYYYMMDDHHmmss")}`;
@@ -1356,8 +1359,10 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
+    let timeFix = moment.utc(date + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(timeZoneInMinutes, 'minutes').format('DD/MM/YYYY HH:mm')
+
     agent.add(
-      `Oke, I already send an email to Your Academic Director that you want to meet on ${meetingScheduleCreated.time_schedule} with type of meeting is ${type}`
+      `Oke, I already send an email to Your Academic Director that you want to meet on ${timeFix} with type of meeting is ${type}`
     );
   }
 
@@ -1481,7 +1486,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01_3 - contract_date - yes - detail",
     edit_date_first
   );
-  
+
   intentMap.set(
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
@@ -1490,7 +1495,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01_3 - contract_date - yes - detail - yes",
     edit_date_mail
   );
-  
+
 
   // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
@@ -1501,7 +1506,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "A06 - Arrange Meeting - date - type - yes",
     arrange_meeting_confirm
   );
- 
+
   agent.handleRequest(intentMap);
 };
 

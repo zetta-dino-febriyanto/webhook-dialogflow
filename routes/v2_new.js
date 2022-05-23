@@ -1327,7 +1327,10 @@ const dialogflowfulfillment = (request, response, result) => {
 
 
     if (recipients) {
-      let meetingSchedule = moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(acaddirSchedule, 'minutes');
+      let meetingSchedule = moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm');
+      if (acaddirSchedule && acaddirSchedule.acaddir_timezone) {
+        meetingSchedule.add(acaddirSchedule.acaddir_timezone, 'minutes')
+      }
       let body = "";
       if (type && type === "Online") {
         body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
@@ -1508,7 +1511,7 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q17-Access Job Description - Edit - yes - detail - no",
     edit_job_desc
   );
-  
+
 
   intentMap.set(
     "Q16- Edit Job Description ? - yes - detail",

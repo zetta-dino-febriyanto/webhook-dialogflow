@@ -1308,9 +1308,12 @@ const dialogflowfulfillment = (request, response, result) => {
         recipients: [acadDirs[0].email],
         rank: "a",
       },
+    ];
+
+    let studentRecipients = [
       {
         recipients: [student.email],
-        rank: "cc",
+        rank: "a",
       },
     ];
 
@@ -1322,42 +1325,86 @@ const dialogflowfulfillment = (request, response, result) => {
       )
       .format("YYYYMMDDHHmmss")}`;
 
-    let body = "";
-    if (type && type === "Online") {
-      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.time_schedule} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
-    } else if (type && type === "Offline") {
-      body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingScheduleCreated.time_schedule} in your office`;
+
+    if (recipients) {
+      let meetingSchedule = moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(acaddirSchedule., 'minutes');
+      let body = "";
+      if (type && type === "Online") {
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+      } else if (type && type === "Offline") {
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} in your office`;
+      }
+
+      //Function to send email to acad dir
+      let mailOptions = {
+        when: "dummy notification",
+        language: "",
+        to: recipients,
+        from: student.email,
+        subjectEN: `dummy ${intent}`,
+        subjectFR: `dummy ${intent}`,
+        htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+        htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+        sendToPersonalEmail: true,
+        requiredParams: {
+          body: body,
+        },
+        notificationReference: "DUMMY_N1",
+        RNCPTitleId: [],
+        schoolId: [],
+        fromId: null,
+        toId: null,
+        subjectId: null,
+        testId: null,
+        sendToPlatformMailBox: true,
+      };
+
+      emailUtil.sendMail(mailOptions, function (err) {
+        if (err) {
+          throw new Error(err);
+        }
+      });
     }
 
-    //Function to send email to acad dir
-    let mailOptions = {
-      when: "dummy notification",
-      language: "",
-      to: recipients,
-      from: student.email,
-      subjectEN: `dummy ${intent}`,
-      subjectFR: `dummy ${intent}`,
-      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
-      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
-      sendToPersonalEmail: true,
-      requiredParams: {
-        body: body,
-      },
-      notificationReference: "DUMMY_N1",
-      RNCPTitleId: [],
-      schoolId: [],
-      fromId: null,
-      toId: null,
-      subjectId: null,
-      testId: null,
-      sendToPlatformMailBox: true,
-    };
-
-    emailUtil.sendMail(mailOptions, function (err) {
-      if (err) {
-        throw new Error(err);
+    if (studentRecipients) {
+      let meetingSchedule = moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(timeZoneInMinutes, 'minutes');
+      let body = "";
+      if (type && type === "Online") {
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+      } else if (type && type === "Offline") {
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} in your office`;
       }
-    });
+
+      //Function to send email to acad dir
+      let mailOptions = {
+        when: "dummy notification",
+        language: "",
+        to: recipients,
+        from: student.email,
+        subjectEN: `dummy ${intent}`,
+        subjectFR: `dummy ${intent}`,
+        htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+        htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+        sendToPersonalEmail: true,
+        requiredParams: {
+          body: body,
+        },
+        notificationReference: "DUMMY_N1",
+        RNCPTitleId: [],
+        schoolId: [],
+        fromId: null,
+        toId: null,
+        subjectId: null,
+        testId: null,
+        sendToPlatformMailBox: true,
+      };
+
+      emailUtil.sendMail(mailOptions, function (err) {
+        if (err) {
+          throw new Error(err);
+        }
+      });
+    }
 
     let timeFix = moment.utc(date + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(timeZoneInMinutes, 'minutes').format('DD/MM/YYYY HH:mm')
 

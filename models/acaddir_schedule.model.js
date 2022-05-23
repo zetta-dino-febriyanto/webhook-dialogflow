@@ -21,7 +21,8 @@ const acaddirScheduleModel = new Schema({
     enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', null],
   }],
   total_student: Number,
-  meeting_duration: Number
+  meeting_duration: Number,
+  acaddir_timezone: Number
 });
 
 module.exports = mongoose.model('acaddir_schedule', acaddirScheduleModel);

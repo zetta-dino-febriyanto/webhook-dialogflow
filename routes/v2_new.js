@@ -1366,7 +1366,7 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
-  function deactivated_account(agent) {
+  async function deactivated_account(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];

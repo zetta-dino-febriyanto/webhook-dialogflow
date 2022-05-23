@@ -1374,7 +1374,67 @@ const dialogflowfulfillment = (request, response, result) => {
     //Funtion to send email to acad Dir and CC to student :
     // Dear <<Acad Dir>>. Your student with name <<Student Name>> and Email <<student email>> Wanto Resign/Deactivated his Account. Thank You.
 
-    agent.add("Oke. I already send an email to <<Acad Dir Name>> As your Academic Director that you want to Resign/Deactivated Your Account. Thank You :)")
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+    let data = {
+      entity: "academic",
+      name: "Academic Director",
+      school: student.school,
+      rncpTitle: student.rncp_title,
+      classId: student.current_class,
+    };
+    console.log(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    );
+    let acadDirs = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: [acadDirs[0].email],
+        rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
+    ];
+
+    //Function to send email to acad dir
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear ${acadDirs[0].first_name} ${acadDirs[0].last_name}. Your student with name ${student.first_name} ${student.last_name} and Email ${student.email} Want to Resign/Deactivated his Account. Thank You.`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
+    agent.add(`Oke. I already send an email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} As your Academic Director that you want to Resign/Deactivated Your Account. Thank You :)`)
   }
 
   let intentMap = new Map();
@@ -1525,7 +1585,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
   //Deactivated Account
   intentMap.set("Q19- Deactivated - yes", deactivated_account);
-  
+
 
   agent.handleRequest(intentMap);
 };

@@ -7,6 +7,7 @@ const {
   Payload,
 } = require("dialogflow-fulfillment");
 require("../utils/database");
+const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 const common = require("../utils/common");
 

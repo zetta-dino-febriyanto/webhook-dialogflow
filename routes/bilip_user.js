@@ -6,6 +6,7 @@ const {
   Card,
   Payload,
 } = require("dialogflow-fulfillment");
+require('../utils/database');
 
 router.post("/", function (req, res, next) {
     //console.log(req.body.queryResult.queryText);

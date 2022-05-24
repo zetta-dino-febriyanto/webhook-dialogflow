@@ -67,4 +67,7 @@ router.post("/", function (req, res, next) {
     intentMap.set("000-General: Welcome Message", sayHello)
 
     agent.handleRequest(intentMap);
-  }
+  };
+  
+  module.exports = router;
+

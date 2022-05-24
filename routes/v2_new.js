@@ -91,33 +91,28 @@ const dialogflowfulfillment = (request, response, result) => {
 
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
-    // let responsess = {
-    //   fulfillmentMessages: [
-    //     {
-    //       text: {
-    //         text: [kata],
-    //       },
-    //     },
-    //     {
-    //       payload: {
-    //         richContent: [
-    //           [
-    //             {
-    //               type: "image",
-    //               accessibilityText: "Example logo",
-    //               rawUrl: 'https://i.stack.imgur.com/HxYOm.png',
-    //             },
-    //           ],
-    //         ],
-    //       },
-    //     },
-    //   ],
-    // }
+    var payloadData = {
+      "richContent": [
+        [
+          {
+            "type": "image",
+            "accessibilityText": "ZettaByte",
+            "rawUrl": "https://zettabyte.life/wp-content/uploads/2020/12/Photo-note-1-1.jpg"
+          },
+          {
+            "subtitle": "For detail information please visit our website",
+            "actionLink": "https://zettabyte.life/",
+            "title": "ZettaByte",
+            "type": "info"
+          }
+        ]
+      ]
+    }
     // agent.add(new Image({imageUrl: 'https://i.stack.imgur.com/HxYOm.png'}))
     // agent.add(new Suggestion("Quick Reply"));
     // agent.add(new Suggestion("Suggestion"));
     agent.add(kata);
-    // agent.add(new Payload(agent.UNSPECIFIED, responsess, { rawPayload: true, sendAsMessage: true}));
+    agent.add(new Payload(agent.UNSPECIFIED, payloadData, {rawPayload: true, sendAsMessage: true}));
   }
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;

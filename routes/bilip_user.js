@@ -61,9 +61,9 @@ router.post("/", function (req, res, next) {
     function sayHello(agent) {
         agent.add("Hello")
     }
-    
+
     let intentMap = new Map();
-    intentMap.set("Default-welcome", sayHello)
+    intentMap.set("000-General: Welcome Message", sayHello)
 
     agent.handleRequest(intentMap);
   }

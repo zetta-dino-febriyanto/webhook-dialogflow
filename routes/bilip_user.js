@@ -59,8 +59,36 @@ router.post("/", function (req, res, next) {
     let intent = result.queryResult.intent.displayName;
     console.log(intent);
 
-    function sayHello(agent) {
-        agent.add("Hello")
+    async function sayHello(agent) {
+        const id_before = result.originalDetectIntentRequest.payload.userId;
+        const results = id_before.split(/[/\s]/);
+        const id = results[0];
+    
+        console.log(id);
+        let user = await get_data(
+          `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+          "GET"
+        );
+    
+        // console.log(user)
+        //uncommend if on stagging
+        // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
+    
+        //this only for development
+        const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+        var payloadData = {
+          "richContent": [
+            [
+              {
+                "type": "image",
+                "rawUrl": "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png",
+                "accessibilityText": "Bilip Logo"
+              }
+            ]
+          ]
+        }
+        agent.add(new Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true}));
+        agent.add(kata);
     }
 
     let intentMap = new Map();
@@ -68,6 +96,6 @@ router.post("/", function (req, res, next) {
 
     agent.handleRequest(intentMap);
   };
-  
+
   module.exports = router;
 

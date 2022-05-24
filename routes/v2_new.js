@@ -96,14 +96,8 @@ const dialogflowfulfillment = (request, response, result) => {
         [
           {
             "type": "image",
-            "accessibilityText": "ZettaByte",
-            "rawUrl": "https://zettabyte.life/wp-content/uploads/2020/12/Photo-note-1-1.jpg"
-          },
-          {
-            "subtitle": "For detail information please visit our website",
-            "actionLink": "https://zettabyte.life/",
-            "title": "ZettaByte",
-            "type": "info"
+            "rawUrl": "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png",
+            "accessibilityText": "Bilip Logo"
           }
         ]
       ]
@@ -112,7 +106,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(new Suggestion("Quick Reply"));
     // agent.add(new Suggestion("Suggestion"));
     agent.add(kata);
-    agent.add(new Payload(agent.UNSPECIFIED, payloadData, {rawPayload: true, sendAsMessage: true}));
+    agent.add(new Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true}));
   }
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;

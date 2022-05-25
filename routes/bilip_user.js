@@ -110,9 +110,27 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
 
+  function send_email_first(agent) {
+    const problem = result.queryResult.queryText;
+    agent.context.set("problem", 99, {
+      problem: problem,
+    });
+    agent.add(
+      `Oke, so you want me to Send email to your Academic Director that you have problem detail like this :`
+    );
+    agent.add(`"${problem}" ?`);
+
+    // function to send email: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
+
+    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+  }
+
+
   let intentMap = new Map();
   intentMap.set("000-General: Welcome Message", sayHello);
   intentMap.set("App-SendEmail-Yes", send_email)
+  intentMap.set("000 Send_email - custom", send_email_first)
+  
   agent.handleRequest(intentMap);
 };
 const get_data = async (url, method, auth, data = {}) => {

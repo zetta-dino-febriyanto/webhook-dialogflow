@@ -6,7 +6,7 @@ const {
   Card,
   Payload,
 } = require("dialogflow-fulfillment");
-require("../utils/database");
+// require("../utils/database");
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 const common = require("../utils/common");
@@ -105,6 +105,8 @@ const dialogflowfulfillment = (request, response, result) => {
 
   agent.handleRequest(intentMap);
 };
+
+
 const get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {

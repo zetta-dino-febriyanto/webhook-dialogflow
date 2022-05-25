@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-require('../utils/database');
+// require('../utils/database');
 
 const SentimentAnalysisModel = require('../models/sentiment_analysis.model');
 

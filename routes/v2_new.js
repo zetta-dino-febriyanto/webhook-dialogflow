@@ -13,7 +13,7 @@ const emailUtil = require("../utils/email");
 const common = require("../utils/common");
 const moment = require("moment");
 
-require("../utils/database");
+// require("../utils/database");
 
 const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
 const AcadDirScheduleModel = require("../models/acaddir_schedule.model");
@@ -31,37 +31,37 @@ router.post("/", function (req, res, next) {
   const query = result.queryResult.queryText;
   const responds = result.queryResult.fulfillmentMessages;
 
-  if (result.queryResult.sentimentAnalysisResult) {
-    // console.log('Detected sentiment : ');
-    const score =
-      result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
-    const magnitude =
-      result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
+  // if (result.queryResult.sentimentAnalysisResult) {
+  //   // console.log('Detected sentiment : ');
+  //   const score =
+  //     result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
+  //   const magnitude =
+  //     result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
 
-    //store the result to DB
-    SentimentAnalysisModel.create({
-      score,
-      magnitude,
-      query,
-      responds,
-      intent,
-    });
+  //   //store the result to DB
+  //   SentimentAnalysisModel.create({
+  //     score,
+  //     magnitude,
+  //     query,
+  //     responds,
+  //     intent,
+  //   });
 
-    //  if (score < -0.3) {
-    //     console.log("Negative Sentiment");
-    //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
-    //   }
-  } else {
-    const score = 0;
-    const magnitude = 0;
-    SentimentAnalysisModel.create({
-      score,
-      magnitude,
-      query,
-      responds,
-      intent,
-    });
-  }
+  //   //  if (score < -0.3) {
+  //   //     console.log("Negative Sentiment");
+  //   //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
+  //   //   }
+  // } else {
+  //   const score = 0;
+  //   const magnitude = 0;
+  //   SentimentAnalysisModel.create({
+  //     score,
+  //     magnitude,
+  //     query,
+  //     responds,
+  //     intent,
+  //   });
+  // }
 });
 
 const dialogflowfulfillment = (request, response, result) => {

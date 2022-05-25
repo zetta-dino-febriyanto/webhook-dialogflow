@@ -107,6 +107,47 @@ const dialogflowfulfillment = (request, response, result) => {
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
 
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+
+    let recipients = [
+      {
+        recipients: ["admtcadmin2021@yopmail.com"],
+        rank: "a",
+      },
+    ];
+
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear User Help. Our customer with name ${student.first_name} ${student.last_name} and email ${student.email} have problem. Please contact them. Thank you.`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
     agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
 
@@ -131,10 +172,50 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
-    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+    let student = await get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
 
+    let recipients = [
+      {
+        recipients: ["admtcadmin2021@yopmail.com"],
+        rank: "a",
+      },
+    ];
+
+    let mailOptions = {
+      when: "dummy notification",
+      language: "",
+      to: recipients,
+      from: student.email,
+      subjectEN: `dummy ${intent}`,
+      subjectFR: `dummy ${intent}`,
+      htmlEN: "utils/email_templates/Dummy_Notification/DUMMY_N1/EN.html",
+      htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
+      sendToPersonalEmail: true,
+      requiredParams: {
+        body: `Dear User Help. Our customer with name ${student.first_name} ${student.last_name} and email ${student.email} have problem. Please contact them. Thank you.`,
+      },
+      notificationReference: "DUMMY_N1",
+      RNCPTitleId: [],
+      schoolId: [],
+      fromId: null,
+      toId: null,
+      subjectId: null,
+      testId: null,
+      sendToPlatformMailBox: true,
+    };
+
+    emailUtil.sendMail(mailOptions, function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+
+    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
-  
+
 
   let intentMap = new Map();
   intentMap.set("000-General: Welcome Message", sayHello);
@@ -142,7 +223,7 @@ const dialogflowfulfillment = (request, response, result) => {
   intentMap.set("000 Send_email - custom", send_email_first)
   intentMap.set("000 Send_email - custom - yes", sending_email)
 
-  
+
   agent.handleRequest(intentMap);
 };
 const get_data = async (url, method, auth, data = {}) => {

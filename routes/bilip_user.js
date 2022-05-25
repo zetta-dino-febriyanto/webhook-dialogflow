@@ -136,12 +136,13 @@ const dialogflowfulfillment = (request, response, result) => {
   }
   
 
-
   let intentMap = new Map();
   intentMap.set("000-General: Welcome Message", sayHello);
   intentMap.set("App-SendEmail-Yes", send_email)
   intentMap.set("000 Send_email - custom", send_email_first)
   intentMap.set("000 Send_email - custom - yes", sending_email)
+
+  
   agent.handleRequest(intentMap);
 };
 const get_data = async (url, method, auth, data = {}) => {

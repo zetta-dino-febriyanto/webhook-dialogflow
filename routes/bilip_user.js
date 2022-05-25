@@ -105,7 +105,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
 
-    // function to send email: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
+    // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
 
     agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
@@ -120,17 +120,28 @@ const dialogflowfulfillment = (request, response, result) => {
     );
     agent.add(`"${problem}" ?`);
 
-    // function to send email: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
-
-    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
+
+  function sending_email(agent) {
+    infoJobDesc = agent.context.get("problem");
+    const problem = infoJobDesc.parameters.problem;
+    console.log(problem);
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
+
+    // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
+    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+
+  }
+  
 
 
   let intentMap = new Map();
   intentMap.set("000-General: Welcome Message", sayHello);
   intentMap.set("App-SendEmail-Yes", send_email)
   intentMap.set("000 Send_email - custom", send_email_first)
-  
+  intentMap.set("000 Send_email - custom - yes", sending_email)
   agent.handleRequest(intentMap);
 };
 const get_data = async (url, method, auth, data = {}) => {

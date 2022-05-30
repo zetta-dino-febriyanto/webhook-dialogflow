@@ -100,7 +100,7 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(kata);
   }
 
-  function send_email(agent) {
+  async function send_email(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
@@ -163,7 +163,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
   }
 
-  function sending_email(agent) {
+  async function sending_email(agent) {
     infoJobDesc = agent.context.get("problem");
     const problem = infoJobDesc.parameters.problem;
     console.log(problem);

@@ -73,6 +73,11 @@ const dialogflowfulfillment = (request, response, result) => {
   console.log(intent);
   console.log(result);
 
+  /**
+   * The function to send the welcome response to user and check the name of the user
+   *
+   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
+   */
   async function sayHello(agent) {
     //get user data
     //uncommend if on stagging
@@ -491,6 +496,12 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the job desc
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  * @param {string} result.queryResult.queryText the problem that was faces by the user
+  */
   async function send_email(agent) {
     // function to send  email to aide@ADMTC.pro and CC to student
     const problem = result.queryResult.queryText;
@@ -549,6 +560,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Thank you I Already sent email to my human Friend :)");
   }
 
+  /**
+  * The function to give the response to ask if the user want to send the email to acaddir
+  *
+  * @param {string} result.queryResult.queryText the problem that was faces by the user
+  */
   function edit_identity_first(agent) {
     const problem = result.queryResult.queryText;
     agent.context.set("problem", 99, {
@@ -560,6 +576,12 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${problem}" ?`);
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the job desc
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  * @param {string} result.queryResult.queryText the problem that was faces by the user
+  */
   async function edit_identity_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change your personal information with detail like this: \n <<problem>> Please proceed, Thank You!
@@ -634,6 +656,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the address detail
+  *
+  * @param {string} result.queryResult.queryText the problem that was faces by the user
+  */
   function edit_address_first(agent) {
     const address = result.queryResult.queryText;
     agent.context.set("address", 99, {
@@ -646,6 +673,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${address}" ?`);
   }
 
+  /**
+  * The function to send the notification to acaddir if the user want to edit their address detail
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function edit_address_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your address with detail like this : \n <<Address>> Please proceed, Thank You!
@@ -1448,6 +1480,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to send the notification to acaddir if the student want to deactivated their account
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function deactivated_account(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);

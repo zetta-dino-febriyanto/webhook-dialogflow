@@ -60,6 +60,11 @@ const dialogflowfulfillment = (request, response, result) => {
   let intent = result.queryResult.intent.displayName;
   console.log(intent);
 
+  /**
+   * The function to send the welcome response to user and check the name of the user
+   *
+   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
+   */
   async function sayHello(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);

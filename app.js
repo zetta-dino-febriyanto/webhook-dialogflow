@@ -1,8 +1,12 @@
+"use strict";
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var util = require('util');
+const utf8Encoder = new util.TextEncoder();
+const utf8Decoder = new util.TextDecoder("utf-8", { ignoreBOM: true });
 
 var indexRouter = require('./routes/index');
 var v1Router = require('./routes/users');

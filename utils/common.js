@@ -465,6 +465,76 @@ exports.get_data = async function (url, method, auth, data = {}) {
   }
 };
 
+/**
+  * The function to check the object is empty or not
+  *
+  * @param {object} obj object param
+  */
+exports.isEmptyObject = function (obj) {
+  return !Object.keys(obj).length;
+}
+
+exports.createTextResponse = function (textresponse, urls) {
+  let response = {
+    fulfillmentMessages: [
+      {
+        text: {
+          text: [textresponse],
+        },
+      },
+      {
+        payload: {
+          richContent: [
+            [
+              {
+                type: "image",
+                accessibilityText: "Example logo",
+                rawUrl: urls,
+              },
+            ],
+          ],
+        },
+      },
+    ],
+  };
+
+  return response;
+}
+
+/**
+  * The function call the rest api on another environment
+  *
+  * @param {string} url url of the api
+  * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
+  * @param {token} auth the bearer token of the user login
+  * @param {object} data the object to pass to the api body
+  */
+exports.get_data = async (url, method, auth, data = {}) => {
+  try {
+    let headers = {
+      // "Content-Type": "application/json",
+      // "client_id": "1001125",
+      // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
+      Authorization: `Bearer "${auth}"`,
+    };
+    if (method === "POST") {
+      const response = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: data,
+      });
+      const json = await response.json();
+      return json;
+    } else {
+      const response = await fetch(url, { method: method, headers: headers });
+      const json = await response.json();
+      return json;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.convertDayNameToDate = function (name = '', weekAdded) {
   name = name.toLowerCase();
   let added = 0;

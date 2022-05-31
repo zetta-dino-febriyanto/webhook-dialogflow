@@ -81,7 +81,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
 
     console.log(id);
-    let user = await get_data(
+    let user = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
@@ -112,15 +112,6 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   /**
-  * The function to check the object is empty or not
-  *
-  * @param {object} obj object param
-  */
-  function isEmptyObject(obj) {
-    return !Object.keys(obj).length;
-  }
-
-  /**
   * The function to search for the next deadlines IN THE FUTURE  for doc upload
   *
   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
@@ -134,7 +125,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     console.log(id);
 
-    let tasks = await get_data(
+    let tasks = await common.get_data(
       `https://api.bilip.zetta-demo.space/getDocExpStudentTask/${id}/5a067bba1c0217218c75f8ab`,
       "GET"
     );
@@ -152,7 +143,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // Function to add search result to context
     agent.context.set("info_doc", 999, taskObject);
     // bot response
-    if (isEmptyObject(taskObject)) {
+    if (common.isEmptyObject(taskObject)) {
       agent.add("You don't have any deadline of test");
     } else {
       agent.add("Please Choose What Document you want to Edit: ");
@@ -249,7 +240,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -263,7 +254,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -327,7 +318,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let isnotAccept = await get_data(
+    let isnotAccept = await common.get_data(
       `https://api.bilip.zetta-demo.space/checkJobDescAcceptByAcadDir/${id}`,
       "GET"
     );
@@ -336,7 +327,7 @@ const dialogflowfulfillment = (request, response, result) => {
     if (!isnotAccept) {
       // function to send  email to acad dir and CC to student
       // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You!
-      let student = await get_data(
+      let student = await common.get_data(
         `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
         "GET"
       );
@@ -350,7 +341,7 @@ const dialogflowfulfillment = (request, response, result) => {
       console.log(
         `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
       );
-      let acadDirs = await get_data(
+      let acadDirs = await common.get_data(
         `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
         "GET"
       );
@@ -436,7 +427,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -450,7 +441,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -510,7 +501,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
 
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -578,7 +569,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -592,7 +583,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -664,7 +655,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -678,7 +669,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -750,7 +741,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -764,7 +755,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -820,7 +811,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -833,7 +824,7 @@ const dialogflowfulfillment = (request, response, result) => {
           company.mentor
       );
       if (companyData && companyData.mentor) {
-        let mentor = await get_data(
+        let mentor = await common.get_data(
           `https://api.bilip.zetta-demo.space/getUserById/${companyData.mentor}`,
           "GET"
         );
@@ -874,7 +865,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -888,7 +879,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -961,7 +952,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -975,7 +966,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -1033,7 +1024,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -1047,7 +1038,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -1104,7 +1095,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     const timeZoneInMinutes = results[1];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -1118,7 +1109,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -1285,7 +1276,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     const timeZoneInMinutes = results[1];
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -1299,7 +1290,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // console.log(
     //   `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     // );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -1465,7 +1456,7 @@ const dialogflowfulfillment = (request, response, result) => {
     //Funtion to send email to acad Dir and CC to student :
     // Dear <<Acad Dir>>. Your student with name <<Student Name>> and Email <<student email>> Wanto Resign/Deactivated his Account. Thank You.
 
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -1479,7 +1470,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
-    let acadDirs = await get_data(
+    let acadDirs = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
@@ -1676,67 +1667,6 @@ const dialogflowfulfillment = (request, response, result) => {
 
 
   agent.handleRequest(intentMap);
-};
-
-function createTextResponse(textresponse, urls) {
-  let response = {
-    fulfillmentMessages: [
-      {
-        text: {
-          text: [textresponse],
-        },
-      },
-      {
-        payload: {
-          richContent: [
-            [
-              {
-                type: "image",
-                accessibilityText: "Example logo",
-                rawUrl: urls,
-              },
-            ],
-          ],
-        },
-      },
-    ],
-  };
-
-  return response;
-}
-
-/**
-  * The function call the rest api on another environment
-  *
-  * @param {string} url url of the api
-  * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
-  * @param {token} auth the bearer token of the user login
-  * @param {object} data the object to pass to the api body
-  */
-const get_data = async (url, method, auth, data = {}) => {
-  try {
-    let headers = {
-      // "Content-Type": "application/json",
-      // "client_id": "1001125",
-      // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
-      Authorization: `Bearer "${auth}"`,
-    };
-    if (method === "POST") {
-      const response = await fetch(url, {
-        method: method,
-        headers: headers,
-        body: data,
-      });
-      const json = await response.json();
-      return json;
-    } else {
-      const response = await fetch(url, { method: method, headers: headers });
-      const json = await response.json();
-      return json;
-    }
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 module.exports = router;

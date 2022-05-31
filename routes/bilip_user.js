@@ -66,7 +66,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
 
     console.log(id);
-    let user = await get_data(
+    let user = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
@@ -103,7 +103,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
 
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -172,7 +172,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
-    let student = await get_data(
+    let student = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
@@ -227,37 +227,4 @@ const dialogflowfulfillment = (request, response, result) => {
   agent.handleRequest(intentMap);
 };
 
-/**
-  * The function call the rest api on another environment
-  *
-  * @param {string} url url of the api
-  * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
-  * @param {token} auth the bearer token of the user login
-  * @param {object} data the object to pass to the api body
-  */
-const get_data = async (url, method, auth, data = {}) => {
-  try {
-    let headers = {
-      // "Content-Type": "application/json",
-      // "client_id": "1001125",
-      // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
-      Authorization: `Bearer "${auth}"`,
-    };
-    if (method === "POST") {
-      const response = await fetch(url, {
-        method: method,
-        headers: headers,
-        body: data,
-      });
-      const json = await response.json();
-      return json;
-    } else {
-      const response = await fetch(url, { method: method, headers: headers });
-      const json = await response.json();
-      return json;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 module.exports = router;

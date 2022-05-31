@@ -752,6 +752,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the parent information
+  *
+  * @param {string} result.queryResult.queryText user parent
+  */
   function edit_parent_first(agent) {
     const parent = result.queryResult.queryText;
     agent.context.set("parent", 99, {
@@ -764,6 +769,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${parent}" ?`);
   }
 
+  /**
+  * The function to send the notification to acaddir if the user want to change the parent information
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function edit_parent_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>>  want to change your parent information with detail like this : \n <<Parent>> Please proceed, Thank You!
@@ -838,6 +848,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to ask the new mentor that want to change
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function edit_mentor_first(agent) {
     // Function to search Mentor of Student
     const id_before = result.originalDetectIntentRequest.payload.userId;
@@ -876,6 +891,11 @@ const dialogflowfulfillment = (request, response, result) => {
     }
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the student mentor
+  *
+  * @param {string} result.queryResult.queryText user mentor
+  */
   function edit_mentor_confirmation(agent) {
     const mentor = result.queryResult.parameters.email;
     agent.context.set("mentor", 99, {
@@ -887,6 +907,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to send the notification to acaddir if the user want to change their mentor
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function edit_mentor_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change mentor with the email of new mentor is <<Mentor>> Please proceed, Thank You!
@@ -962,6 +987,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to preparing to send the email to acaddir if the user want to change their contract date
+  *
+  * @param {string} result.queryResult.queryText new contract date
+  */
   function edit_date_first(agent) {
     const date = result.queryResult.queryText;
     agent.context.set("date", 99, {
@@ -974,6 +1004,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${date}" ?`);
   }
 
+  /**
+  * The function to send the notification to acaddir if the user want to change their contract date
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function edit_date_mail(agent) {
     // function to send  email to acad dir and CC to student
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Contract Date with detail like this: <<date>>. Please proceed, Thank You!
@@ -1049,6 +1084,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to send the notification to the acaddir about the student that want to cancel their contract
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function cancel_contract(agent) {
     // Function to get student name
     // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to Cancel the Contract of Company, Please proceed. Thank You!

@@ -2,14 +2,14 @@ var express = require("express");
 var router = express.Router();
 const {
   WebhookClient,
-  Image,
-  Card,
   Payload,
 } = require("dialogflow-fulfillment");
 require("../utils/database");
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 const common = require("../utils/common");
+const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
+
 
 router.post("/", function (req, res, next) {
   //console.log(req.body.queryResult.queryText);
@@ -22,37 +22,35 @@ router.post("/", function (req, res, next) {
   const query = result.queryResult.queryText;
   const responds = result.queryResult.fulfillmentMessages;
 
-  // if (result.queryResult.sentimentAnalysisResult) {
-  //   // console.log('Detected sentiment : ');
-  //   const score =
-  //     result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
-  //   const magnitude =
-  //     result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
+  if (result.queryResult.sentimentAnalysisResult) {
+    // console.log('Detected sentiment : ');
+    const score = result.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
+    const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
 
-  //   //store the result to DB
-  //   SentimentAnalysisModel.create({
-  //     score,
-  //     magnitude,
-  //     query,
-  //     responds,
-  //     intent,
-  //   });
+    //store the result to DB
+    SentimentAnalysisModel.create({
+      score,
+      magnitude,
+      query,
+      responds,
+      intent,
+    });
 
-  //   //  if (score < -0.3) {
-  //   //     console.log("Negative Sentiment");
-  //   //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
-  //   //   }
-  // } else {
-  //   const score = 0;
-  //   const magnitude = 0;
-  //   SentimentAnalysisModel.create({
-  //     score,
-  //     magnitude,
-  //     query,
-  //     responds,
-  //     intent,
-  //   });
-  // }
+    //  if (score < -0.85) {
+    //     console.log("Negative Sentiment");
+    //     res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
+    //   }
+  } else {
+    const score = 0;
+    const magnitude = 0;
+    SentimentAnalysisModel.create({
+      score,
+      magnitude,
+      query,
+      responds,
+      intent,
+    });
+  }
 });
 
 const dialogflowfulfillment = (request, response, result) => {
@@ -62,11 +60,6 @@ const dialogflowfulfillment = (request, response, result) => {
   let intent = result.queryResult.intent.displayName;
   console.log(intent);
 
-  /**
-   * The function to send the welcome response to user and check the name of the user
-   *
-   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
-   */
   async function sayHello(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -77,10 +70,6 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.bilip.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
-
-    // console.log(user)
-    //uncommend if on stagging
-    // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
@@ -96,6 +85,8 @@ const dialogflowfulfillment = (request, response, result) => {
         ],
       ],
     };
+
+    // Send response to Dialogflow
     agent.add(
       new Payload(agent.UNSPECIFIED, payloadData, {
         sendAsMessage: true,
@@ -105,11 +96,6 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(kata);
   }
 
-  /**
-   * The function to send the email to admtc if the user have a problem
-   *
-   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
-   */
   async function send_email(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -152,6 +138,7 @@ const dialogflowfulfillment = (request, response, result) => {
       sendToPlatformMailBox: true,
     };
 
+    //Send email
     emailUtil.sendMail(mailOptions, function (err) {
       if (err) {
         throw new Error(err);
@@ -161,16 +148,14 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
 
-  /**
-   * The function to preparing the problem that was given by the user before sent to the admtc
-   *
-   * @param {string} result.queryResult.queryText the problem that was faces by the user
-   */
   function send_email_first(agent) {
     const problem = result.queryResult.queryText;
+
+    // Set context problem
     agent.context.set("problem", 99, {
       problem: problem,
     });
+
     agent.add(
       `Oke, so you want me to Send email to your Academic Director that you have problem detail like this :`
     );
@@ -178,15 +163,9 @@ const dialogflowfulfillment = (request, response, result) => {
 
   }
 
-  /**
-   * The function to send the email to admtc including the problem that was faces by the user
-   *
-   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
-   * @param {string} infoJobDesc.parameters.problem the problem that was faces by the user 
-   */
   async function sending_email(agent) {
-    infoJobDesc = agent.context.get("problem");
-    const problem = infoJobDesc.parameters.problem;
+    infoProblem = agent.context.get("problem");
+    const problem = infoProblem.parameters.problem;
     console.log(problem);
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -247,15 +226,6 @@ const dialogflowfulfillment = (request, response, result) => {
 
   agent.handleRequest(intentMap);
 };
-
-/**
-   * The function call the rest api on another environment
-   *
-   * @param {string} url url of the api
-   * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
-   * @param {token} auth the bearer token of the user login
-   * @param {object} data the object to pass to the api body
-   */
 const get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {

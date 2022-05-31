@@ -108,9 +108,6 @@ const dialogflowfulfillment = (request, response, result) => {
         ]
       ]
     }
-    // agent.add(new Image({imageUrl: 'https://i.stack.imgur.com/HxYOm.png'}))
-    // agent.add(new Suggestion("Quick Reply"));
-    // agent.add(new Suggestion("Suggestion"));
     agent.add(new Payload(agent.UNSPECIFIED, payloadData, { sendAsMessage: true, rawPayload: true }));
     agent.add(kata);
 

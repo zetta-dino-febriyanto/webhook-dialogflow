@@ -433,47 +433,32 @@ exports.checkIfRncpIsRmoDmoeSep2016DmoePigier2016 = async (rncpShortName, callba
   })
 }
 
-// this function to help to return unique value from string of array
+/**
+ * help to return unique value from string of array
+ *
+ * @param {string} value value
+ * @param {number} index index
+ * @param {array} self array of the data
+ */
 exports.onlyUnique = function (value, index, self) {
   return self.indexOf(value) === index;
 }
 
-exports.get_data = async function (url, method, auth, data = {}) {
-  try {
-    let headers = {
-      "Content-Type": "application/json",
-      // "client_id": "1001125",
-      // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
-      "Authorization": `Bearer "${auth}"`
-    }
-
-    if (!auth) {
-      headers = { 'Content-Type': 'application/json' };
-    }
-    if (method === 'POST') {
-      const response = await fetch(url, { method: method, headers: headers, body: JSON.stringify(data) });
-      const json = await response.json();
-      return json;
-    } else {
-      const response = await fetch(url, { method: method, headers: headers });
-      const json = await response.json();
-      return json;
-    }
-
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 /**
-  * The function to check the object is empty or not
-  *
-  * @param {object} obj object param
-  */
+ * The function to check the object is empty or not
+ *
+ * @param {object} obj object param
+ */
 exports.isEmptyObject = function (obj) {
   return !Object.keys(obj).length;
 }
 
+/**
+ * The function to generate response for dialog flow
+ *
+ * @param {string} textresponse response text
+ * @param {string} urls response url
+ */
 exports.createTextResponse = function (textresponse, urls) {
   let response = {
     fulfillmentMessages: [
@@ -502,13 +487,13 @@ exports.createTextResponse = function (textresponse, urls) {
 }
 
 /**
-  * The function call the rest api on another environment
-  *
-  * @param {string} url url of the api
-  * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
-  * @param {token} auth the bearer token of the user login
-  * @param {object} data the object to pass to the api body
-  */
+ * The function to call the rest api on another environment
+ *
+ * @param {string} url url of the api
+ * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
+ * @param {token} auth the bearer token of the user login
+ * @param {object} data the object to pass to the api body
+ */
 exports.get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {
@@ -535,6 +520,12 @@ exports.get_data = async (url, method, auth, data = {}) => {
   }
 };
 
+/**
+ * The function to generate date based on the day name
+ *
+ * @param {string} name name of the day
+ * @param {number} weekAdded week added to get the date based on the day name in next week
+ */
 exports.convertDayNameToDate = function (name = '', weekAdded) {
   name = name.toLowerCase();
   let added = 0;

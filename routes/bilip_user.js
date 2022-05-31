@@ -62,6 +62,11 @@ const dialogflowfulfillment = (request, response, result) => {
   let intent = result.queryResult.intent.displayName;
   console.log(intent);
 
+  /**
+   * The function to send the welcome response to user and check the name of the user
+   *
+   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
+   */
   async function sayHello(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -100,6 +105,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(kata);
   }
 
+  /**
+   * The function to send the email to admtc if the user have a problem
+   *
+   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
+   */
   async function send_email(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -151,6 +161,11 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
   }
 
+  /**
+   * The function to preparing the problem that was given by the user before sent to the admtc
+   *
+   * @param {string} result.queryResult.queryText the problem that was faces by the user
+   */
   function send_email_first(agent) {
     const problem = result.queryResult.queryText;
     agent.context.set("problem", 99, {
@@ -163,6 +178,12 @@ const dialogflowfulfillment = (request, response, result) => {
 
   }
 
+  /**
+   * The function to send the email to admtc including the problem that was faces by the user
+   *
+   * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
+   * @param {string} infoJobDesc.parameters.problem the problem that was faces by the user 
+   */
   async function sending_email(agent) {
     infoJobDesc = agent.context.get("problem");
     const problem = infoJobDesc.parameters.problem;
@@ -226,6 +247,15 @@ const dialogflowfulfillment = (request, response, result) => {
 
   agent.handleRequest(intentMap);
 };
+
+/**
+   * The function call the rest api on another environment
+   *
+   * @param {string} url url of the api
+   * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
+   * @param {token} auth the bearer token of the user login
+   * @param {object} data the object to pass to the api body
+   */
 const get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {

@@ -11,12 +11,23 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/**
+ * API to create the academic schedule
+ *
+ * @param {object} req.body acaddir schedule object
+ */
 router.post('/acaddir_schedule', async function (req, res, next) {
   let params = req.body;
   let create = await AcadDirScheduleModel.create(params);
   res.send(create);
 });
 
+/**
+ * API to create the meeting schedule between acaddir and student
+ *
+ * @param {object} req.body meeting schedule object
+ * @param {objectId} params.user_id user id of the user login
+ */
 router.post('/meeting_schedule', async function (req, res, next) {
   let params = req.body;
   let student = await get_data(

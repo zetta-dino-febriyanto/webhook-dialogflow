@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 //add database
-mongoose.connect('mongodb://localhost/zetta_ai', err => {
+mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`, err => {
     if (err) throw err;
     console.log('connected to MongoDB')
 })

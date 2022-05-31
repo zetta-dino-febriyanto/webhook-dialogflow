@@ -27,14 +27,14 @@ router.post('/', function (req, res, next) {
       score, magnitude, query, responds, intent
     })
 
-    
+
     if (score < -0.85 && intent != "Q16- Edit Job Description ? - Send") {
-      if (language == "en"){
+      if (language == "en") {
         res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
       } else {
         res.send(createTextResponse("Désolé si ma performance est mauvaise :( S'il y a des informations auxquelles je ne peux pas répondre, vous pouvez contacter mes amis humains via la fonction Contactez-nous :)"));
       }
-      
+
     }
 
   } else {
@@ -46,6 +46,7 @@ router.post('/', function (req, res, next) {
 
   }
 });
+
 
 function createTextResponse(textresponse) {
   let response = {

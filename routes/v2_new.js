@@ -15,7 +15,12 @@ const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
 const AcadDirScheduleModel = require("../models/acaddir_schedule.model");
 const MeetingScheduleModel = require("../models/meeting_schedule.model");
 
-/* GET users listing. */
+/**
+  * The function to get the sentiment analysis and store the message to the database
+  *
+  * @param {object} req req
+  * @param {object} res res
+  */
 router.post("/", function (req, res, next) {
   //console.log(req.body.queryResult.queryText);
 
@@ -101,13 +106,25 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(new Image({imageUrl: 'https://i.stack.imgur.com/HxYOm.png'}))
     // agent.add(new Suggestion("Quick Reply"));
     // agent.add(new Suggestion("Suggestion"));
-    agent.add(new Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true}));
+    agent.add(new Payload(agent.UNSPECIFIED, payloadData, { sendAsMessage: true, rawPayload: true }));
     agent.add(kata);
-    
+
   }
+
+  /**
+  * The function to check the object is empty or not
+  *
+  * @param {object} obj object param
+  */
   function isEmptyObject(obj) {
     return !Object.keys(obj).length;
   }
+
+  /**
+  * The function to search for the next deadlines IN THE FUTURE  for doc upload
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function editdoc_first(agent) {
     // function to search for the next deadlines IN THE FUTURE  for doc upload
     console.log(result);
@@ -149,6 +166,10 @@ const dialogflowfulfillment = (request, response, result) => {
     }
   }
 
+  /**
+  * The function to search for the next deadlines IN THE FUTURE for doc upload if the user cancel the selected document after choosing
+  *
+  */
   function editdoc_no(agent) {
     // Function to add search result to context
     infoContext = agent.context.get("info_doc");
@@ -165,6 +186,10 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Select the number, please");
   }
 
+  /**
+  * The function to choose the document based on the list
+  *
+  */
   function editdoc_choose(agent) {
     const choice = agent.parameters.number;
     infoContext = agent.context.get("info_doc");
@@ -185,6 +210,10 @@ const dialogflowfulfillment = (request, response, result) => {
     }
   }
 
+  /**
+  * The function to try to edit the document and give the response to user to preparing sent email process to acaddir
+  *
+  */
   function editdoc_choose_yes(agent) {
     infoChoice = agent.context.get("choice_doc");
     const choice = infoChoice.parameters.choice;
@@ -195,12 +224,21 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to cancel the edit document request
+  *
+  */
   function editdoc_choose_no(agent) {
     agent.add(
       `Oke, I Suggest you to contact your Academic Director to edit Document, Thank You`
     );
   }
 
+  /**
+  * The function to send the notification to request update document
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function editdoc_send(agent) {
     // function to get variabel from context
     infoChoice = agent.context.get("choice_doc");
@@ -280,6 +318,11 @@ const dialogflowfulfillment = (request, response, result) => {
     );
   }
 
+  /**
+  * The function to request to edit the job desc of the student of the job desc is not already accepted by acaddir
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  */
   async function edit_job_desc(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -364,6 +407,11 @@ const dialogflowfulfillment = (request, response, result) => {
     }
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the job desc
+  *
+  * @param {string} result.queryResult.queryText the problem why the student want to edit their job desc
+  */
   function edit_job_desc_confirmation(agent) {
     const problem = result.queryResult.queryText;
     agent.context.set("job_desc", 99, {
@@ -375,6 +423,12 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`"${problem}" ?`);
   }
 
+  /**
+  * The function to preparing to send the notification to acaddir if the user want to change the job desc
+  *
+  * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
+  * @param {string} parameters.problem the problem why the student want to edit their job desc
+  */
   async function edit_job_desc_email(agent) {
     infoJobDesc = agent.context.get("job_desc");
     const problem = infoJobDesc.parameters.problem;
@@ -1474,6 +1528,8 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(`Oke. I already send an email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} As your Academic Director that you want to Resign/Deactivated Your Account. Thank You :)`)
   }
 
+  //=========================== Intent Setup ============================
+
   let intentMap = new Map();
 
   // Welcome Intent
@@ -1498,8 +1554,6 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q17-Access Job Description - Edit - yes - detail - no",
     edit_job_desc
   );
-
-
   intentMap.set(
     "Q16- Edit Job Description ? - yes - detail",
     edit_job_desc_confirmation
@@ -1579,7 +1633,6 @@ const dialogflowfulfillment = (request, response, result) => {
     edit_mentor_mail
   );
   intentMap.set("Q01_1 - mentor - yes - confirmations - yes", edit_mentor_mail);
-
   intentMap.set(
     "Q01- Information company / mentor - contract - yes",
     cancel_contract
@@ -1599,7 +1652,6 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01_3 - contract_date - yes - detail",
     edit_date_first
   );
-
   intentMap.set(
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
@@ -1608,7 +1660,6 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01_3 - contract_date - yes - detail - yes",
     edit_date_mail
   );
-
 
   // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
@@ -1654,6 +1705,14 @@ function createTextResponse(textresponse, urls) {
   return response;
 }
 
+/**
+  * The function call the rest api on another environment
+  *
+  * @param {string} url url of the api
+  * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
+  * @param {token} auth the bearer token of the user login
+  * @param {object} data the object to pass to the api body
+  */
 const get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {

@@ -226,6 +226,15 @@ const dialogflowfulfillment = (request, response, result) => {
 
   agent.handleRequest(intentMap);
 };
+
+/**
+  * The function call the rest api on another environment
+  *
+  * @param {string} url url of the api
+  * @param {'POST' || 'GET' || 'PUT'} method the method of the endpoint
+  * @param {token} auth the bearer token of the user login
+  * @param {object} data the object to pass to the api body
+  */
 const get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {

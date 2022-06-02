@@ -1,9 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const {
-  WebhookClient,
-  Payload,
-} = require("dialogflow-fulfillment");
+const { WebhookClient, Payload } = require("dialogflow-fulfillment");
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 const common = require("../utils/common");
@@ -98,19 +95,24 @@ const dialogflowfulfillment = (request, response, result) => {
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
     var payloadData = {
-      "richContent": [
+      richContent: [
         [
           {
-            "type": "image",
-            "rawUrl": "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png",
-            "accessibilityText": "Bilip Logo"
-          }
-        ]
-      ]
-    }
-    agent.add(new Payload(agent.UNSPECIFIED, payloadData, { sendAsMessage: true, rawPayload: true }));
+            type: "image",
+            rawUrl:
+              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png",
+            accessibilityText: "Bilip Logo",
+          },
+        ],
+      ],
+    };
+    agent.add(
+      new Payload(agent.UNSPECIFIED, payloadData, {
+        sendAsMessage: true,
+        rawPayload: true,
+      })
+    );
     agent.add(kata);
-
   }
 
   /**
@@ -141,18 +143,23 @@ const dialogflowfulfillment = (request, response, result) => {
       result[index + 1] = item;
       return result;
     }, {});
-    console.log(taskObject)
+    console.log(taskObject);
     // Function to add search result to context
     agent.context.set("info_doc", 999, taskObject);
-    // bot response
+
+    // Check Whether user have deadline of task or not
+    // If taskKbject empty (user doesn't have deadline of task)
     if (common.isEmptyObject(taskObject)) {
       agent.add("You don't have any deadline of test");
-    } else {
+    }
+    // User have deadline of test
+    else {
       agent.add("Please Choose What Document you want to Edit: ");
 
       for (let [index, task] of tasks.entries()) {
         agent.add(`${index + 1}. Upload Document ${task.description}`);
       }
+
       agent.add("Select the number, please");
       infoContext = agent.context.get("info_doc");
       console.log(infoContext);
@@ -160,7 +167,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   /**
-   * The function to search for the next deadlines IN THE FUTURE for doc upload if the user cancel the selected document after choosing
+   * The function to search for the next deadlines IN THE FUTURE for doc upload if the user select the wrong document after choosing.
    *
    */
   function editdoc_no(agent) {
@@ -1235,10 +1242,13 @@ const dialogflowfulfillment = (request, response, result) => {
       for (let [index, date] of dateFound.entries()) {
         responseText += `\n${index + 1}. ${moment
           .utc(date, "DD/MM/YYYYHH:mm")
-          .add(timeZoneInMinutes, 'minutes')
+          .add(timeZoneInMinutes, "minutes")
           .format("DD/MM/YYYY")}`;
         dateFoundFormatted.push(
-          moment.utc(date, "DD/MM/YYYYHH:mm").add(timeZoneInMinutes, 'minutes').format("DD/MM/YYYY")
+          moment
+            .utc(date, "DD/MM/YYYYHH:mm")
+            .add(timeZoneInMinutes, "minutes")
+            .format("DD/MM/YYYY")
         );
       }
 
@@ -1251,7 +1261,7 @@ const dialogflowfulfillment = (request, response, result) => {
         result[index + 1] = item;
         return result;
       },
-        {});
+      {});
       console.log(taskObject);
 
       // Function to add search result to context
@@ -1289,7 +1299,9 @@ const dialogflowfulfillment = (request, response, result) => {
       const date = infoContext.parameters[choice];
       console.log(infoContext.parameters);
       agent.add(`Oke, you choose to Meet Your Acad ir on ${date}?`);
-      agent.add(`If Yes Please Choose the type of meeting:\n1. Online \n2. Offline`);
+      agent.add(
+        `If Yes Please Choose the type of meeting:\n1. Online \n2. Offline`
+      );
       agent.context.set("type", 99, {
         1: "Online",
         2: "Offline",
@@ -1409,18 +1421,18 @@ const dialogflowfulfillment = (request, response, result) => {
       time_schedule:
         checkMeetingScheduleData && checkMeetingScheduleData.length
           ? moment
-            .utc(
-              checkMeetingScheduleData[0].date_schedule +
-              checkMeetingScheduleData[0].time_schedule,
-              "DD/MM/YYYYHH:mm"
-            )
-            .add(acaddirSchedule.meeting_duration, "minutes")
+              .utc(
+                checkMeetingScheduleData[0].date_schedule +
+                  checkMeetingScheduleData[0].time_schedule,
+                "DD/MM/YYYYHH:mm"
+              )
+              .add(acaddirSchedule.meeting_duration, "minutes")
           : moment
-            .utc(
-              date + acaddirSchedule.time_start_schedule,
-              "DD/MM/YYYYHH:mm"
-            )
-            .add(acaddirSchedule.meeting_duration, "minutes"),
+              .utc(
+                date + acaddirSchedule.time_start_schedule,
+                "DD/MM/YYYYHH:mm"
+              )
+              .add(acaddirSchedule.meeting_duration, "minutes"),
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
@@ -1444,22 +1456,37 @@ const dialogflowfulfillment = (request, response, result) => {
     let jitsiLink = `https://meet.jit.si/ZettaMeet_${moment
       .utc(
         meetingScheduleCreated.date_schedule +
-        meetingScheduleCreated.time_schedule,
+          meetingScheduleCreated.time_schedule,
         "DD/MM/YYYYHH:mm"
       )
       .format("YYYYMMDDHHmmss")}`;
 
-
     if (recipients) {
-      let meetingSchedule = moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm');
+      let meetingSchedule = moment.utc(
+        meetingScheduleCreated.date_schedule +
+          meetingScheduleCreated.time_schedule,
+        "DD/MM/YYYYHH:mm"
+      );
       if (acaddirSchedule && acaddirSchedule.acaddir_timezone) {
-        meetingSchedule.add(acaddirSchedule.acaddir_timezone, 'minutes')
+        meetingSchedule.add(acaddirSchedule.acaddir_timezone, "minutes");
       }
       let body = "";
       if (type && type === "Online") {
-        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+        body = `Hello ${acadDirs[0].first_name} ${
+          acadDirs[0].last_name
+        } student with name ${student.first_name} ${
+          student.last_name
+        } want to meet you on ${meetingSchedule.format(
+          "HH:mm"
+        )} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
       } else if (type && type === "Offline") {
-        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} in your office`;
+        body = `Hello ${acadDirs[0].first_name} ${
+          acadDirs[0].last_name
+        } student with name ${student.first_name} ${
+          student.last_name
+        } want to meet you on ${meetingSchedule.format(
+          "HH:mm"
+        )} in your office`;
       }
 
       //Function to send email to acad dir
@@ -1494,12 +1521,30 @@ const dialogflowfulfillment = (request, response, result) => {
     }
 
     if (studentRecipients) {
-      let meetingSchedule = moment.utc(meetingScheduleCreated.date_schedule + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(timeZoneInMinutes, 'minutes');
+      let meetingSchedule = moment
+        .utc(
+          meetingScheduleCreated.date_schedule +
+            meetingScheduleCreated.time_schedule,
+          "DD/MM/YYYYHH:mm"
+        )
+        .add(timeZoneInMinutes, "minutes");
       let body = "";
       if (type && type === "Online") {
-        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+        body = `Hello ${acadDirs[0].first_name} ${
+          acadDirs[0].last_name
+        } student with name ${student.first_name} ${
+          student.last_name
+        } want to meet you on ${meetingSchedule.format(
+          "HH:mm"
+        )} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
       } else if (type && type === "Offline") {
-        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name} student with name ${student.first_name} ${student.last_name} want to meet you on ${meetingSchedule.format('HH:mm')} in your office`;
+        body = `Hello ${acadDirs[0].first_name} ${
+          acadDirs[0].last_name
+        } student with name ${student.first_name} ${
+          student.last_name
+        } want to meet you on ${meetingSchedule.format(
+          "HH:mm"
+        )} in your office`;
       }
 
       //Function to send email to acad dir
@@ -1533,7 +1578,10 @@ const dialogflowfulfillment = (request, response, result) => {
       });
     }
 
-    let timeFix = moment.utc(date + meetingScheduleCreated.time_schedule, 'DD/MM/YYYYHH:mm').add(timeZoneInMinutes, 'minutes').format('DD/MM/YYYY HH:mm')
+    let timeFix = moment
+      .utc(date + meetingScheduleCreated.time_schedule, "DD/MM/YYYYHH:mm")
+      .add(timeZoneInMinutes, "minutes")
+      .format("DD/MM/YYYY HH:mm");
 
     agent.add(
       `Oke, I already send an email to Your Academic Director that you want to meet on ${timeFix} with type of meeting is ${type}`
@@ -1613,7 +1661,9 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    agent.add(`Oke. I already send an email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} As your Academic Director that you want to Resign/Deactivated Your Account. Thank You :)`)
+    agent.add(
+      `Oke. I already send an email to ${acadDirs[0].first_name} ${acadDirs[0].last_name} As your Academic Director that you want to Resign/Deactivated Your Account. Thank You :)`
+    );
   }
 
   //=========================== Intent Setup ============================
@@ -1736,18 +1786,12 @@ const dialogflowfulfillment = (request, response, result) => {
     "Q01- Information company / mentor - date - yes - date",
     edit_date_first
   );
-  intentMap.set(
-    "Q01_3 - contract_date - yes - detail",
-    edit_date_first
-  );
+  intentMap.set("Q01_3 - contract_date - yes - detail", edit_date_first);
   intentMap.set(
     "Q01- Information company / mentor - date - yes - date - yes",
     edit_date_mail
   );
-  intentMap.set(
-    "Q01_3 - contract_date - yes - detail - yes",
-    edit_date_mail
-  );
+  intentMap.set("Q01_3 - contract_date - yes - detail - yes", edit_date_mail);
 
   // Arrange Meeting
   intentMap.set("A06 - Arrange Meeting", arrange_meeting_first);
@@ -1761,7 +1805,6 @@ const dialogflowfulfillment = (request, response, result) => {
 
   //Deactivated Account
   intentMap.set("Q19- Deactivated - yes", deactivated_account);
-
 
   agent.handleRequest(intentMap);
 };

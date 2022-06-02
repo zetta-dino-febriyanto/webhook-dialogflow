@@ -565,7 +565,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   /**
-   * The function to give the response to ask if the user want to send the email to acaddir
+   * The function to give the response to ask if the user want to send the email to acaddir about changes of Personal information
    *
    * @param {string} result.queryResult.queryText the problem that was faces by the user
    */
@@ -581,8 +581,8 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   /**
-   * The function to preparing to send the notification to acaddir if the user want to change the job desc
-   *
+   * The function to preparing to send the notification to acaddir if the user want to change personal information
+   *    
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of user login
    * @param {string} result.queryResult.queryText the problem that was faces by the user
    */
@@ -1285,7 +1285,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     infoContext = agent.context.get("info");
     const threshold = Object.keys(infoContext.parameters).length - 2;
-    let check = false;
+  
 
     if (choice > threshold || choice < 1) {
       agent.add("Wrong Input. Please Choose the right input");

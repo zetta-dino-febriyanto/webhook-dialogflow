@@ -59,6 +59,7 @@ const dialogflowfulfillment = (request, response, result) => {
   let infoContext = null;
   let intent = result.queryResult.intent.displayName;
   console.log(intent);
+  console.log(result);
 
   /**
    * The function to send the welcome response to user and check the name of the user

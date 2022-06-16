@@ -66,6 +66,7 @@ const dialogflowfulfillment = (request, response, result) => {
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
    */
   async function sayHello(agent) {
+    console.log(result)
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
@@ -76,7 +77,7 @@ const dialogflowfulfillment = (request, response, result) => {
       "GET"
     );
 
-    
+
 
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;

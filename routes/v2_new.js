@@ -100,7 +100,7 @@ const dialogflowfulfillment = (request, response, result) => {
           {
             type: "image",
             rawUrl:
-              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png",
+              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
             accessibilityText: "Bilip Logo",
           },
         ],

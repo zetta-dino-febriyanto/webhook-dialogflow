@@ -76,6 +76,8 @@ const dialogflowfulfillment = (request, response, result) => {
       "GET"
     );
 
+    
+
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
     var payloadData = {

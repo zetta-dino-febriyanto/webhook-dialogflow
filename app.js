@@ -12,6 +12,8 @@ var indexRouter = require('./routes/index');
 var v1Router = require('./routes/users');
 var v2Router = require('./routes/v2_new');
 var userRouter = require('./routes/bilip_user');
+var b_userRouter = require('./routes/b_user');
+
 var app = express();
 
 // view engine setup
@@ -28,6 +30,7 @@ app.use('/', indexRouter);
 app.use('/users', v1Router);
 app.use('/v2_new', v2Router);
 app.use('/bilip_user', userRouter);
+app.user('/b_user', b_userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

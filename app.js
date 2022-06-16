@@ -30,7 +30,7 @@ app.use('/', indexRouter);
 app.use('/users', v1Router);
 app.use('/v2_new', v2Router);
 app.use('/bilip_user', userRouter);
-app.user('/b_user', b_userRouter);
+app.use('/b_user', b_userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

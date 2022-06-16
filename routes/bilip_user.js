@@ -178,6 +178,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
+    console.log(id)
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
     let student = await common.get_data(

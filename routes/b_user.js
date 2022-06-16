@@ -72,8 +72,9 @@ const dialogflowfulfillment = (request, response, result) => {
    *
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
    */
-  async function sayHello(agent) {
-    console.log(result)
+   async function sayHello(agent) {
+    //get user data
+    //uncommend if on stagging
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
@@ -84,7 +85,9 @@ const dialogflowfulfillment = (request, response, result) => {
       "GET"
     );
 
-
+    // console.log(user)
+    //uncommend if on stagging
+    // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
@@ -100,8 +103,6 @@ const dialogflowfulfillment = (request, response, result) => {
         ],
       ],
     };
-
-    // Send response to Dialogflow
     agent.add(
       new Payload(agent.UNSPECIFIED, payloadData, {
         sendAsMessage: true,

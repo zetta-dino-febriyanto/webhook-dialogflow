@@ -115,7 +115,7 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-
+    console.log(student)
     let recipients = [
       {
         recipients: ["admtcadmin2021@yopmail.com"],
@@ -165,7 +165,7 @@ const dialogflowfulfillment = (request, response, result) => {
     });
 
     agent.add(
-      `Oke, so you want me to Send email to your Academic Director that you have problem detail like this :`
+      `Oke, so you want me to Send email to User Help that you have problem detail like this :`
     );
     agent.add(`"${problem}" ?`);
 

@@ -16,12 +16,16 @@ router.post("/", function (req, res, next) {
 
   const result = req.body;
   console.log(result)
-  dialogflowfulfillment(req, res, result);
-  //console.log(result);
-  //Get Intent, Query, and Respond
   const intent = result.queryResult.intent.displayName;
+  console.log(intent);
   const query = result.queryResult.queryText;
+  console.log(query);
   const responds = result.queryResult.fulfillmentMessages;
+  console.log(respond);
+  dialogflowfulfillment(req, res, result);
+
+  //Get Intent, Query, and Respond
+  
 
   if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');

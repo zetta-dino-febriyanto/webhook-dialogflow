@@ -16,13 +16,14 @@ router.post("/", function (req, res, next) {
 
   const result = req.body;
   console.log(result)
+  dialogflowfulfillment(req, res, result);
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
   const query = result.queryResult.queryText;
   console.log(query);
   const responds = result.queryResult.fulfillmentMessages;
   console.log(responds);
-  dialogflowfulfillment(req, res, result);
+ 
 
   //Get Intent, Query, and Respond
   

@@ -212,7 +212,7 @@ const dialogflowfulfillment = (request, response, result) => {
       htmlFR: "utils/email_templates/Dummy_Notification/DUMMY_N1/FR.html",
       sendToPersonalEmail: true,
       requiredParams: {
-        body: `Dear User Help. Our customer with name ${student.first_name} ${student.last_name} and email ${student.email} have problem. Please contact them. Thank you.`,
+        body: `Dear User Help. Our customer with name ${student.first_name} ${student.last_name} and email ${student.email} have problem: ${problem}. Please contact them. Thank you.`,
       },
       notificationReference: "DUMMY_N1",
       RNCPTitleId: [],

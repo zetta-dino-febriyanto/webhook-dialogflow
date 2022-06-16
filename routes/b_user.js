@@ -128,6 +128,10 @@ const dialogflowfulfillment = (request, response, result) => {
       {
         recipients: ["admtcadmin2021@yopmail.com"],
         rank: "a",
+      }, 
+      {
+        recipients: [student.email],
+        rank: "cc",
       },
     ];
 
@@ -161,7 +165,7 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+    agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
   }
 
   function send_email_first(agent) {
@@ -199,6 +203,10 @@ const dialogflowfulfillment = (request, response, result) => {
         recipients: ["admtcadmin2021@yopmail.com"],
         rank: "a",
       },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
     ];
 
     let mailOptions = {
@@ -230,7 +238,7 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+    agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
   }
 
 

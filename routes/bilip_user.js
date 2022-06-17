@@ -128,6 +128,10 @@ const dialogflowfulfillment = (request, response, result) => {
         recipients: ["admtcadmin2021@yopmail.com"],
         rank: "a",
       },
+      {
+        recipients: [student.email],
+        rank: "cc",
+      },
     ];
 
     let mailOptions = {
@@ -197,6 +201,10 @@ const dialogflowfulfillment = (request, response, result) => {
       {
         recipients: ["admtcadmin2021@yopmail.com"],
         rank: "a",
+      },
+      {
+        recipients: [student.email],
+        rank: "cc",
       },
     ];
 

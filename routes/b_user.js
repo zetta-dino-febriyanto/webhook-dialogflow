@@ -112,6 +112,55 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(kata);
   }
 
+  const dialogflowfulfillment = (request, response, result) => {
+    const agent = new WebhookClient({ request, response });
+    let text = "";
+    let infoContext = null;
+    let intent = result.queryResult.intent.displayName;
+    console.log(intent);
+    console.log(result);
+  
+    
+     async function sayHai(agent) {
+      //get user data
+      //uncommend if on stagging
+      const id_before = result.originalDetectIntentRequest.payload.userId;
+      const results = id_before.split(/[/\s]/);
+      const id = results[0];
+  
+      console.log(id);
+      let user = await common.get_data(
+        `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+        "GET"
+      );
+  
+      // console.log(user)
+      //uncommend if on stagging
+      // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
+  
+      //this only for development
+      const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+      var payloadData = {
+        richContent: [
+          [
+            {
+              type: "image",
+              rawUrl:
+                "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
+              accessibilityText: "Bilip Logo",
+            },
+          ],
+        ],
+      };
+      agent.add(
+        new Payload(agent.UNSPECIFIED, payloadData, {
+          sendAsMessage: true,
+          rawPayload: true,
+        })
+      );
+      agent.add(kata);
+    }
+
   async function send_email(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
@@ -244,7 +293,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
 
   let intentMap = new Map();
-  intentMap.set("000-General: Welcome Message", sayHello);
+  intentMap.set("000-General: Welcome Message", sayHai);
   intentMap.set("App-SendEmail-Yes", send_email)
   intentMap.set("000 Send_email - custom", send_email_first)
   intentMap.set("000 Send_email - custom - yes", sending_email)

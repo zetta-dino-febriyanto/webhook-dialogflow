@@ -72,8 +72,9 @@ const dialogflowfulfillment = (request, response, result) => {
    *
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
    */
-  async function sayHello(agent) {
-    console.log(result)
+   async function sayHello(agent) {
+    //get user data
+    //uncommend if on stagging
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
@@ -84,7 +85,9 @@ const dialogflowfulfillment = (request, response, result) => {
       "GET"
     );
 
-
+    // console.log(user)
+    //uncommend if on stagging
+    // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
     const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
@@ -94,14 +97,51 @@ const dialogflowfulfillment = (request, response, result) => {
           {
             type: "image",
             rawUrl:
-              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/v2/bilip%20Head.png",
+              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
             accessibilityText: "Bilip Logo",
           },
         ],
       ],
     };
+    agent.add(
+      new Payload(agent.UNSPECIFIED, payloadData, {
+        sendAsMessage: true,
+        rawPayload: true,
+      })
+    );
+    agent.add(kata);
+  }
+  async function sayHai(agent) {
+    //get user data
+    //uncommend if on stagging
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
 
-    // Send response to Dialogflow
+    console.log(id);
+    let user = await common.get_data(
+      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
+
+    // console.log(user)
+    //uncommend if on stagging
+    // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
+
+    //this only for development
+    const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+    var payloadData = {
+      richContent: [
+        [
+          {
+            type: "image",
+            rawUrl:
+              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
+            accessibilityText: "Bilip Logo",
+          },
+        ],
+      ],
+    };
     agent.add(
       new Payload(agent.UNSPECIFIED, payloadData, {
         sendAsMessage: true,
@@ -116,6 +156,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     console.log(id)
+    console.log(results)
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
 
     let student = await common.get_data(
@@ -127,7 +168,7 @@ const dialogflowfulfillment = (request, response, result) => {
       {
         recipients: ["admtcadmin2021@yopmail.com"],
         rank: "a",
-      },
+      }, 
       {
         recipients: [student.email],
         rank: "cc",
@@ -164,7 +205,7 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+    agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
   }
 
   function send_email_first(agent) {
@@ -189,7 +230,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
-    console.log(id)
+    console.log(results)
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
     let student = await common.get_data(
@@ -237,12 +278,12 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    agent.add("Oke, I already send an email to my human friend. He should contact you as soon as possible. Thank You :)")
+    agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
   }
 
 
   let intentMap = new Map();
-  intentMap.set("000-General: Welcome Message", sayHello);
+  intentMap.set("000-General: Welcome Message", sayHai);
   intentMap.set("App-SendEmail-Yes", send_email)
   intentMap.set("000 Send_email - custom", send_email_first)
   intentMap.set("000 Send_email - custom - yes", sending_email)

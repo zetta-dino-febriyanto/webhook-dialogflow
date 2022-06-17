@@ -111,16 +111,8 @@ const dialogflowfulfillment = (request, response, result) => {
     );
     agent.add(kata);
   }
-
-  const dialogflowfulfillment = (request, response, result) => {
-    const agent = new WebhookClient({ request, response });
-    let text = "";
-    let infoContext = null;
-    let intent = result.queryResult.intent.displayName;
-    console.log(intent);
-    console.log(result);
   
-    
+ 
      async function sayHai(agent) {
       //get user data
       //uncommend if on stagging

@@ -119,36 +119,36 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
 
     console.log(id);
-    // let user = await common.get_data(
-    //   `https://api.bilip.zetta-demo.space/getUserById/${id}`,
-    //   "GET"
-    // );
+    let user = await common.get_data(
+      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
 
-    // // console.log(user)
-    // //uncommend if on stagging
-    // // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
+    // console.log(user)
+    //uncommend if on stagging
+    // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
-    // //this only for development
-    // const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
-    // var payloadData = {
-    //   richContent: [
-    //     [
-    //       {
-    //         type: "image",
-    //         rawUrl:
-    //           "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
-    //         accessibilityText: "Bilip Logo",
-    //       },
-    //     ],
-    //   ],
-    // };
-    // agent.add(
-    //   new Payload(agent.UNSPECIFIED, payloadData, {
-    //     sendAsMessage: true,
-    //     rawPayload: true,
-    //   })
-    // );
-    agent.add("Hai");
+    //this only for development
+    const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+    var payloadData = {
+      richContent: [
+        [
+          {
+            type: "image",
+            rawUrl:
+              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
+            accessibilityText: "Bilip Logo",
+          },
+        ],
+      ],
+    };
+    agent.add(
+      new Payload(agent.UNSPECIFIED, payloadData, {
+        sendAsMessage: true,
+        rawPayload: true,
+      })
+    );
+    agent.add(kata);
   }
 
   async function send_email(agent) {

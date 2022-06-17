@@ -508,7 +508,14 @@ exports.get_data = async (url, method, auth, data = {}) => {
         headers: headers,
         body: data,
       });
+      console.log({
+        method: method,
+        headers: headers,
+        body: data,
+      })
       const json = await response.json();
+      console.log('json')
+      console.log(json)
       return json;
     } else {
       const response = await fetch(url, { method: method, headers: headers });

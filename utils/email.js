@@ -444,6 +444,13 @@ function sendNotification(parameters, callback) {
       mail_type: params.sender_property.mail_type,
     };
 
+    console.log({
+      ...params,
+      sender_property: senderPropertyData,
+      recipient_properties: recipientPropertiesData,
+      file_attachments: fileAttachments
+    })
+
     const notifSent = await common.get_data(`https://api.bilip.zetta-demo.space/createMail`, 'POST', null, {
       ...params,
       sender_property: senderPropertyData,

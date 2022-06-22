@@ -16,7 +16,12 @@ router.post("/", function (req, res, next) {
 
   const result = req.body;
   console.log(result)
-  dialogflowfulfillment(req, res, result);
+  try{
+    dialogflowfulfillment(req, res, result);
+  } catch(err){
+
+  }
+  
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
   const query = result.queryResult.queryText;
@@ -281,12 +286,54 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
   }
 
+  async function jury_not_fixed(agent){
+    const id_before = result.originalDetectIntentRequest.payload.userId;
+    const results = id_before.split(/[/\s]/);
+    const id = results[0];
+
+    let user = await common.get_data(
+      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      "GET"
+    );
+
+    const kata = `I will redirect you to my human friend for help. Click the button below to Contact my human friend`;
+    var payloadData = {
+      richContent: [
+        [
+          {
+            icon: {
+              type: "chevron_right",
+              color: "#FF9800"
+            },
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {}
+            },
+            text: "Tutorial Link",
+            type: "button",
+            link: `ttps://api.whatsapp.com/send?phone=6593722206&text=Hello, this is ${user.first_name}. I need urgent help`
+          }
+        ]
+      ]
+    };
+    agent.add(kata)
+    agent.add(
+      new Payload(agent.UNSPECIFIED, payloadData, {
+        sendAsMessage: true,
+        rawPayload: true,
+      })
+    );
+  
+  }
+
 
   let intentMap = new Map();
   intentMap.set("000-General: Welcome Message", sayHai);
   intentMap.set("App-SendEmail-Yes", send_email)
   intentMap.set("000 Send_email - custom", send_email_first)
   intentMap.set("000 Send_email - custom - yes", sending_email)
+  intentMap.set("JURY-03 The issue still not fixed", jury_not_fixed)
 
 
   agent.handleRequest(intentMap);

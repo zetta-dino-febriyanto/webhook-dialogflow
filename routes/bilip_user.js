@@ -312,7 +312,7 @@ const dialogflowfulfillment = (request, response, result) => {
             },
             text: "Tutorial Link",
             type: "button",
-            link: `ttps://api.whatsapp.com/send?phone=6593722206&text=Hello, this is ${user.first_name}. I need urgent help`
+            link: `https://api.whatsapp.com/send?phone=6593722206&text=Hello, this is ${user.first_name}. I need urgent help`
           }
         ]
       ]

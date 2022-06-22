@@ -48,14 +48,10 @@ router.post('/', function (req, res, next) {
     SentimentAnalysisModel.create({
       score, magnitude, query, responds, intent
     })
-
-    try{
-      dialogflowfulfillment(req, res, result);
-    } catch(err){
-
-    }
-
   }
+    if(intent == 'JURY-03 The issue still not fixed'){
+        dialogflowfulfillment(req, res, result);
+    }
 });
 
 const dialogflowfulfillment = (request, response, result) => {

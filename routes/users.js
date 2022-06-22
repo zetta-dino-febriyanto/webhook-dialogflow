@@ -43,6 +43,10 @@ router.post('/', function (req, res, next) {
     SentimentAnalysisModel.create({
       score, magnitude, query, responds, intent
     })
+  }
+
+  if (intent == 'JURY-03 The issue still not fixed'){
+    res.send(createTextResponse("I will redirect you to my human friend for help <Link to WA Aide jury>"));
 
   }
 });

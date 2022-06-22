@@ -29,7 +29,7 @@ router.post('/', function (req, res, next) {
 
     if (intent == 'JURY-03 The issue still not fixed'){
       res.send(createTextResponse("I will redirect you to my human friends for help <Link to WA Aide jury>"));
-
+      res.send(createTextResponse("I will redirect you to my human friends for help <Link to WA Aide jury>"));
     }
 
     if (score < -0.85 && (intent != "Q16- Edit Job Description ? - Send" || intent !="JURY-03 The issue still not fixed")) {
@@ -51,6 +51,8 @@ router.post('/', function (req, res, next) {
 
     
 });
+
+
 
 
 function createTextResponse(textresponse) {

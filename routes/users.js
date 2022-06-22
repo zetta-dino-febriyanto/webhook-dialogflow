@@ -131,7 +131,7 @@ const dialogflowfulfillment = (request, response, result) => {
               languageCode: "",
               parameters: {}
             },
-            text: "Tutorial Link",
+            text: "WhatsApp Link",
             type: "button",
             link: `https://api.whatsapp.com/send?phone=6593722206&text=Hello, this is ${user.first_name}. I need urgent help`
           }

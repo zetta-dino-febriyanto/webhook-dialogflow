@@ -153,7 +153,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   let intentMap = new Map();
-  intentMap.set("000-General: Welcome Message", sayHello);
+  intentMap.set("A02-Welcome Intent", sayHello);
   intentMap.set("JURY-03 The issue still not fixed", jury_not_fixed)
 
 

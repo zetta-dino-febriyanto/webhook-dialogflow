@@ -28,7 +28,7 @@ router.post('/', function (req, res, next) {
     })
 
 
-    if (score < -0.85 && intent != "Q16- Edit Job Description ? - Send") {
+    if (score < -0.85 && (intent != "Q16- Edit Job Description ? - Send" || intent !="JURY-03 The issue still not fixed")) {
       if (language == "en") {
         res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
       } else {

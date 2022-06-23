@@ -6,6 +6,7 @@ const JWT_KEY = 'j!J@W#w$t%T^';
 const _ = require('lodash');
 const moment = require('moment');
 const fetch = require('node-fetch');
+const axios = require('axios').default;
 
 var privateKey = process.env.PWD_KEY;
 
@@ -494,6 +495,41 @@ exports.createTextResponse = function (textresponse, urls) {
  * @param {token} auth the bearer token of the user login
  * @param {object} data the object to pass to the api body
  */
+// exports.get_data = async (url, method, auth, data = {}) => {
+//   try {
+//     let headers = {
+//       // "Content-Type": "application/json",
+//       // "client_id": "1001125",
+//       // "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
+//       Authorization: `Bearer "${auth}"`,
+//     };
+//     if (method === "POST") {
+//       const response = await fetch(url, {
+//         method: method,
+//         headers: headers,
+//         body: data,
+//       });
+//       console.log({
+//         method: method,
+//         headers: headers,
+//         body: data,
+//       })
+//       console.log('response')
+//       console.log(response)
+//       const json = await response.json();
+//       console.log('json')
+//       console.log(json)
+//       return json;
+//     } else {
+//       const response = await fetch(url, { method: method, headers: headers });
+//       const json = await response.json();
+//       return json;
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 exports.get_data = async (url, method, auth, data = {}) => {
   try {
     let headers = {
@@ -503,20 +539,16 @@ exports.get_data = async (url, method, auth, data = {}) => {
       Authorization: `Bearer "${auth}"`,
     };
     if (method === "POST") {
-      const response = await fetch(url, {
-        method: method,
-        headers: headers,
-        body: data,
+      axios.post(
+        url,
+        data,
+        {
+          headers: headers
+        }
+      ).then(response => {
+        console.log(response.data)
+        return response.data
       });
-      console.log({
-        method: method,
-        headers: headers,
-        body: data,
-      })
-      const json = await response.json();
-      console.log('json')
-      console.log(json)
-      return json;
     } else {
       const response = await fetch(url, { method: method, headers: headers });
       const json = await response.json();

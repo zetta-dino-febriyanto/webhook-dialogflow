@@ -444,6 +444,7 @@ function sendNotification(parameters, callback) {
       mail_type: params.sender_property.mail_type,
     };
 
+    console.log('data create mail')
     console.log({
       ...params,
       sender_property: senderPropertyData,

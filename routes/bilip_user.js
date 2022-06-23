@@ -21,6 +21,7 @@ router.post("/", function (req, res, next) {
   } catch (err) {
 
   }
+  const language_code = result.queryResult.languageCode;
 
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
@@ -134,7 +135,13 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+    let kata = "";
+    if (language_code == 'en'){
+      kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+    } else {
+      kata = `Bonjour ${user.first_name}. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
+    }
+   
     var payloadData = {
       richContent: [
         [

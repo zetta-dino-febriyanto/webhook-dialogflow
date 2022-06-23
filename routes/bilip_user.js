@@ -120,10 +120,11 @@ const dialogflowfulfillment = (request, response, result) => {
     const language_code = result.queryResult.languageCode;
     //get user data
     //uncommend if on stagging
-    id_before = ''
+  
     
-    console.log(id_before)
+    
     const id_before = result.originalDetectIntentRequest.payload.userId;
+    console.log(id_before)
     if(typeof id_before !== 'undefined'){
       const results = id_before.split(/[/\s]/);
       const id = results[0];

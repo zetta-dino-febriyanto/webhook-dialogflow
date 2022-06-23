@@ -21,8 +21,7 @@ router.post("/", function (req, res, next) {
   } catch (err) {
 
   }
-  const language_code = result.queryResult.languageCode;
-
+  
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
   const query = result.queryResult.queryText;
@@ -118,6 +117,7 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add(kata);
   }
   async function sayHai(agent) {
+    const language_code = result.queryResult.languageCode;
     //get user data
     //uncommend if on stagging
     const id_before = result.originalDetectIntentRequest.payload.userId;

@@ -120,48 +120,60 @@ const dialogflowfulfillment = (request, response, result) => {
     const language_code = result.queryResult.languageCode;
     //get user data
     //uncommend if on stagging
+    id_before = ''
+    
     console.log(id_before)
     const id_before = result.originalDetectIntentRequest.payload.userId;
-    const results = id_before.split(/[/\s]/);
-    const id = results[0];
-
-    console.log(id);
-    let user = await common.get_data(
-      `https://api.v2.zetta-demo.space/getUserById/${id}`,
-      "GET"
-    );
-
-    // console.log(user)
-    //uncommend if on stagging
-    // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
-
-    //this only for development
-    let kata = "";
-    if (language_code == 'en'){
-      kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
-    } else {
-      kata = `Bonjour ${user.first_name}. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
-    }
-   
-    var payloadData = {
-      richContent: [
-        [
-          {
-            type: "image",
-            rawUrl:
-              "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
-            accessibilityText: "Bilip Logo",
-          },
+    if(typeof id_before !== 'undefined'){
+      const results = id_before.split(/[/\s]/);
+      const id = results[0];
+  
+      console.log(id);
+      let user = await common.get_data(
+        `https://api.v2.zetta-demo.space/getUserById/${id}`,
+        "GET"
+      );
+  
+      // console.log(user)
+      //uncommend if on stagging
+      // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
+  
+      //this only for development
+      let kata = "";
+      if (language_code == 'en'){
+        kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+      } else {
+        kata = `Bonjour ${user.first_name}. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
+      }
+     
+      var payloadData = {
+        richContent: [
+          [
+            {
+              type: "image",
+              rawUrl:
+                "https://raw.githubusercontent.com/zetta-dino-febriyanto/webhook-dialogflow/main/bilip%20Head.png",
+              accessibilityText: "Bilip Logo",
+            },
+          ],
         ],
-      ],
-    };
-    agent.add(
-      new Payload(agent.UNSPECIFIED, payloadData, {
-        sendAsMessage: true,
-        rawPayload: true,
-      })
-    );
-    agent.add(kata);
+      };
+      agent.add(
+        new Payload(agent.UNSPECIFIED, payloadData, {
+          sendAsMessage: true,
+          rawPayload: true,
+        })
+      );
+      agent.add(kata);
+    } else {
+      if (language_code == 'en'){
+        kata = `Hello. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+      } else {
+        kata = `Bonjour. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
+      }
+      agent.add(kata);
+    }
+    
   }
 
   async function send_email(agent) {

@@ -54,9 +54,9 @@ function sendMail(mailOptions, callback = () => { }) {
   // getdatauser
   let userFound = () => {
     return new Promise(async (resolve, reject) => {
-      let userFoundEmail = await common.get_data(`https://api.bilip.zetta-demo.space/getUserByEmail/${mailOptions.from}`, 'GET');
+      let userFoundEmail = await common.get_data(`https://api.v2.zetta-demo.space/getUserByEmail/${mailOptions.from}`, 'GET');
       if (!userFoundEmail) {
-        let userFoundId = await common.get_data(`https://api.bilip.zetta-demo.space/getUserById/${mailOptions.fromId}`, 'GET');
+        let userFoundId = await common.get_data(`https://api.v2.zetta-demo.space/getUserById/${mailOptions.fromId}`, 'GET');
         if (userFoundId && !userFoundId.is_user_student) {
           mailOptions.from = userFoundId.email;
         } else {
@@ -425,7 +425,7 @@ function sendNotification(parameters, callback) {
     let recipientPropertiesData = [];
     if (params.recipient_properties && params.recipient_properties.length) {
       for (let recipient of params.recipient_properties) {
-        let recipientData = await common.get_data(`https://api.bilip.zetta-demo.space/getUserByEmail/${recipient.recipients[0]}`, 'GET');
+        let recipientData = await common.get_data(`https://api.v2.zetta-demo.space/getUserByEmail/${recipient.recipients[0]}`, 'GET');
         if (recipientData) {
           recipientPropertiesData.push({
             recipients: recipientData._id,
@@ -436,8 +436,8 @@ function sendNotification(parameters, callback) {
       }
     }
 
-    let userSender = await common.get_data(`https://api.bilip.zetta-demo.space/getUserByEmail/${params.sender_property.sender}`, 'GET');
-    let userPlatformEmail = await common.get_data(`https://api.bilip.zetta-demo.space/getUserByEmail/${platformEmail}`, 'GET');
+    let userSender = await common.get_data(`https://api.v2.zetta-demo.space/getUserByEmail/${params.sender_property.sender}`, 'GET');
+    let userPlatformEmail = await common.get_data(`https://api.v2.zetta-demo.space/getUserByEmail/${platformEmail}`, 'GET');
     let senderPropertyData = {
       sender: userSender && userSender._id ? userSender._id : userPlatformEmail._id,
       is_read: params.sender_property.is_read,
@@ -451,7 +451,7 @@ function sendNotification(parameters, callback) {
       file_attachments: fileAttachments
     })
 
-    const notifSent = await common.get_data(`https://api.bilip.zetta-demo.space/createMail`, 'POST', null, {
+    const notifSent = await common.get_data(`https://api.v2.zetta-demo.space/createMail`, 'POST', null, {
       ...params,
       sender_property: senderPropertyData,
       recipient_properties: recipientPropertiesData,

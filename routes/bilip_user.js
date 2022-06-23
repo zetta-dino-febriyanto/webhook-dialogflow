@@ -16,22 +16,22 @@ router.post("/", function (req, res, next) {
 
   const result = req.body;
   console.log(result)
-  try{
+  try {
     dialogflowfulfillment(req, res, result);
-  } catch(err){
+  } catch (err) {
 
   }
-  
+
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
   const query = result.queryResult.queryText;
   console.log(query);
   const responds = result.queryResult.fulfillmentMessages;
   console.log(responds);
- 
+
 
   //Get Intent, Query, and Respond
-  
+
 
   if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');
@@ -77,7 +77,7 @@ const dialogflowfulfillment = (request, response, result) => {
    *
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
    */
-   async function sayHello(agent) {
+  async function sayHello(agent) {
     //get user data
     //uncommend if on stagging
     const id_before = result.originalDetectIntentRequest.payload.userId;
@@ -86,7 +86,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     console.log(id);
     let user = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      `https://api.v2.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
 
@@ -125,7 +125,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     console.log(id);
     let user = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      `https://api.v2.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
 
@@ -165,15 +165,15 @@ const dialogflowfulfillment = (request, response, result) => {
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
 
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-    
+
     let recipients = [
       {
         recipients: ["admtcadmin2021@yopmail.com"],
         rank: "a",
-      }, 
+      },
       {
         recipients: [student.email],
         rank: "cc",
@@ -239,7 +239,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     // function to send email to user help: Dear User Help. Our customer with name <<customer name>> and email <<customer email>> have problem. Please contact them. Thank you.
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
 
@@ -286,13 +286,13 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
   }
 
-  async function jury_not_fixed(agent){
+  async function jury_not_fixed(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
 
     let user = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
 
@@ -324,7 +324,7 @@ const dialogflowfulfillment = (request, response, result) => {
         rawPayload: true,
       })
     );
-  
+
   }
 
 

@@ -84,7 +84,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     console.log(id);
     let user = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserById/${id}`,
+      `https://api.v2.zetta-demo.space/getUserById/${id}`,
       "GET"
     );
 
@@ -130,7 +130,7 @@ const dialogflowfulfillment = (request, response, result) => {
     console.log(id);
 
     let tasks = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getDocExpStudentTask/${id}/5a067bba1c0217218c75f8ab`,
+      `https://api.v2.zetta-demo.space/getDocExpStudentTask/${id}/5a067bba1c0217218c75f8ab`,
       "GET"
     );
     // console.log(tasks)
@@ -250,7 +250,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -261,10 +261,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -328,7 +328,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let isnotAccept = await common.get_data(
-      `https://api.bilip.zetta-demo.space/checkJobDescAcceptByAcadDir/${id}`,
+      `https://api.v2.zetta-demo.space/checkJobDescAcceptByAcadDir/${id}`,
       "GET"
     );
     // Function to check is Job Description of Student is already accepted by acad dir or no
@@ -337,7 +337,7 @@ const dialogflowfulfillment = (request, response, result) => {
       // function to send  email to acad dir and CC to student
       // Email Text : Dear <<Acad Dir Name>>. <<Student Name>> want to change the Edit Job Description, Please Rejected his Job Description. Thank You!
       let student = await common.get_data(
-        `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+        `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
         "GET"
       );
       let data = {
@@ -348,10 +348,10 @@ const dialogflowfulfillment = (request, response, result) => {
         classId: student.current_class,
       };
       console.log(
-        `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+        `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
       );
       let acadDirs = await common.get_data(
-        `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+        `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
         "GET"
       );
 
@@ -437,7 +437,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -448,10 +448,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -517,7 +517,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
 
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
 
@@ -596,7 +596,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -607,10 +607,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -692,7 +692,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -703,10 +703,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -788,7 +788,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -799,10 +799,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -863,7 +863,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     if (student && student.companies && student.companies.length) {
@@ -876,7 +876,7 @@ const dialogflowfulfillment = (request, response, result) => {
       );
       if (companyData && companyData.mentor) {
         let mentor = await common.get_data(
-          `https://api.bilip.zetta-demo.space/getUserById/${companyData.mentor}`,
+          `https://api.v2.zetta-demo.space/getUserById/${companyData.mentor}`,
           "GET"
         );
 
@@ -927,7 +927,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -938,10 +938,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -1024,7 +1024,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -1035,10 +1035,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -1101,7 +1101,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const results = id_before.split(/[/\s]/);
     const id = results[0];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -1112,10 +1112,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 
@@ -1177,7 +1177,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
     const timeZoneInMinutes = results[1];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -1188,10 +1188,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
     let acadDir = acadDirs[0];
@@ -1261,7 +1261,7 @@ const dialogflowfulfillment = (request, response, result) => {
         result[index + 1] = item;
         return result;
       },
-      {});
+        {});
       console.log(taskObject);
 
       // Function to add search result to context
@@ -1285,7 +1285,7 @@ const dialogflowfulfillment = (request, response, result) => {
 
     infoContext = agent.context.get("info");
     const threshold = Object.keys(infoContext.parameters).length - 2;
-  
+
 
     if (choice > threshold || choice < 1) {
       agent.add("Wrong Input. Please Choose the right input");
@@ -1381,7 +1381,7 @@ const dialogflowfulfillment = (request, response, result) => {
     const id = results[0];
     const timeZoneInMinutes = results[1];
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -1392,10 +1392,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     // console.log(
-    //   `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    //   `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     // );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
     let acadDir = acadDirs[0];
@@ -1421,18 +1421,18 @@ const dialogflowfulfillment = (request, response, result) => {
       time_schedule:
         checkMeetingScheduleData && checkMeetingScheduleData.length
           ? moment
-              .utc(
-                checkMeetingScheduleData[0].date_schedule +
-                  checkMeetingScheduleData[0].time_schedule,
-                "DD/MM/YYYYHH:mm"
-              )
-              .add(acaddirSchedule.meeting_duration, "minutes")
+            .utc(
+              checkMeetingScheduleData[0].date_schedule +
+              checkMeetingScheduleData[0].time_schedule,
+              "DD/MM/YYYYHH:mm"
+            )
+            .add(acaddirSchedule.meeting_duration, "minutes")
           : moment
-              .utc(
-                date + acaddirSchedule.time_start_schedule,
-                "DD/MM/YYYYHH:mm"
-              )
-              .add(acaddirSchedule.meeting_duration, "minutes"),
+            .utc(
+              date + acaddirSchedule.time_start_schedule,
+              "DD/MM/YYYYHH:mm"
+            )
+            .add(acaddirSchedule.meeting_duration, "minutes"),
       user_meeting: acadDir._id,
       student_meeting: student._id,
       link: String,
@@ -1456,7 +1456,7 @@ const dialogflowfulfillment = (request, response, result) => {
     let jitsiLink = `https://meet.jit.si/ZettaMeet_${moment
       .utc(
         meetingScheduleCreated.date_schedule +
-          meetingScheduleCreated.time_schedule,
+        meetingScheduleCreated.time_schedule,
         "DD/MM/YYYYHH:mm"
       )
       .format("YYYYMMDDHHmmss")}`;
@@ -1464,7 +1464,7 @@ const dialogflowfulfillment = (request, response, result) => {
     if (recipients) {
       let meetingSchedule = moment.utc(
         meetingScheduleCreated.date_schedule +
-          meetingScheduleCreated.time_schedule,
+        meetingScheduleCreated.time_schedule,
         "DD/MM/YYYYHH:mm"
       );
       if (acaddirSchedule && acaddirSchedule.acaddir_timezone) {
@@ -1472,21 +1472,17 @@ const dialogflowfulfillment = (request, response, result) => {
       }
       let body = "";
       if (type && type === "Online") {
-        body = `Hello ${acadDirs[0].first_name} ${
-          acadDirs[0].last_name
-        } student with name ${student.first_name} ${
-          student.last_name
-        } want to meet you on ${meetingSchedule.format(
-          "HH:mm"
-        )} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name
+          } student with name ${student.first_name} ${student.last_name
+          } want to meet you on ${meetingSchedule.format(
+            "HH:mm"
+          )} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
       } else if (type && type === "Offline") {
-        body = `Hello ${acadDirs[0].first_name} ${
-          acadDirs[0].last_name
-        } student with name ${student.first_name} ${
-          student.last_name
-        } want to meet you on ${meetingSchedule.format(
-          "HH:mm"
-        )} in your office`;
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name
+          } student with name ${student.first_name} ${student.last_name
+          } want to meet you on ${meetingSchedule.format(
+            "HH:mm"
+          )} in your office`;
       }
 
       //Function to send email to acad dir
@@ -1524,27 +1520,23 @@ const dialogflowfulfillment = (request, response, result) => {
       let meetingSchedule = moment
         .utc(
           meetingScheduleCreated.date_schedule +
-            meetingScheduleCreated.time_schedule,
+          meetingScheduleCreated.time_schedule,
           "DD/MM/YYYYHH:mm"
         )
         .add(timeZoneInMinutes, "minutes");
       let body = "";
       if (type && type === "Online") {
-        body = `Hello ${acadDirs[0].first_name} ${
-          acadDirs[0].last_name
-        } student with name ${student.first_name} ${
-          student.last_name
-        } want to meet you on ${meetingSchedule.format(
-          "HH:mm"
-        )} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name
+          } student with name ${student.first_name} ${student.last_name
+          } want to meet you on ${meetingSchedule.format(
+            "HH:mm"
+          )} on this link <a href="${jitsiLink}">${jitsiLink}</a>`;
       } else if (type && type === "Offline") {
-        body = `Hello ${acadDirs[0].first_name} ${
-          acadDirs[0].last_name
-        } student with name ${student.first_name} ${
-          student.last_name
-        } want to meet you on ${meetingSchedule.format(
-          "HH:mm"
-        )} in your office`;
+        body = `Hello ${acadDirs[0].first_name} ${acadDirs[0].last_name
+          } student with name ${student.first_name} ${student.last_name
+          } want to meet you on ${meetingSchedule.format(
+            "HH:mm"
+          )} in your office`;
       }
 
       //Function to send email to acad dir
@@ -1602,7 +1594,7 @@ const dialogflowfulfillment = (request, response, result) => {
     // Dear <<Acad Dir>>. Your student with name <<Student Name>> and Email <<student email>> Wanto Resign/Deactivated his Account. Thank You.
 
     let student = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
+      `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
     let data = {
@@ -1613,10 +1605,10 @@ const dialogflowfulfillment = (request, response, result) => {
       classId: student.current_class,
     };
     console.log(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
     );
     let acadDirs = await common.get_data(
-      `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+      `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
       "GET"
     );
 

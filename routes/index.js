@@ -31,7 +31,7 @@ router.post('/acaddir_schedule', async function (req, res, next) {
 router.post('/meeting_schedule', async function (req, res, next) {
   let params = req.body;
   let student = await get_data(
-    `https://api.bilip.zetta-demo.space/getUserByUserId/${params.user_id}`,
+    `https://api.v2.zetta-demo.space/getUserByUserId/${params.user_id}`,
     "GET"
   );
   let data = {
@@ -42,10 +42,10 @@ router.post('/meeting_schedule', async function (req, res, next) {
     classId: student.current_class,
   };
   console.log(
-    `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
+    `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`
   );
   let acadDirs = await get_data(
-    `https://api.bilip.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
+    `https://api.v2.zetta-demo.space/getUserFromEntityNameSchoolRncpClass/${data.entity}/${data.name}/${data.school}/${data.rncpTitle}/${data.classId}`,
     "GET"
   );
   let acadDir = acadDirs[0];

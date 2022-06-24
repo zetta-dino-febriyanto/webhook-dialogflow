@@ -230,8 +230,14 @@ const dialogflowfulfillment = (request, response, result) => {
         throw new Error(err);
       }
     });
+    const language_code = result.queryResult.languageCode;
 
-    agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
+    if (language_code == 'en'){
+      agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
+    } else{
+      agent.add("Oke, j'ai déjà envoyé un e-mail à mon ami humain et CC à vous. Il devrait vous contacter dans les plus brefs délais. Merci :)")
+    }
+    
   }
 
   function send_email_first(agent) {
@@ -241,12 +247,18 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.context.set("problem", 99, {
       problem: problem,
     });
-
+    if (language_code == 'en'){
     agent.add(
       `Oke, so you want me to Send email to User Help that you have problem detail like this :`
     );
     agent.add(`"${problem}" ?`);
-
+    } else{
+      
+      agent.add(
+        `Oke, vous voulez donc que j'envoie un e-mail à l'aide de l'utilisateur indiquant que vous avez des détails sur le problème comme celui-ci :`
+      );
+      agent.add(`"${problem}" ?`);
+    }
   }
 
   async function sending_email(agent) {
@@ -304,7 +316,11 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
+    if (language_code == 'en'){
+      agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
+    } else{
+      agent.add("Oke, j'ai déjà envoyé un e-mail à mon ami humain et CC à vous. Il devrait vous contacter dans les plus brefs délais. Merci :)")
+    }
   }
 
   async function jury_not_fixed(agent) {
@@ -316,7 +332,7 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-
+    
     const kata = `I will redirect you to my human friend for help. Click the button below to Contact my human friend`;
     var payloadData = {
       richContent: [

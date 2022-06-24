@@ -85,7 +85,12 @@ const dialogflowfulfillment = (request, response, result) => {
     // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
 
     //this only for development
-    const kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+    let kata = "";
+    if (language_code == 'en'){
+      kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
+    } else {
+      kata = `Bonjour ${user.first_name}. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
+    }
     var payloadData = {
       richContent: [
         [
@@ -111,13 +116,21 @@ const dialogflowfulfillment = (request, response, result) => {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
+    const language_code = result.queryResult.languageCode;
 
     let user = await common.get_data(
       `https://api.bilip.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-
-    const kata = `I will redirect you to my human friend for help. Click the button below to Contact my human friend`;
+    let kata = ""
+    
+    if(language_code == 'en'){
+      kata = `I will redirect you to my human friend for help. Click the button below to Contact my human friend`;
+    }
+    else {
+      kata = `Je vais vous rediriger vers mon ami humain pour obtenir de l'aide. Cliquez sur le bouton ci-dessous pour contacter mon ami humain`;
+    }
+   
     var payloadData = {
       richContent: [
         [

@@ -68,6 +68,8 @@ const dialogflowfulfillment = (request, response, result) => {
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
    */
    async function sayHello(agent) {
+    const language_code = result.queryResult.languageCode;
+
     //get user data
     //uncommend if on stagging
     const id_before = result.originalDetectIntentRequest.payload.userId;

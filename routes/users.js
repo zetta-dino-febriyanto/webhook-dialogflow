@@ -8,9 +8,9 @@ require("../utils/database");
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 const common = require("../utils/common");
-const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
+const DataConversationModel = require("../models/data_conversation.model");
 /* GET users listing. */
-router.post('/', function (req, res, next) {
+router.post('/', async function (req, res, next) {
 
 
   const result = req.body;
@@ -20,8 +20,35 @@ router.post('/', function (req, res, next) {
   const query = result.queryResult.queryText;
   const responds = result.queryResult.fulfillmentMessages;
   const id_before = result.originalDetectIntentRequest.payload.userId;
-  const results = id_before.split(/[/\s]/);
+  const userIdResults = id_before.split(/[/\s]/);
   const user_id = results[0];
+  let id;
+  let timeZone;
+  let loginAs;
+  let entityData;
+  if (userIdResults && userIdResults.length && userIdResults[0]) {
+    id = userIdResults[0];
+  }
+  if (userIdResults && userIdResults.length && userIdResults[1]) {
+    timeZone = userIdResults[1];
+  }
+  if (userIdResults && userIdResults.length && userIdResults[2]) {
+    loginAs = userIdResults[2];
+  }
+
+  if (userIdResults && userIdResults.length && userIdResults[0] && userIdResults[2]) {
+    let userData = await common.get_data(
+      `https://api.v2.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
+    if (userData && userData.entities && userData.entities.length) {
+      entityData = userData.entities.find((entity) => {
+        if (entity && entity._id && String(entity._id) === String(userIdResults[2])) {
+          return entity;
+        }
+      });
+    }
+  }
 
   if (result.queryResult.sentimentAnalysisResult) {
 
@@ -31,12 +58,21 @@ router.post('/', function (req, res, next) {
 
 
     // store the result to DB
-    SentimentAnalysisModel.create({
-      score, magnitude, query, responds, intent
+    DataConversationModel.create({
+      score,
+      magnitude,
+      query,
+      responds,
+      intent,
+      user_id: id,
+      school: entityData && entityData.school ? entityData.school : undefined,
+      title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
+      usertype: entityData && entityData.type ? entityData.type : undefined,
+      class: entityData && entityData.class ? entityData.class : undefined,
     })
 
 
-    if (score < -0.85 && (intent != "Q16- Edit Job Description ? - Send" || intent !="JURY-03 The issue still not fixed")) {
+    if (score < -0.85 && (intent != "Q16- Edit Job Description ? - Send" || intent != "JURY-03 The issue still not fixed")) {
       if (language == "en") {
         res.send(createTextResponse("Sorry if my perfomance is bad :( If there is Information that i can't answer, you can contact my human friends through Contact Us Feature :)"));
       } else {
@@ -48,12 +84,21 @@ router.post('/', function (req, res, next) {
   } else {
     const score = 0
     const magnitude = 0
-    SentimentAnalysisModel.create({
-      score, magnitude, query, responds, intent
+    DataConversationModel.create({
+      score,
+      magnitude,
+      query,
+      responds,
+      intent,
+      user_id: id,
+      school: entityData && entityData.school ? entityData.school : undefined,
+      title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
+      usertype: entityData && entityData.type ? entityData.type : undefined,
+      class: entityData && entityData.class ? entityData.class : undefined,
     })
   }
-  if(intent == 'JURY-03 The issue still not fixed' || intent == "A02-Welcome Intent"){
-      dialogflowfulfillment(req, res, result);
+  if (intent == 'JURY-03 The issue still not fixed' || intent == "A02-Welcome Intent") {
+    dialogflowfulfillment(req, res, result);
   }
 });
 
@@ -70,37 +115,37 @@ const dialogflowfulfillment = (request, response, result) => {
    *
    * @param {objectId} result.originalDetectIntentRequest.payload.userId user id of the user login
    */
-   async function sayHello(agent) {
+  async function sayHello(agent) {
     const language_code = result.queryResult.languageCode;
     //get user data
     //uncommend if on stagging
-  
-    
-    
+
+
+
     const id_before = result.originalDetectIntentRequest.payload.userId;
     console.log(id_before)
-    if(typeof id_before !== 'undefined'){
+    if (typeof id_before !== 'undefined') {
       const results = id_before.split(/[/\s]/);
       const id = results[0];
-  
+
       console.log(id);
       let user = await common.get_data(
         `https://api.v2.zetta-demo.space/getUserById/${id}`,
         "GET"
       );
-  
+
       // console.log(user)
       //uncommend if on stagging
       // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
-  
+
       //this only for development
       let kata = "";
-      if (language_code == 'en'){
+      if (language_code == 'en') {
         kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
       } else {
         kata = `Bonjour ${user.first_name}. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
       }
-     
+
       var payloadData = {
         richContent: [
           [
@@ -121,17 +166,17 @@ const dialogflowfulfillment = (request, response, result) => {
       );
       agent.add(kata);
     } else {
-      if (language_code == 'en'){
+      if (language_code == 'en') {
         kata = `Hello. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
       } else {
         kata = `Bonjour. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
       }
       agent.add(kata);
     }
-    
+
   }
- 
-  async function jury_not_fixed(agent){
+
+  async function jury_not_fixed(agent) {
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];
@@ -142,14 +187,14 @@ const dialogflowfulfillment = (request, response, result) => {
       "GET"
     );
     let kata = ""
-    
-    if(language_code == 'en'){
+
+    if (language_code == 'en') {
       kata = `I will redirect you to my human friend for help. Click the button below to Contact my human friend`;
     }
     else {
       kata = `Je vais vous rediriger vers mon ami humain pour obtenir de l'aide. Cliquez sur le bouton ci-dessous pour contacter mon ami humain`;
     }
-   
+
     var payloadData = {
       richContent: [
         [
@@ -177,7 +222,7 @@ const dialogflowfulfillment = (request, response, result) => {
         rawPayload: true,
       })
     );
-  
+
   }
 
   let intentMap = new Map();

@@ -8,7 +8,7 @@ const moment = require("moment");
 
 require("../utils/database");
 
-const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
+const DataConversationModel = require("../models/data_conversation.model");
 const AcadDirScheduleModel = require("../models/acaddir_schedule.model");
 const MeetingScheduleModel = require("../models/meeting_schedule.model");
 
@@ -18,7 +18,7 @@ const MeetingScheduleModel = require("../models/meeting_schedule.model");
  * @param {object} req req
  * @param {object} res res
  */
-router.post("/", function (req, res, next) {
+router.post("/", async function (req, res, next) {
   //console.log(req.body.queryResult.queryText);
 
   const result = req.body;
@@ -29,6 +29,38 @@ router.post("/", function (req, res, next) {
   const query = result.queryResult.queryText;
   const responds = result.queryResult.fulfillmentMessages;
 
+  const id_before = result.originalDetectIntentRequest.payload.userId;
+  const userIdResults = id_before.split(/[/\s]/);
+  let id;
+  let timeZone;
+  let loginAs;
+  let entityData;
+  if (userIdResults && userIdResults.length && userIdResults[0]) {
+    id = userIdResults[0];
+  }
+  if (userIdResults && userIdResults.length && userIdResults[1]) {
+    timeZone = userIdResults[1];
+  }
+  if (userIdResults && userIdResults.length && userIdResults[2]) {
+    loginAs = userIdResults[2];
+  }
+
+  if (userIdResults && userIdResults.length && userIdResults[0] && userIdResults[2]) {
+    let userData = await common.get_data(
+      `https://api.v2.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
+    if (userData && userData.entities && userData.entities.length) {
+      entityData = userData.entities.find((entity) => {
+        if (entity && entity._id && String(entity._id) === String(userIdResults[2])) {
+          return entity;
+        }
+      });
+    }
+  }
+
+  console.log(`entityData ::: ${entityData}`)
+
   if (result.queryResult.sentimentAnalysisResult) {
     // console.log('Detected sentiment : ');
     const score =
@@ -37,12 +69,17 @@ router.post("/", function (req, res, next) {
       result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
 
     //store the result to DB
-    SentimentAnalysisModel.create({
+    DataConversationModel.create({
       score,
       magnitude,
       query,
       responds,
       intent,
+      user_id: id,
+      school: entityData && entityData.school ? entityData.school : undefined,
+      title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
+      usertype: entityData && entityData.type ? entityData.type : undefined,
+      class: entityData && entityData.class ? entityData.class : undefined,
     });
 
     //  if (score < -0.3) {
@@ -52,12 +89,17 @@ router.post("/", function (req, res, next) {
   } else {
     const score = 0;
     const magnitude = 0;
-    SentimentAnalysisModel.create({
+    DataConversationModel.create({
       score,
       magnitude,
       query,
       responds,
       intent,
+      user_id: id,
+      school: entityData && entityData.school ? entityData.school : undefined,
+      title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
+      usertype: entityData && entityData.type ? entityData.type : undefined,
+      class: entityData && entityData.class ? entityData.class : undefined,
     });
   }
 });

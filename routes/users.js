@@ -21,7 +21,7 @@ router.post('/', async function (req, res, next) {
   const responds = result.queryResult.fulfillmentMessages;
   const id_before = result.originalDetectIntentRequest.payload.userId;
   const userIdResults = id_before.split(/[/\s]/);
-  const user_id = results[0];
+  const user_id = userIdResults[0];
   let id;
   let timeZone;
   let loginAs;

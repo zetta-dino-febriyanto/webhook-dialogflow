@@ -25,8 +25,34 @@ router.post("/", async function (req, res, next) {
   const responds = result.queryResult.fulfillmentMessages;
   console.log(responds);
   const id_before = result.originalDetectIntentRequest.payload.userId;
-  const results = id_before.split(/[/\s]/);
-  const user_id = results[0];
+  const userIdResults = id_before.split(/[/\s]/);
+  let id;
+  let timeZone;
+  let loginAs;
+  let entityData;
+  if (userIdResults && userIdResults.length && userIdResults[0]) {
+    id = userIdResults[0];
+  }
+  if (userIdResults && userIdResults.length && userIdResults[1]) {
+    timeZone = userIdResults[1];
+  }
+  if (userIdResults && userIdResults.length && userIdResults[2]) {
+    loginAs = userIdResults[2];
+  }
+
+  if (userIdResults && userIdResults.length && userIdResults[0] && userIdResults[2]) {
+    let userData = await common.get_data(
+      `https://api.v2.zetta-demo.space/getUserById/${id}`,
+      "GET"
+    );
+    if (userData && userData.entities && userData.entities.length) {
+      entityData = userData.entities.find((entity) => {
+        if (entity && entity._id && String(entity._id) === String(userIdResults[2])) {
+          return entity;
+        }
+      });
+    }
+  }
 
 
   //Get Intent, Query, and Respond

@@ -241,6 +241,7 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   function send_email_first(agent) {
+    const language_code = result.queryResult.languageCode;
     const problem = result.queryResult.queryText;
 
     // Set context problem
@@ -262,6 +263,8 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   async function sending_email(agent) {
+    const language_code = result.queryResult.languageCode;
+
     infoProblem = agent.context.get("problem");
     const problem = infoProblem.parameters.problem;
     console.log(problem);
@@ -324,6 +327,8 @@ const dialogflowfulfillment = (request, response, result) => {
   }
 
   async function jury_not_fixed(agent) {
+    const language_code = result.queryResult.languageCode;
+
     const id_before = result.originalDetectIntentRequest.payload.userId;
     const results = id_before.split(/[/\s]/);
     const id = results[0];

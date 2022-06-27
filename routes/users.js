@@ -90,7 +90,7 @@ router.post('/', async function (req, res, next) {
       query,
       responds,
       intent,
-      user_id: user_id,
+      user_id: id,
       school: entityData && entityData.school ? entityData.school : undefined,
       title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
       usertype: entityData && entityData.type ? entityData.type : undefined,

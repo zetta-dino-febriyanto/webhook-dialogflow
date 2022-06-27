@@ -89,7 +89,8 @@ const dialogflowfulfillment = (request, response, result) => {
         "GET"
       );
   
-      // console.log(user)
+      console.log(user.first_name)
+      console.log(language_code)
       //uncommend if on stagging
       // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
   

@@ -8,16 +8,16 @@ require("../utils/database");
 const fetch = require("node-fetch");
 const emailUtil = require("../utils/email");
 const common = require("../utils/common");
-const SentimentAnalysisModel = require("../models/sentiment_analysis.model");
+const DataConversationModel = require("../models/data_conversation.model");
 
 
-router.post("/", function (req, res, next) {
+router.post("/", async function (req, res, next) {
   //console.log(req.body.queryResult.queryText);
 
   const result = req.body;
   console.log(result)
 
-  
+
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
   const query = result.queryResult.queryText;
@@ -38,12 +38,17 @@ router.post("/", function (req, res, next) {
     const magnitude = result.queryResult.sentimentAnalysisResult.queryTextSentiment.magnitude;
 
     //store the result to DB
-    SentimentAnalysisModel.create({
+    DataConversationModel.create({
       score,
       magnitude,
       query,
       responds,
       intent,
+      user_id: id,
+      school: entityData && entityData.school ? entityData.school : undefined,
+      title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
+      usertype: entityData && entityData.type ? entityData.type : undefined,
+      class: entityData && entityData.class ? entityData.class : undefined,
     });
 
     //  if (score < -0.85) {
@@ -53,15 +58,20 @@ router.post("/", function (req, res, next) {
   } else {
     const score = 0;
     const magnitude = 0;
-    SentimentAnalysisModel.create({
+    DataConversationModel.create({
       score,
       magnitude,
       query,
       responds,
       intent,
+      user_id: id,
+      school: entityData && entityData.school ? entityData.school : undefined,
+      title: entityData && entityData.assigned_rncp_title ? entityData.assigned_rncp_title : undefined,
+      usertype: entityData && entityData.type ? entityData.type : undefined,
+      class: entityData && entityData.class ? entityData.class : undefined,
     });
   }
-  if(intent == '000-General: Welcome Message' || intent == "App-SendEmail-Yes" || intent == "000 Send_email - custom" || intent == "000 Send_email - custom - yes" || intent == "JURY-03 The issue still not fixed"){
+  if (intent == '000-General: Welcome Message' || intent == "App-SendEmail-Yes" || intent == "000 Send_email - custom" || intent == "000 Send_email - custom - yes" || intent == "JURY-03 The issue still not fixed") {
     dialogflowfulfillment(req, res, result);
   }
 });
@@ -122,33 +132,33 @@ const dialogflowfulfillment = (request, response, result) => {
     const language_code = result.queryResult.languageCode;
     //get user data
     //uncommend if on stagging
-  
-    
-    
+
+
+
     const id_before = result.originalDetectIntentRequest.payload.userId;
     console.log(id_before)
-    if(typeof id_before !== 'undefined'){
+    if (typeof id_before !== 'undefined') {
       const results = id_before.split(/[/\s]/);
       const id = results[0];
-  
+
       console.log(id);
       let user = await common.get_data(
         `https://api.v2.zetta-demo.space/getUserById/${id}`,
         "GET"
       );
-  
+
       // console.log(user)
       //uncommend if on stagging
       // agent.add(`Hello ${user.first_name} ${user.last_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`);
-  
+
       //this only for development
       let kata = "";
-      if (language_code == 'en'){
+      if (language_code == 'en') {
         kata = `Hello ${user.first_name}. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
       } else {
         kata = `Bonjour ${user.first_name}. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
       }
-     
+
       var payloadData = {
         richContent: [
           [
@@ -169,14 +179,14 @@ const dialogflowfulfillment = (request, response, result) => {
       );
       agent.add(kata);
     } else {
-      if (language_code == 'en'){
+      if (language_code == 'en') {
         kata = `Hello. This is Bilip, the electronic assistant of the ADMTC.PRO User Help service. What can i help you?`;
       } else {
         kata = `Bonjour. Voici Bilip, l'assistant électronique du service d'Aide Utilisateur ADMTC.PRO. Que puis-je vous aider ?`;
       }
       agent.add(kata);
     }
-    
+
   }
 
   async function send_email(agent) {
@@ -234,12 +244,12 @@ const dialogflowfulfillment = (request, response, result) => {
     });
     const language_code = result.queryResult.languageCode;
 
-    if (language_code == 'en'){
+    if (language_code == 'en') {
       agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
-    } else{
+    } else {
       agent.add("Oke, j'ai déjà envoyé un e-mail à mon ami humain et CC à vous. Il devrait vous contacter dans les plus brefs délais. Merci :)")
     }
-    
+
   }
 
   function send_email_first(agent) {
@@ -250,13 +260,13 @@ const dialogflowfulfillment = (request, response, result) => {
     agent.context.set("problem", 99, {
       problem: problem,
     });
-    if (language_code == 'en'){
-    agent.add(
-      `Oke, so you want me to Send email to User Help that you have problem detail like this :`
-    );
-    agent.add(`"${problem}" ?`);
-    } else{
-      
+    if (language_code == 'en') {
+      agent.add(
+        `Oke, so you want me to Send email to User Help that you have problem detail like this :`
+      );
+      agent.add(`"${problem}" ?`);
+    } else {
+
       agent.add(
         `Oke, vous voulez donc que j'envoie un e-mail à l'aide de l'utilisateur indiquant que vous avez des détails sur le problème comme celui-ci :`
       );
@@ -321,9 +331,9 @@ const dialogflowfulfillment = (request, response, result) => {
       }
     });
 
-    if (language_code == 'en'){
+    if (language_code == 'en') {
       agent.add("Oke, I already send an email to my human friend and CC to You. He should contact you as soon as possible. Thank You :)")
-    } else{
+    } else {
       agent.add("Oke, j'ai déjà envoyé un e-mail à mon ami humain et CC à vous. Il devrait vous contacter dans les plus brefs délais. Merci :)")
     }
   }
@@ -339,7 +349,7 @@ const dialogflowfulfillment = (request, response, result) => {
       `https://api.v2.zetta-demo.space/getUserByUserId/${id}`,
       "GET"
     );
-    
+
     const kata = `I will redirect you to my human friend for help. Click the button below to Contact my human friend`;
     var payloadData = {
       richContent: [

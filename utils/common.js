@@ -539,7 +539,7 @@ exports.get_data = async (url, method, auth, data = {}) => {
       Authorization: `Bearer "${auth}"`,
     };
     if (method === "POST") {
-      axios.post(
+      return axios.post(
         url,
         data,
         {
@@ -550,9 +550,13 @@ exports.get_data = async (url, method, auth, data = {}) => {
         return response.data
       });
     } else {
-      const response = await fetch(url, { method: method, headers: headers });
-      const json = await response.json();
-      return json;
+      return axios.get(url, { headers: headers })
+        .then(response => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   } catch (error) {
     console.log(error);

@@ -16,11 +16,7 @@ router.post("/", function (req, res, next) {
 
   const result = req.body;
   console.log(result)
-  try {
-    dialogflowfulfillment(req, res, result);
-  } catch (err) {
 
-  }
   
   const intent = result.queryResult.intent.displayName;
   console.log(intent);
@@ -28,6 +24,9 @@ router.post("/", function (req, res, next) {
   console.log(query);
   const responds = result.queryResult.fulfillmentMessages;
   console.log(responds);
+  const id_before = result.originalDetectIntentRequest.payload.userId;
+  const results = id_before.split(/[/\s]/);
+  const user_id = results[0];
 
 
   //Get Intent, Query, and Respond
@@ -61,6 +60,9 @@ router.post("/", function (req, res, next) {
       responds,
       intent,
     });
+  }
+  if(intent == '000-General: Welcome Message' || intent == "App-SendEmail-Yes" || intent == "000 Send_email - custom" || intent == "000 Send_email - custom - yes" || intent == "JURY-03 The issue still not fixed"){
+    dialogflowfulfillment(req, res, result);
   }
 });
 

@@ -19,6 +19,9 @@ router.post('/', function (req, res, next) {
   const language = result.queryResult.languageCode;
   const query = result.queryResult.queryText;
   const responds = result.queryResult.fulfillmentMessages;
+  const id_before = result.originalDetectIntentRequest.payload.userId;
+  const results = id_before.split(/[/\s]/);
+  const user_id = results[0];
 
   if (result.queryResult.sentimentAnalysisResult) {
 
@@ -49,9 +52,9 @@ router.post('/', function (req, res, next) {
       score, magnitude, query, responds, intent
     })
   }
-    if(intent == 'JURY-03 The issue still not fixed' || intent == "A02-Welcome Intent"){
-        dialogflowfulfillment(req, res, result);
-    }
+  if(intent == 'JURY-03 The issue still not fixed' || intent == "A02-Welcome Intent"){
+      dialogflowfulfillment(req, res, result);
+  }
 });
 
 const dialogflowfulfillment = (request, response, result) => {

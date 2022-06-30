@@ -176,6 +176,7 @@ const dialogflowfulfillment = (request, response, result) => {
         `https://api.v2.zetta-demo.space/getUserById/${id}`,
         "GET"
       );
+      console.log(user)
 
       // console.log(user)
       //uncommend if on stagging
